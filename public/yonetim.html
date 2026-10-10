@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lavie Yönetim</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@400;500&display=swap">
+<style>
+/* Tek sütun iş listesi: üstte sekmeler, altta sipariş kartları */
+:root{--paper:#f6f3f1;--ink:#2b2a33;--muted:#6e6a72;--line:#e0d8d2;--accent:#5b4a6b;--field:#fff;--ok:#2f6440;--okbg:#e3efe6;--wait:#8a5a12;--waitbg:#f8ecd6;--off:#6e6a72;--offbg:#ece9ee;--bad:#a2464b}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:"Jost",system-ui,sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 60px;display:grid;gap:14px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{font-family:"Italiana",Georgia,serif;font-size:1.8rem;letter-spacing:.05em;margin:0;font-weight:400}
+.brand small{font-family:"Jost",sans-serif;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-left:6px}
+.b{font:inherit;font-size:.86rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.b.main{background:var(--accent);border-color:var(--accent);color:#fff}
+.b.green{background:#25d366;border-color:#25d366;color:#0b2b17}
+.b.danger{color:var(--bad)}
+.b[disabled]{opacity:.6;cursor:wait}
+:focus-visible{outline:2px solid #b08a4f;outline-offset:2px}
+.login{background:var(--field);border:1px solid var(--line);border-radius:14px;padding:20px 16px;display:grid;gap:10px;max-width:420px}
+input,select,textarea{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink)}
+textarea{min-height:70px;resize:vertical}
+.msg{color:var(--muted);font-size:.9rem}
+.msg.err{color:var(--bad)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.tab{font:inherit;font-size:.88rem;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer;white-space:nowrap}
+.tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.tab b{font-weight:500;font-variant-numeric:tabular-nums;margin-left:4px}
+.list{display:grid;gap:12px}
+.card{background:var(--field);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.names{font-family:"Italiana",Georgia,serif;font-size:1.35rem;line-height:1.2;margin:0}
+.pill{font-size:.75rem;padding:3px 10px;border-radius:999px;white-space:nowrap;font-weight:500}
+.pill.bekliyor{background:var(--waitbg);color:var(--wait)}
+.pill.aktif{background:var(--okbg);color:var(--ok)}
+.pill.kapali{background:var(--offbg);color:var(--off)}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:.88rem}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.acts{display:flex;flex-wrap:wrap;gap:6px}
+.edit{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.row{grid-template-columns:1fr}}
+.f{display:grid;gap:3px;min-width:0}
+.f span{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.empty{color:var(--muted);text-align:center;padding:30px 0}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;font-size:.88rem;z-index:5}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="brand">Lavie<small>Yönetim</small></h1>
+    <div id="hdrBtns" hidden style="display:flex;gap:6px">
+      <button class="b" id="yenile" type="button">Yenile</button>
+      <button class="b" id="cikis" type="button">Çıkış</button>
+    </div>
+  </header>
+
+  <form class="login" id="login">
+    <label for="sifre" class="msg">Yönetim şifresi</label>
+    <input id="sifre" type="password" autocomplete="current-password" required>
+    <button class="b main" type="submit">Giriş yap</button>
+    <div class="msg" id="lmsg"></div>
+  </form>
+
+  <div id="app" hidden>
+    <div class="tabs" id="tabs" role="group" aria-label="Filtre"></div>
+    <div class="list" id="list" style="margin-top:12px"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const API = "/api/yonetim";
+const TASARIM = {zeytin:"Zeytin Dalı",gece:"Gece Mavisi",gul:"Gül Kurusu",mono:"Siyah Beyaz",ege:"Ege"};
+const TUR = ["Düğün","Nişan","Kına","Söz"];
+const DURUM = {bekliyor:"Ödeme bekliyor",aktif:"Yayında",kapali:"Kapalı"};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let SIFRE = "", LISTE = [], FILTRE = "bekliyor", ACIK = null;
+
+try { SIFRE = localStorage.getItem("lavie_sifre") || ""; } catch {}
+
+function toast(m){ const t=$("toast"); t.textContent=m; t.hidden=false; clearTimeout(t._z); t._z=setTimeout(()=>t.hidden=true,2200); }
+async function api(method, body){
+  const r = await fetch(API, { method, headers: { "x-sifre": SIFRE, ...(body?{"content-type":"application/json"}:{}) }, body: body?JSON.stringify(body):undefined });
+  const j = await r.json().catch(()=>({ok:false,hata:"baglanti"}));
+  if (!j.ok) throw new Error(j.hata || "hata");
+  return j;
+}
+function hataMetni(h){
+  return h==="sifre" ? "Şifre yanlış." : h==="sifre_ayarlanmamis" ? "Yönetim şifresi henüz Netlify'da ayarlanmamış." : "Bağlantı sorunu, tekrar deneyin.";
+}
+async function yukle(){
+  const j = await api("GET");
+  LISTE = j.ciftler; ciz();
+}
+async function giris(){
+  $("lmsg").className="msg"; $("lmsg").textContent="Kontrol ediliyor...";
+  try { await yukle(); try{localStorage.setItem("lavie_sifre",SIFRE);}catch{}
+    $("login").hidden=true; $("app").hidden=false; $("hdrBtns").hidden=false; $("hdrBtns").style.display="flex";
+  } catch(e){ $("lmsg").className="msg err"; $("lmsg").textContent=hataMetni(e.message); }
+}
+function tarihYaz(c){
+  if(!c.tarih) return "";
+  const d=new Date(c.tarih+"T00:00"); const t=isNaN(d)?c.tarih:d.toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"});
+  return t + (c.saat?" · "+c.saat:"");
+}
+function waNo(tel){ let n=String(tel||"").replace(/\D/g,""); if(n.startsWith("0")) n="9"+n; else if(n.length===10) n="90"+n; return n.length>=12?n:""; }
+function ciz(){
+  const say = {bekliyor:0,aktif:0,kapali:0,hepsi:LISTE.length};
+  LISTE.forEach(c=>say[c.durum]=(say[c.durum]||0)+1);
+  $("tabs").innerHTML = [["bekliyor","Bekleyen"],["aktif","Yayında"],["kapali","Kapalı"],["hepsi","Tümü"]]
+    .map(([k,l])=>`<button class="tab" type="button" data-f="${k}" aria-pressed="${FILTRE===k}">${l}<b>${say[k]||0}</b></button>`).join("");
+  const liste = LISTE.filter(c=>FILTRE==="hepsi"||c.durum===FILTRE);
+  $("list").innerHTML = liste.length ? liste.map(kart).join("") :
+    `<div class="empty">${FILTRE==="bekliyor"?"Bekleyen sipariş yok. Yeni sipariş gelince burada görünecek.":"Bu bölümde davetiye yok."}</div>`;
+}
+function kart(c){
+  const wa = waNo(c.telefon);
+  const ac = ACIK===c.slug;
+  return `<article class="card" data-s="${esc(c.slug)}">
+    <div class="top"><h2 class="names">${esc(c.gelin)} &amp; ${esc(c.damat)}</h2><span class="pill ${esc(c.durum)}">${DURUM[c.durum]||esc(c.durum)}</span></div>
+    <dl class="meta">
+      <dt>Tür</dt><dd>${esc(c.tur)} · ${esc(TASARIM[c.tasarim]||c.tasarim)}</dd>
+      <dt>Tarih</dt><dd>${esc(tarihYaz(c))}</dd>
+      <dt>Mekân</dt><dd>${esc(c.mekan)}</dd>
+      <dt>Telefon</dt><dd>${c.telefon?esc(c.telefon):"–"}</dd>
+      <dt>Paket</dt><dd>${c.paket==="site-gorsel"?"Site + paylaşım görseli":"Davetiye sitesi"}</dd>
+      <dt>Kod</dt><dd>${esc(c.slug)}</dd>
+      <dt>Yanıt</dt><dd>${c.yanitSayisi} misafir</dd>
+      <dt>Sipariş</dt><dd>${c.olusturma?esc(new Date(c.olusturma).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})):"–"}</dd>
+    </dl>
+    <div class="acts">
+      ${c.durum==="bekliyor"?`<button class="b main" data-a="aktif">Ödeme alındı, yayınla</button>`:""}
+      ${c.durum==="aktif"?`<button class="b" data-a="kapali">Yayından kaldır</button>`:""}
+      ${c.durum==="kapali"?`<button class="b" data-a="aktif">Tekrar yayınla</button>`:""}
+      ${c.durum==="aktif"&&wa?`<a class="b green" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${encodeURIComponent(mesaj(c))}">Linkleri çifte gönder</a>`:""}
+      ${c.durum==="aktif"?`<a class="b" target="_blank" rel="noopener" href="${esc(c.linkler.davetiye)}">Davetiyeyi aç</a>`:""}
+      <button class="b" data-a="kopyaD">Davetiye linki</button>
+      <button class="b" data-a="kopyaP">Panel linki</button>
+      <button class="b" data-a="duzenle">${ac?"Düzenlemeyi kapat":"Düzenle"}</button>
+      <button class="b danger" data-a="sil">Sil</button>
+    </div>
+    ${ac?formHTML(c):""}
+  </article>`;
+}
+function mesaj(c){
+  return `Merhaba, ${c.gelin} & ${c.damat} davetiyeniz hazır!\n\nMisafirlerinizle paylaşacağınız davetiye linki:\n${c.linkler.davetiye}\n\nKatılım yanıtlarını görebileceğiniz size özel panel (paylaşmayın):\n${c.linkler.panel}\n\nMutluluklar dileriz. Lavie`;
+}
+function formHTML(c){
+  const inp=(k,l,t="text")=>`<label class="f"><span>${l}</span><input name="${k}" type="${t}" value="${esc(c[k])}"></label>`;
+  return `<form class="edit" data-s="${esc(c.slug)}">
+    <div class="row">${inp("gelin","Gelin")}${inp("damat","Damat")}</div>
+    <div class="row">${inp("tarih","Tarih","date")}${inp("saat","Saat","time")}</div>
+    <div class="row">
+      <label class="f"><span>Tasarım</span><select name="tasarim">${Object.entries(TASARIM).map(([k,v])=>`<option value="${k}" ${c.tasarim===k?"selected":""}>${v}</option>`).join("")}</select></label>
+      <label class="f"><span>Tür</span><select name="tur">${TUR.map(t=>`<option ${c.tur===t?"selected":""}>${t}</option>`).join("")}</select></label>
+    </div>
+    ${inp("mekan","Mekân")}${inp("adres","Adres")}${inp("konum","Konum linki","url")}${inp("aile","Aile isimleri")}${inp("telefon","Telefon","tel")}
+    <label class="f"><span>Davet notu</span><textarea name="not">${esc(c.not)}</textarea></label>
+    <label class="f"><span>Program</span><textarea name="program" rows="4">${esc(c.program)}</textarea></label>
+    <button class="b main" type="submit">Kaydet</button>
+  </form>`;
+}
+async function kopyala(t){
+  try{ await navigator.clipboard.writeText(t); toast("Kopyalandı"); }
+  catch{ window.prompt("Linki kopyalayın:", t); }
+}
+
+$("login").addEventListener("submit", e=>{ e.preventDefault(); SIFRE=$("sifre").value; giris(); });
+$("cikis").onclick=()=>{ try{localStorage.removeItem("lavie_sifre");}catch{} location.reload(); };
+$("yenile").onclick=async()=>{ try{ await yukle(); toast("Güncellendi"); }catch(e){ toast(hataMetni(e.message)); } };
+$("tabs").addEventListener("click", e=>{ const b=e.target.closest(".tab"); if(!b) return; FILTRE=b.dataset.f; ciz(); });
+$("list").addEventListener("click", async e=>{
+  const b=e.target.closest("button[data-a]"); if(!b) return;
+  const slug=b.closest(".card").dataset.s, c=LISTE.find(x=>x.slug===slug), a=b.dataset.a;
+  if(a==="kopyaD") return kopyala(c.linkler.davetiye);
+  if(a==="kopyaP") return kopyala(c.linkler.panel);
+  if(a==="duzenle"){ ACIK = ACIK===slug?null:slug; return ciz(); }
+  if(a==="sil" && !confirm(`${c.gelin} & ${c.damat} davetiyesi ve tüm misafir yanıtları silinsin mi? Bu geri alınamaz.`)) return;
+  b.disabled=true;
+  try{
+    if(a==="sil"){ await api("POST",{islem:"sil",slug}); LISTE=LISTE.filter(x=>x.slug!==slug); toast("Silindi"); }
+    else { const j=await api("POST",{islem:"durum",slug,durum:a}); Object.assign(c,j.cift); toast(a==="aktif"?"Yayında":"Yayından kaldırıldı");
+      if(a==="aktif") FILTRE="aktif"; }
+    ciz();
+  }catch(err){ b.disabled=false; toast(hataMetni(err.message)); }
+});
+$("list").addEventListener("submit", async e=>{
+  e.preventDefault(); const f=e.target, slug=f.dataset.s, c=LISTE.find(x=>x.slug===slug);
+  const alanlar=Object.fromEntries(new FormData(f).entries());
+  const btn=f.querySelector("button[type=submit]"); btn.disabled=true; btn.textContent="Kaydediliyor...";
+  try{ const j=await api("POST",{islem:"guncelle",slug,alanlar}); Object.assign(c,j.cift); ACIK=null; ciz(); toast("Kaydedildi"); }
+  catch(err){ btn.disabled=false; btn.textContent="Kaydet"; toast(hataMetni(err.message)); }
+});
+
+if (SIFRE) { $("sifre").value=SIFRE; giris(); }
+</script>
+</body>
+</html>

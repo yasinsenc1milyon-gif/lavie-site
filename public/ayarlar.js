@@ -2,8 +2,8 @@
 // Kurulumdan sonra sadece bu dosyayı düzenlemen yeterli.
 
 window.LAVIE_AYAR = {
-  // Google Apps Script "Web uygulaması" adresi (KURULUM.txt, 2. adım)
-  API_URL: "https://script.google.com/macros/s/AKfycbxaxE5lCN8DYyB_-JFqfVmIOhNwvgQFyZxtkswmkpy7Kc3GKzbD3wDyM8gEABXKRmMYew/exec",
+  // Sitenin kendi sunucu adresi (değiştirme)
+  API_URL: "/api",
 
   // Siparişlerin geleceği WhatsApp numarası: başında 90, boşluksuz
   WHATSAPP: "905355066329",

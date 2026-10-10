@@ -66,7 +66,7 @@ function csv(){
   a.download = `${slug}-misafirler.csv`; a.click();
 }
 async function yukle(){
-  const r = await fetch(`${API}?islem=panel&c=${encodeURIComponent(slug)}&k=${encodeURIComponent(key)}`);
+  const r = await fetch(`${API}/panel?c=${encodeURIComponent(slug)}&k=${encodeURIComponent(key)}`);
   const j = await r.json();
   if (!j.ok) throw new Error(j.hata);
   CIFT = j.cift; LISTE = j.yanitlar.sort((a,b) => new Date(b.zaman) - new Date(a.zaman));

@@ -26,13 +26,13 @@ html,body{margin:0;background:#e9e6e3}
   const hata = m => { kok.innerHTML = `<div class="durum">${m}</div>`; };
   if (!slug) return hata("Davetiye linki eksik.");
   try {
-    const r = await fetch(API + "?c=" + encodeURIComponent(slug));
+    const r = await fetch(API + "/cift?c=" + encodeURIComponent(slug));
     const j = await r.json();
     if (!j.ok) return hata("Bu davetiye bulunamadı.");
     const d = j.cift;
     document.title = `${d.gelin} & ${d.damat} · ${d.tur || "Davetiye"}`;
     window.Lavie.ciz(kok, d, async v => {
-      const r2 = await fetch(API, { method: "POST", body: JSON.stringify({ c: slug, ...v }) });
+      const r2 = await fetch(API + "/yanit", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ c: slug, ...v }) });
       const j2 = await r2.json();
       if (!j2.ok) throw new Error(j2.hata || "hata");
     });

@@ -107,6 +107,7 @@ h2{font-family:var(--display);font-weight:400;font-size:1.45rem;margin:22px 0 10
 20:30 Akşam yemeği
 22:00 Eğlence</textarea></div>
         <div class="f"><span class="label">Paket</span><div class="pk" id="pk"></div></div>
+        <div class="f"><label class="label" for="telefon">Telefonunuz (sipariş için)</label><input id="telefon" type="tel" inputmode="tel" placeholder="05XX XXX XX XX" autocomplete="tel"></div>
       </form>
     </div>
   </div>
@@ -131,7 +132,7 @@ h2{font-family:var(--display);font-weight:400;font-size:1.45rem;margin:22px 0 10
 const A = window.LAVIE_AYAR, L = window.Lavie;
 const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id };
 const $ = id => document.getElementById(id);
-const ALANLAR = ["gelin","damat","tarih","saat","mekan","adres","konum","aile","not","program"];
+const ALANLAR = ["gelin","damat","tarih","saat","mekan","adres","konum","aile","not","program","telefon"];
 $("ig").href = "https://instagram.com/" + A.INSTAGRAM;
 
 function veri(){ const d = { tasarim:S.tasarim, tur:S.tur }; ALANLAR.forEach(k => d[k] = $(k).value.trim()); return d; }
@@ -169,7 +170,7 @@ function mesaj(kod){
     `Tasarım: ${t.ad}`,`Tür: ${d.tur}`,`Gelin: ${d.gelin}`,`Damat: ${d.damat}`,
     `Tarih: ${L.uzunTarih(d)} ${d.saat}`,`Mekân: ${d.mekan}`,`Adres: ${d.adres}`,
     d.konum?`Konum: ${d.konum}`:null, d.aile?`Aile: ${d.aile}`:null, d.not?`Not: ${d.not}`:null,
-    d.program?`Program:\n${d.program}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`].filter(x => x !== null).join("\n");
+    d.program?`Program:\n${d.program}`:null, d.telefon?`Telefon: ${d.telefon}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`].filter(x => x !== null).join("\n");
 }
 function ciz(basa){
   seritCiz(); turCiz(); paketCiz();
@@ -187,11 +188,11 @@ function siparisSifirla(){
 }
 $("order").addEventListener("click", async () => {
   const d = veri();
-  if (!d.gelin || !d.damat || !d.tarih) { $("note").textContent = "Lütfen gelin, damat ve tarih bilgilerini doldurun."; $("note").hidden = false; return; }
+  if (!d.gelin || !d.damat || !d.tarih || d.telefon.replace(/\D/g,"").length < 10) { $("note").textContent = "Lütfen gelin, damat, tarih ve telefon bilgilerini doldurun."; $("note").hidden = false; return; }
   $("order").disabled = true; $("order").textContent = "Hazırlanıyor...";
   let kod = null;
   try {
-    const r = await fetch(A.API_URL, { method: "POST", body: JSON.stringify({ islem: "siparis", ...d, paket: S.paket }) });
+    const r = await fetch(A.API_URL + "/siparis", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...d, paket: S.paket }) });
     const j = await r.json();
     if (j.ok && j.slug) kod = j.slug;
   } catch (_) {}
