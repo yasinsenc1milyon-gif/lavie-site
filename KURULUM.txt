@@ -1,52 +1,29 @@
-LAVIE · ÜCRETSİZ KURULUM
-=========================
+LAVIE · NASIL ÇALIŞIR
+=====================
 
-Dosyalar
-- index.html   : Vitrin. Müşteri tasarım seçer, bilgilerini yazar, WhatsApp'tan sipariş verir.
-- d.html       : Çiftin canlı davetiyesi (siteadin/d.html?c=elif-burak)
-- panel.html   : Çiftin misafir paneli (siteadin/panel.html?c=elif-burak&k=ANAHTAR)
-- davetiye.js / davetiye.css : 5 tasarımın kodu
-- ayarlar.js   : WhatsApp numaran, fiyatlar, Apps Script linki (sadece bunu düzenlersin)
-- Code.gs      : Google E-Tablolar tarafındaki kod
+Her şey Netlify'da çalışır. Google E-Tablo veya Apps Script gerekmez.
+GitHub'a gönderilen her değişiklik 1-2 dakikada siteye yansır.
 
-1) GOOGLE E-TABLO (siparişler ve katılım yanıtları burada durur)
-   a. sheets.google.com'da yeni bir boş e-tablo aç, adını "Lavie" yap.
-   b. Uzantılar > Apps Script menüsünü aç.
-   c. Oradaki kodu tamamen sil, Code.gs dosyasının içeriğini yapıştır, kaydet.
-   d. Üstteki fonksiyon listesinden "kurulum" seç, Çalıştır'a bas.
-      Google izin isteyecek: hesabını seç > Gelişmiş > "Lavie'ye git (güvenli değil)" > İzin ver.
-      (Bu uyarı, kodu kendin yazdığın için çıkar; kod sadece bu e-tabloya erişir.)
-   e. E-tabloda "Ciftler" ve "Yanitlar" sayfaları oluşur. Ciftler'de örnek bir çift (elif-burak) var.
+Sayfalar
+- laviedavetiye.netlify.app                 Vitrin: tasarım seç, bilgileri yaz, sipariş ver
+- laviedavetiye.netlify.app/d.html?c=KOD    Çiftin davetiyesi (misafirler açar)
+- laviedavetiye.netlify.app/panel.html?...  Çiftin misafir paneli (şifreli link)
+- laviedavetiye.netlify.app/yonetim.html    Senin yönetim sayfan
+- Örnek davetiye: laviedavetiye.netlify.app/d.html?c=ornek
 
-2) WEB UYGULAMASI OLARAK YAYINLA
-   a. Apps Script'te sağ üstte Dağıt > Yeni dağıtım.
-   b. Tür: Web uygulaması.  Yürüten: Ben.  Erişimi olanlar: Herkes.
-   c. Dağıt'a bas, verilen "Web uygulaması URL"sini kopyala (https://script.google.com/macros/s/.../exec).
-   d. ayarlar.js dosyasında API_URL kısmına bu linki yapıştır.
-      Aynı dosyada WHATSAPP numaranı, fiyatlarını ve Instagram adını da düzelt.
-   Not: Code.gs'yi sonradan değiştirirsen Dağıt > Dağıtımları yönet > düzenle > Yeni sürüm demen gerekir.
+BİR KERELİK AYAR: YÖNETİM ŞİFRESİ
+  1. app.netlify.com → laviedavetiye → Project configuration → Environment variables
+  2. Add a variable → Key: ADMIN_SIFRE   Value: kendi şifren (en az 10 karakter)
+  3. Kaydet, sonra Deploys → Trigger deploy → Deploy project
+  4. laviedavetiye.netlify.app/yonetim.html adresinden şifrenle gir.
 
-3) SİTEYİ ÜCRETSİZ YAYINLA (Netlify)
-   a. Bilgisayardan app.netlify.com/drop adresine gir, ücretsiz hesap aç.
-   b. lavie-site klasörünü olduğu gibi sayfaya sürükle bırak.
-   c. Site hemen yayına girer. Site ayarlarından adını değiştirip ör. lavie-davetiye.netlify.app yapabilirsin.
-   d. Daha sonra dosya değiştirirsen klasörü tekrar sürükle bırak ("Deploys" sekmesi).
-   İleride kendi alan adını (lavie.com.tr gibi) Netlify'a bağlayabilirsin; site aynı kalır.
-
-4) TEST
-   - siteadin/d.html?c=elif-burak  → örnek davetiye açılmalı. Katılım formunu doldur.
-   - E-tablodaki "Yanitlar" sayfasında yanıtın görünmeli.
-   - siteadin/panel.html?c=elif-burak&k=ANAHTAR  → ANAHTAR, Ciftler sayfasındaki anahtar sütunu.
-
-YENİ SİPARİŞ GELİNCE (yaklaşık 1 dakika)
-   Müşteri vitrinde "Siparişi oluştur"a basınca çiftin satırı Ciftler sayfasına
-   kendiliğinden eklenir: aktif = BEKLIYOR, linkler ve panel şifresi hazır.
-   WhatsApp mesajında "Sipariş kodu" yazar (ör. ayse-mehmet).
-   1. Ödemeyi IBAN'dan al.
-   2. Ciftler sayfasında o satırın "aktif" hücresini BEKLIYOR'dan EVET'e çevir.
-   3. Aynı satırdaki davetiye_linki ve panel_linki hücrelerini çifte gönder.
-   Çift bilgilerinde düzeltme gerekirse satırdaki hücreyi değiştirmen yeterli,
-   davetiye anında güncellenir. Elle çift eklemek de hâlâ mümkün.
+YENİ SİPARİŞ GELİNCE
+  1. Müşteri vitrinde "Siparişi oluştur"a basar; davetiyesi "Ödeme bekliyor" olarak oluşur.
+     WhatsApp'tan sana sipariş kodu ve bilgileri gelir.
+  2. Ödemeyi IBAN'dan al.
+  3. Yönetim sayfasında "Ödeme alındı, yayınla"ya bas.
+  4. "Linkleri çifte gönder" ile davetiye ve panel linkleri çiftin WhatsApp'ına hazır mesaj olarak gider.
+  Bilgi düzeltmek için kartta "Düzenle"yi kullan; davetiye anında güncellenir.
 
 YASAL NOT
-   Düzenli satış yapmaya başlarsan vergi kaydı gerekir. Bir muhasebeciye danışmanı öneririm.
+  Düzenli satış yapmaya başlarsan vergi kaydı gerekir. Bir muhasebeciye danışmanı öneririm.
