@@ -64,6 +64,9 @@ h2{font-family:var(--display);font-weight:400;font-size:1.45rem;margin:22px 0 10
 .obar .sum{flex:1;min-width:0;font-size:.88rem}
 .obar .sum b{font-size:1.1rem;font-variant-numeric:tabular-nums}
 .btn{font:inherit;font-weight:500;border:0;border-radius:999px;padding:11px 18px;cursor:pointer;text-decoration:none;display:inline-block;background:#25d366;color:#0b2b17}
+[hidden]{display:none!important}
+.btn[disabled]{opacity:.6;cursor:wait}
+.obar-note{max-width:1060px;margin:8px auto 0;font-size:.82rem;color:#d9d4dd}
 </style>
 </head>
 <body>
@@ -117,8 +120,10 @@ h2{font-family:var(--display);font-weight:400;font-size:1.45rem;margin:22px 0 10
 
 <div class="obar"><div class="obar-in">
   <div class="sum" id="sum"></div>
-  <a class="btn" id="wa" target="_blank" rel="noopener">WhatsApp ile sipariş ver</a>
-</div></div>
+  <button class="btn" id="order" type="button">Siparişi oluştur</button>
+  <a class="btn" id="wa" target="_blank" rel="noopener" hidden>WhatsApp'tan gönder</a>
+</div>
+<div class="obar-note" id="note" hidden></div></div>
 
 <script src="ayarlar.js"></script>
 <script src="davetiye.js"></script>
@@ -157,9 +162,10 @@ function paketCiz(){
     pk.appendChild(l);
   });
 }
-function mesaj(){
+function mesaj(kod){
   const d = veri(), p = A.PAKETLER.find(x => x.id === S.paket), t = L.TASARIMLAR.find(x => x.id === S.tasarim);
   return ["Merhaba Lavie, sipariş vermek istiyorum.","",
+    kod?`Sipariş kodu: ${kod}`:null,
     `Tasarım: ${t.ad}`,`Tür: ${d.tur}`,`Gelin: ${d.gelin}`,`Damat: ${d.damat}`,
     `Tarih: ${L.uzunTarih(d)} ${d.saat}`,`Mekân: ${d.mekan}`,`Adres: ${d.adres}`,
     d.konum?`Konum: ${d.konum}`:null, d.aile?`Aile: ${d.aile}`:null, d.not?`Not: ${d.not}`:null,
@@ -172,8 +178,28 @@ function ciz(basa){
   sc.scrollTop = basa ? 0 : y;
   const p = A.PAKETLER.find(x => x.id === S.paket), t = L.TASARIMLAR.find(x => x.id === S.tasarim);
   $("sum").innerHTML = `${L.esc(t.ad)} · ${L.esc(p.ad)}<br><b>${p.fiyat} TL</b>`;
-  $("wa").href = `https://wa.me/${A.WHATSAPP}?text=${encodeURIComponent(mesaj())}`;
+  siparisSifirla();
 }
+// Bilgiler değişirse sipariş adımı baştan başlar
+function siparisSifirla(){
+  $("order").hidden = false; $("order").disabled = false; $("order").textContent = "Siparişi oluştur";
+  $("wa").hidden = true; $("note").hidden = true;
+}
+$("order").addEventListener("click", async () => {
+  const d = veri();
+  if (!d.gelin || !d.damat || !d.tarih) { $("note").textContent = "Lütfen gelin, damat ve tarih bilgilerini doldurun."; $("note").hidden = false; return; }
+  $("order").disabled = true; $("order").textContent = "Hazırlanıyor...";
+  let kod = null;
+  try {
+    const r = await fetch(A.API_URL, { method: "POST", body: JSON.stringify({ islem: "siparis", ...d, paket: S.paket }) });
+    const j = await r.json();
+    if (j.ok && j.slug) kod = j.slug;
+  } catch (_) {}
+  $("wa").href = `https://wa.me/${A.WHATSAPP}?text=${encodeURIComponent(mesaj(kod))}`;
+  $("order").hidden = true; $("wa").hidden = false;
+  $("note").textContent = kod ? "Davetiyeniz hazırlandı. Siparişi tamamlamak için WhatsApp'tan gönderin; ödemeden sonra linkiniz açılır." : "Siparişinizi WhatsApp'tan gönderin.";
+  $("note").hidden = false;
+});
 ALANLAR.forEach(k => $(k).addEventListener("input", () => ciz()));
 $("f").addEventListener("submit", e => e.preventDefault());
 $("fullBtn").addEventListener("click", () => { const f = $("stage").classList.toggle("full"); $("fullBtn").textContent = f ? "Kapat" : "Tam ekran"; });

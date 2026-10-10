@@ -38,20 +38,15 @@ Dosyalar
    - E-tablodaki "Yanitlar" sayfasında yanıtın görünmeli.
    - siteadin/panel.html?c=elif-burak&k=ANAHTAR  → ANAHTAR, Ciftler sayfasındaki anahtar sütunu.
 
-YENİ SİPARİŞ GELİNCE (yaklaşık 3 dakika)
+YENİ SİPARİŞ GELİNCE (yaklaşık 1 dakika)
+   Müşteri vitrinde "Siparişi oluştur"a basınca çiftin satırı Ciftler sayfasına
+   kendiliğinden eklenir: aktif = BEKLIYOR, linkler ve panel şifresi hazır.
+   WhatsApp mesajında "Sipariş kodu" yazar (ör. ayse-mehmet).
    1. Ödemeyi IBAN'dan al.
-   2. Ciftler sayfasına yeni satır ekle:
-      slug     : linkte görünecek isim, küçük harf ve tire, Türkçe karakter yok (ör. ayse-mehmet)
-      anahtar  : en az 10 karakterlik rastgele harf-rakam (Apps Script'te "yeniAnahtarGoster" çalıştırınca üretir)
-      tasarim  : zeytin / gece / gul / mono / ege
-      tur      : Düğün / Nişan / Kına / Söz
-      tarih    : 2027-06-12 ya da 12.06.2027      saat: 19:30
-      program  : her satıra bir tane (hücre içinde alt satır için Ctrl+Enter / Alt+Enter)
-      aktif    : EVET  (HAYIR yazarsan davetiye kapanır)
-      Diğerleri WhatsApp mesajındaki bilgilerden kopyalanır.
-   3. Çifte iki link gönder:
-      Davetiye (misafirlerle paylaşılacak): siteadin/d.html?c=SLUG
-      Panel (sadece çift):                 siteadin/panel.html?c=SLUG&k=ANAHTAR
+   2. Ciftler sayfasında o satırın "aktif" hücresini BEKLIYOR'dan EVET'e çevir.
+   3. Aynı satırdaki davetiye_linki ve panel_linki hücrelerini çifte gönder.
+   Çift bilgilerinde düzeltme gerekirse satırdaki hücreyi değiştirmen yeterli,
+   davetiye anında güncellenir. Elle çift eklemek de hâlâ mümkün.
 
 YASAL NOT
    Düzenli satış yapmaya başlarsan vergi kaydı gerekir. Bir muhasebeciye danışmanı öneririm.
