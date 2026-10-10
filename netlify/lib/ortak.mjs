@@ -3,11 +3,16 @@ import { getStore } from "@netlify/blobs";
 
 export const ciftStore = () => getStore({ name: "ciftler", consistency: "strong" });
 export const yanitStore = () => getStore({ name: "yanitlar", consistency: "strong" });
+export const mesajStore = () => getStore({ name: "mesajlar", consistency: "strong" });
+export const fotoStore = () => getStore({ name: "fotograflar", consistency: "strong" });
+export const yorumStore = () => getStore({ name: "yorumlar", consistency: "strong" });
 
 export const TASARIMLAR = ["zeytin", "gece", "gul", "mono", "ege"];
 export const TURLER = ["Düğün", "Nişan", "Kına", "Söz"];
 export const DURUMLAR = ["bekliyor", "aktif", "kapali"];
-export const ALANLAR = ["tasarim", "tur", "gelin", "damat", "tarih", "saat", "mekan", "adres", "konum", "aile", "not", "program", "telefon", "paket"];
+export const MUZIKLER = ["kutu", "yok"];
+export const ALANLAR = ["tasarim", "tur", "gelin", "damat", "tarih", "saat", "mekan", "adres", "konum", "aile", "not", "program", "telefon", "paket", "muzik"];
+export const FOTO_SINIR = 12;
 
 export const json = (o, status = 200) =>
   new Response(JSON.stringify(o), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
@@ -24,6 +29,7 @@ export function temizle(d) {
   }
   if (!TASARIMLAR.includes(o.tasarim)) o.tasarim = "zeytin";
   if (!TURLER.includes(o.tur)) o.tur = "Düğün";
+  if (!MUZIKLER.includes(o.muzik)) o.muzik = "kutu";
   return o;
 }
 
@@ -35,6 +41,7 @@ export function slugYap(s) {
 }
 
 export const anahtarYap = () => crypto.randomUUID().replace(/-/g, "").slice(0, 12);
+export const kimlikYap = () => `${new Date().toISOString().replace(/[-:.TZ]/g, "")}-${crypto.randomUUID().slice(0, 6)}`;
 
 // Vitrinde ve Instagram'da gösterilecek örnek davetiye
 export const ORNEK = {
@@ -44,8 +51,9 @@ export const ORNEK = {
   aile: "Yılmaz ve Demir aileleri",
   not: "Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız.",
   program: "19:30 Karşılama\n20:00 Nikâh töreni\n20:30 Akşam yemeği\n22:00 Eğlence",
-  telefon: "", paket: "site-gorsel"
+  telefon: "", paket: "site-gorsel", muzik: "kutu"
 };
+export const ornekMi = slug => slug === "ornek";
 
 export function slugOku(v) { return String(v || "").toLowerCase().trim().slice(0, 60); }
 
@@ -53,14 +61,32 @@ export async function ciftGetir(slug) {
   slug = slugOku(slug);
   if (!slug) return null;
   if (slug === "ornek" || slug === "elif-burak") return ORNEK;
-  return await ciftStore().get(slug, { type: "json" });
+  const c = await ciftStore().get(slug, { type: "json" });
+  if (c && !c.muzik) c.muzik = "kutu";
+  return c;
 }
 
-export async function yanitlariGetir(slug) {
-  const s = yanitStore();
-  const { blobs } = await s.list({ prefix: slug + "/" });
-  const liste = await Promise.all(blobs.map(b => s.get(b.key, { type: "json" })));
+async function hepsiJSON(store, prefix) {
+  const { blobs } = await store.list({ prefix });
+  const liste = await Promise.all(blobs.map(async b => { const v = await store.get(b.key, { type: "json" }); return v && { id: b.key.slice(prefix.length), ...v }; }));
   return liste.filter(Boolean).sort((a, b) => String(b.zaman).localeCompare(String(a.zaman)));
+}
+export const yanitlariGetir = slug => hepsiJSON(yanitStore(), slug + "/");
+export const mesajlariGetir = slug => hepsiJSON(mesajStore(), slug + "/");
+
+export async function fotoListesi(slug) {
+  const { blobs } = await fotoStore().list({ prefix: slug + "/" });
+  return blobs.map(b => b.key.slice(slug.length + 1)).sort();
+}
+export const fotoUrl = (slug, id) => `/api/foto?c=${encodeURIComponent(slug)}&id=${encodeURIComponent(id)}`;
+
+// Çift silinince bağlı her şeyi temizler
+export async function ciftVerisiniSil(slug) {
+  for (const s of [yanitStore(), mesajStore(), fotoStore()]) {
+    const { blobs } = await s.list({ prefix: slug + "/" });
+    await Promise.all(blobs.map(b => s.delete(b.key)));
+  }
+  await yorumStore().delete(slug);
 }
 
 export function linkler(req, c) {

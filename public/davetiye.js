@@ -33,7 +33,8 @@
     return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(((d.mekan || "") + " " + (d.adres || "")).trim());
   }
 
-  function html(d) {
+  function html(d, ek) {
+    ek = ek || {};
     const t = TASARIMLAR.find(x => x.id === d.tasarim) || TASARIMLAR[0];
     const tur = UST[d.tur] ? d.tur : "Düğün";
     const gelin = esc(d.gelin || "Gelin"), damat = esc(d.damat || "Damat");
@@ -55,6 +56,7 @@
       ${prog ? `<section><h3>Program</h3><p style="margin-bottom:5cqw;color:var(--soft)">${esc(gun(d))}, ${esc(uzunTarih(d))}</p><ol>${prog}</ol></section>` : ""}
       ${d.mekan || d.adres ? `<section><h3>Konum</h3><div class="venue">${esc(d.mekan)}</div><div class="addr">${esc(d.adres)}</div>
         <a class="ibtn" href="${esc(haritaLinki(d))}" target="_blank" rel="noopener">Yol tarifi al</a></section>` : ""}
+      ${galeri(ek)}
       <section><h3>Katılım</h3>
         <form class="rsvp">
           <input name="isim" placeholder="Adınız soyadınız" aria-label="Adınız soyadınız" maxlength="80" required>
@@ -63,8 +65,42 @@
           <button class="ibtn solid" type="submit">Yanıtımı gönder</button>
           <div class="rsvp-ok" hidden></div>
         </form></section>
+      <section class="defter"><h3>Hatıra Defteri</h3>
+        <p style="color:var(--soft);margin-bottom:5cqw">Bize güzel bir not bırakın, ömür boyu saklayalım.</p>
+        <form class="mesaj-f">
+          <input name="isim" placeholder="Adınız" aria-label="Adınız" maxlength="60" required>
+          <textarea name="mesaj" placeholder="Mesajınız" aria-label="Mesajınız" maxlength="400" rows="3" required></textarea>
+          <button class="ibtn solid" type="submit">Mesaj bırak</button>
+          <div class="rsvp-ok" hidden></div>
+        </form>
+        <div class="mesajlar">${(ek.mesajlar || []).map(mesajKart).join("")}</div>
+      </section>
       <footer>${gelin} &amp; ${damat}<small>Lavie ile hazırlandı</small></footer>
     </div>`;
+  }
+
+  function galeri(ek) {
+    const f = ek.fotolar || [];
+    if (f.length) return `<section><h3>Anılarımız</h3><div class="gal">${f.map((u, i) => `<button type="button" class="gal-i" data-i="${i}" aria-label="Fotoğraf ${i + 1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join("")}</div></section>`;
+    if (ek.ornekGaleri) return `<section><h3>Anılarımız</h3><div class="gal">${[1, 2, 3, 4].map(i => `<div class="gal-i gal-bos"><span>Fotoğraf ${i}</span></div>`).join("")}</div><p style="color:var(--soft);font-size:3.4cqw;margin-top:3cqw">Fotoğraflarınızı sipariş sonrası panelinizden eklersiniz.</p></section>`;
+    return "";
+  }
+  function mesajKart(m) {
+    const z = m.zaman ? new Date(m.zaman).toLocaleDateString("tr-TR", { day: "numeric", month: "long" }) : "";
+    return `<figure class="mk"><blockquote>${esc(m.mesaj)}</blockquote><figcaption>${esc(m.isim)}${z ? ` · ${esc(z)}` : ""}</figcaption></figure>`;
+  }
+  function buyut(kok, fotolar, i) {
+    const o = document.createElement("div");
+    o.className = "lb"; o.setAttribute("role", "dialog");
+    o.innerHTML = `<img alt=""><button type="button" class="lb-x" aria-label="Kapat">×</button>`;
+    const img = o.querySelector("img");
+    const goster = () => { img.src = fotolar[i]; };
+    goster();
+    o.addEventListener("click", e => {
+      if (e.target.classList.contains("lb-x") || e.target === o) return o.remove();
+      i = (i + (e.clientX > innerWidth / 2 ? 1 : -1) + fotolar.length) % fotolar.length; goster();
+    });
+    document.body.appendChild(o);
   }
 
   function sayac() {
@@ -77,8 +113,25 @@
   setInterval(sayac, 1000);
 
   // kok: kapsayıcı eleman, d: çift bilgileri, yanitGonder: async ({isim,kisi,durum}) => void
-  function ciz(kok, d, yanitGonder) {
-    kok.innerHTML = html(d);
+  // ek: { fotolar, mesajlar, ornekGaleri, mesajGonder: async ({isim,mesaj}) => kayıt }
+  function ciz(kok, d, yanitGonder, ek) {
+    ek = ek || {};
+    kok.innerHTML = html(d, ek);
+    kok.querySelectorAll(".gal-i[data-i]").forEach(b => b.addEventListener("click", () => buyut(kok, ek.fotolar, Number(b.dataset.i))));
+    const mf = kok.querySelector("form.mesaj-f");
+    const mok = mf.querySelector(".rsvp-ok"), mbtn = mf.querySelector("button");
+    mf.addEventListener("submit", async e => {
+      e.preventDefault();
+      const isim = mf.isim.value.trim(), mesaj = mf.mesaj.value.trim();
+      if (!isim || !mesaj) { mok.textContent = "Lütfen adınızı ve mesajınızı yazın."; mok.hidden = false; return; }
+      mbtn.disabled = true; mok.hidden = false; mok.textContent = "Gönderiliyor...";
+      try {
+        const k = ek.mesajGonder ? await ek.mesajGonder({ isim, mesaj }) : { isim, mesaj, zaman: new Date().toISOString() };
+        kok.querySelector(".mesajlar").insertAdjacentHTML("afterbegin", mesajKart(k || { isim, mesaj }));
+        mf.reset(); mok.textContent = "Teşekkürler, mesajınız deftere eklendi.";
+      } catch { mok.textContent = "Mesaj gönderilemedi, tekrar deneyin."; }
+      finally { mbtn.disabled = false; }
+    });
     sayac();
     const f = kok.querySelector("form.rsvp");
     const ok = f.querySelector(".rsvp-ok");

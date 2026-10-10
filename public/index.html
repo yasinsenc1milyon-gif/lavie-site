@@ -4,138 +4,374 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Lavie · Dijital Davetiye</title>
-<meta name="description" content="Düğün, nişan, kına ve söz için şık dijital davetiye siteleri. Tasarımını seç, bilgilerini yaz, sipariş ver.">
+<meta name="description" content="Zarfı açılan, müzikli, geri sayımlı dijital düğün, nişan, kına ve söz davetiyesi. Katılımı tek dokunuşla toplayın, panelinizden takip edin.">
+<meta property="og:title" content="Lavie · Dijital Davetiye">
+<meta property="og:description" content="Zarfı açılan, müzikli, şık dijital davetiye siteleri. Katılım takibi, galeri ve hatıra defteri dahil.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Great+Vibes&family=Jost:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="davetiye.css">
 <style>
-:root{--paper:#f6f3f1;--ink:#2b2a33;--muted:#6e6a72;--line:#e0d8d2;--accent:#5b4a6b;--accent-ink:#fff;--gold:#b08a4f;--field:#fff;
-  --display:"Italiana","Cormorant Garamond",Georgia,serif;--body:"Jost",system-ui,sans-serif}
+/* Layout: ince üst menü → iki sütunlu açılış (metin | canlı örnek telefon) → özellikler ızgarası → oluşturucu → adımlar → paketler → yorumlar → SSS → alt bilgi */
+:root{
+  --paper:#f6f3f1; --paper2:#efe9e5; --ink:#24222b; --muted:#6c6772; --line:#e2d9d3;
+  --accent:#5b4a6b; --accent-ink:#fff; --gold:#b08a4f; --field:#fff; --deep:#221e29; --deep-ink:#efe8f2;
+  --display:"Italiana","Cormorant Garamond",Georgia,serif; --serif:"Cormorant Garamond",Georgia,serif; --body:"Jost",system-ui,sans-serif;
+  color-scheme:light;
+}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
 html,body{margin:0}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
-.wrap{max-width:1060px;margin:0 auto;padding-inline:16px;padding-block:20px 130px}
-header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px}
-.brand{font-family:var(--display);font-size:2.2rem;letter-spacing:.06em;margin:0;font-weight:400}
-.tag{color:var(--muted);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase}
-.tag a{color:inherit}
-h2{font-family:var(--display);font-weight:400;font-size:1.45rem;margin:22px 0 10px}
-.label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.strip{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 8px}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;font-weight:400}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.in{max-width:1080px;margin:0 auto;padding-inline:20px}
+section.blk{padding-block:72px}
+@media (max-width:640px){section.blk{padding-block:52px}}
+.eyebrow{font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:500}
+h2.t{font-family:var(--display);font-weight:400;font-size:clamp(2rem,4.5vw,2.8rem);line-height:1.1;margin:10px 0 12px;text-wrap:balance}
+.lead{color:var(--muted);max-width:56ch;margin:0}
+.btn{font:inherit;font-weight:500;font-size:.95rem;border:1px solid transparent;border-radius:999px;padding:13px 24px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,background .15s}
+.btn:active{transform:scale(.98)}
+.btn.pri{background:var(--accent);color:var(--accent-ink)}
+.btn.pri:hover{background:#4c3d5b}
+.btn.sec{border-color:var(--ink);color:var(--ink);background:transparent}
+.btn.sec:hover{background:var(--ink);color:var(--paper)}
+
+/* Menü */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .in{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.logo{font-family:var(--display);font-size:1.9rem;letter-spacing:.06em;text-decoration:none;line-height:1}
+.nav nav{display:flex;gap:22px;font-size:.9rem}
+.nav nav a{text-decoration:none;color:var(--muted)}
+.nav nav a:hover{color:var(--ink)}
+.nav .btn{padding:9px 16px;font-size:.85rem}
+@media (max-width:760px){.nav nav{display:none}}
+
+/* Açılış */
+.hero{padding-block:56px 72px;overflow:hidden}
+.hero .in{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:center}
+@media (max-width:860px){.hero .in{grid-template-columns:minmax(0,1fr);gap:40px}.hero{padding-top:36px}}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(2.7rem,7vw,4.6rem);line-height:1.02;margin:14px 0 18px;letter-spacing:.01em;text-wrap:balance}
+.hero h1 em{font-family:"Pinyon Script",cursive;font-style:normal;color:var(--accent);font-size:1.08em}
+.hero .lead{font-size:1.08rem}
+.hero .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.trust{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:26px;font-size:.86rem;color:var(--muted);padding:0;list-style:none}
+.trust li{display:flex;align-items:center;gap:7px}
+.trust li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.showcase{justify-self:center;position:relative;width:100%;max-width:330px}
+.showcase::before{content:"";position:absolute;inset:-40px -60px;background:radial-gradient(closest-side,#e8dcea,transparent);z-index:-1}
+.device{width:100%;aspect-ratio:9/18.5;max-height:640px;border-radius:40px;border:10px solid #1d1b22;background:#1d1b22;overflow:hidden;box-shadow:0 30px 60px -28px rgba(36,34,43,.55)}
+.device iframe{width:100%;height:100%;border:0;border-radius:30px;display:block;background:#f1f1e8}
+.showcase figcaption{text-align:center;font-size:.8rem;color:var(--muted);margin-top:12px}
+
+/* Özellikler */
+.feats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:36px}
+@media (max-width:900px){.feats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.feat{background:var(--paper);padding:24px 20px;display:grid;gap:8px;align-content:start}
+.feat svg{width:28px;height:28px;color:var(--accent)}
+.feat b{font-weight:500;font-size:1rem}
+.feat p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5}
+
+/* Oluşturucu */
+.make{background:var(--paper2);border-block:1px solid var(--line)}
+.strip{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 10px;margin-top:28px}
 .tpl{flex:0 0 104px;border:2px solid transparent;border-radius:12px;padding:3px;background:none;cursor:pointer;text-align:center;font:inherit;color:var(--ink)}
-.tpl .mini{aspect-ratio:9/16;border-radius:9px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;container-type:inline-size}
+.tpl .mini{aspect-ratio:9/16;border-radius:9px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;container-type:inline-size;box-shadow:0 6px 16px -10px rgba(0,0,0,.4)}
 .tpl .mini i{font-style:normal;font-size:19cqw;line-height:1}
 .tpl .mini em{font-style:normal;font-size:7.5cqw;letter-spacing:.2em;text-transform:uppercase;opacity:.8}
-.tpl .n{display:block;font-size:.8rem;margin-top:5px}
+.tpl .n{display:block;font-size:.82rem;margin-top:6px}
 .tpl[aria-pressed="true"]{border-color:var(--accent)}
-:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.main{display:grid;grid-template-columns:minmax(0,390px) minmax(0,1fr);gap:32px;align-items:start;margin-top:6px}
-@media (max-width:780px){.main{grid-template-columns:minmax(0,1fr)}}
-.stage{position:sticky;top:12px;display:grid;gap:8px;justify-items:center}
-@media (max-width:780px){.stage{position:static}}
+.main{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:40px;align-items:start;margin-top:18px}
+@media (max-width:820px){.main{grid-template-columns:minmax(0,1fr)}}
+.stage{position:sticky;top:76px;display:grid;gap:8px;justify-items:center}
+@media (max-width:820px){.stage{position:static}}
 .stage-top{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:360px}
+.label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .mini-btn{font:inherit;font-size:.82rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
-.phone{width:100%;max-width:360px;height:min(680px,78vh);border-radius:34px;border:10px solid #1d1c22;background:#1d1c22;overflow:hidden;box-shadow:0 24px 50px -24px rgba(29,28,34,.55)}
+.phone{width:100%;max-width:360px;height:min(660px,76vh);border-radius:34px;border:10px solid #1d1b22;background:#1d1b22;overflow:hidden;box-shadow:0 24px 50px -24px rgba(29,27,34,.55)}
 .screen{height:100%;overflow-y:auto;border-radius:24px;container-type:inline-size}
-.stage.full{position:fixed;inset:0;z-index:20;background:rgba(20,18,24,.92);padding:14px 16px;align-content:start}
+.stage.full{position:fixed;inset:0;z-index:30;background:rgba(20,18,24,.94);padding:calc(14px + env(safe-area-inset-top,0px)) 16px 14px;align-content:start}
 .stage.full .label{color:#ddd}
 .stage.full .phone{height:calc(100vh - 90px);max-width:420px}
+.formcard{background:var(--field);border:1px solid var(--line);border-radius:16px;padding:22px 18px}
 #f{display:grid;gap:14px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:420px){.row{grid-template-columns:1fr}}
-.f{display:grid;gap:4px;min-width:0}
-#f input,#f textarea{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink)}
-#f textarea{resize:vertical;min-height:64px}
+@media (max-width:440px){.row{grid-template-columns:1fr}}
+.f{display:grid;gap:5px;min-width:0}
+#f input,#f textarea{font:inherit;font-size:16px;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink)}
+#f textarea{resize:vertical;min-height:70px}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
-.seg button{font:inherit;font-size:.88rem;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
+.seg button{font:inherit;font-size:.88rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .pk{display:grid;gap:8px}
-.pk label{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--field);cursor:pointer}
-.pk input{width:auto!important;margin-top:4px}
-.pk b{font-weight:500}.pk small{display:block;color:var(--muted)}
+.pk label{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer}
+.pk label:has(input:checked){border-color:var(--accent);background:#f3eef5}
+.pk input{width:auto!important;margin-top:5px;accent-color:var(--accent)}
+.pk b{font-weight:500}.pk small{display:block;color:var(--muted);font-size:.84rem}
 .price{margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:500}
-.hint{font-size:.78rem;color:var(--muted)}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:40px}
-.steps div{border-top:1px solid var(--line);padding-top:10px}
-.steps b{font-family:var(--display);font-weight:400;font-size:1.2rem;display:block}
-.steps p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
-.obar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));z-index:10}
-.obar-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hint{font-size:.8rem;color:var(--muted)}
+.fsec{font-family:var(--display);font-size:1.25rem;margin:8px 0 0;padding-top:12px;border-top:1px solid var(--line)}
+.fsec:first-child{border-top:0;padding-top:0;margin-top:0}
+
+/* Adımlar */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:36px;counter-reset:s;list-style:none;padding:0}
+@media (max-width:760px){.steps{grid-template-columns:1fr;gap:22px}}
+.steps li{counter-increment:s;display:grid;gap:6px;border-top:1px solid var(--ink);padding-top:16px}
+.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--display);font-size:1.6rem;color:var(--gold)}
+.steps b{font-weight:500;font-size:1.05rem}
+.steps p{margin:0;color:var(--muted);font-size:.93rem}
+
+/* Paketler */
+.plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:36px;max-width:820px}
+@media (max-width:700px){.plans{grid-template-columns:1fr}}
+.plan{background:var(--field);border:1px solid var(--line);border-radius:18px;padding:28px 24px;display:grid;gap:14px;align-content:start;position:relative}
+.plan.vurgu{border-color:var(--accent);box-shadow:0 18px 40px -26px rgba(91,74,107,.6)}
+.plan .rozet{position:absolute;top:-12px;left:24px;background:var(--accent);color:#fff;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+.plan h3{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0}
+.plan .fiyat{font-family:var(--display);font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums}
+.plan .fiyat small{font-family:var(--body);font-size:.85rem;color:var(--muted);margin-left:6px}
+.plan ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.93rem}
+.plan li{display:flex;gap:10px;align-items:flex-start}
+.plan li svg{flex:0 0 18px;width:18px;height:18px;color:var(--accent);margin-top:3px}
+.plan li.ek{font-weight:500}
+
+/* Yorumlar */
+.yorumlar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:32px}
+@media (max-width:860px){.yorumlar{grid-template-columns:1fr}}
+.yk{background:var(--field);border:1px solid var(--line);border-radius:16px;padding:22px;display:grid;gap:12px;margin:0}
+.yk .yildiz{color:var(--gold);letter-spacing:3px}
+.yk blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:1.15rem;line-height:1.45}
+.yk figcaption{font-size:.85rem;color:var(--muted)}
+
+/* SSS */
+.sss{margin-top:28px;border-top:1px solid var(--line);max-width:760px}
+.sss details{border-bottom:1px solid var(--line)}
+.sss summary{cursor:pointer;list-style:none;padding:18px 32px 18px 0;font-weight:500;position:relative}
+.sss summary::-webkit-details-marker{display:none}
+.sss summary::after{content:"+";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:1.4rem;font-weight:300;color:var(--accent)}
+.sss details[open] summary::after{content:"–"}
+.sss p{margin:0 0 18px;color:var(--muted);max-width:62ch}
+
+/* Alt bilgi */
+footer.site{background:var(--deep);color:var(--deep-ink);padding-block:48px 140px}
+footer.site .in{display:flex;justify-content:space-between;gap:28px;flex-wrap:wrap;align-items:flex-start}
+footer.site .logo{color:#fff}
+footer.site p{margin:8px 0 0;color:#b9b0c0;font-size:.9rem;max-width:36ch}
+footer.site ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.92rem}
+footer.site a{color:#fff;text-decoration:none}
+footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;width:100%}
+
+/* Sipariş çubuğu */
+.obar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));z-index:25;transform:translateY(110%);transition:transform .3s ease}
+.obar.gor{transform:none}
+.obar-in{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .obar .sum{flex:1;min-width:0;font-size:.88rem}
 .obar .sum b{font-size:1.1rem;font-variant-numeric:tabular-nums}
-.btn{font:inherit;font-weight:500;border:0;border-radius:999px;padding:11px 18px;cursor:pointer;text-decoration:none;display:inline-block;background:#25d366;color:#0b2b17}
-[hidden]{display:none!important}
-.btn[disabled]{opacity:.6;cursor:wait}
-.obar-note{max-width:1060px;margin:8px auto 0;font-size:.82rem;color:#d9d4dd}
+.obtn{font:inherit;font-weight:500;border:0;border-radius:999px;padding:11px 18px;cursor:pointer;text-decoration:none;display:inline-block;background:#25d366;color:#0b2b17}
+.obtn[disabled]{opacity:.6;cursor:wait}
+.obar-note{max-width:1080px;margin:8px auto 0;font-size:.82rem;color:#d9d4dd}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.obar{transition:none}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1 class="brand">Lavie</h1>
-    <span class="tag">Dijital düğün &amp; nişan davetiyesi · <a id="ig" target="_blank" rel="noopener">Instagram</a></span>
-  </header>
 
-  <h2>Tasarımını seç</h2>
-  <div class="strip" id="strip" role="group" aria-label="Tasarımlar"></div>
+<header class="nav">
+  <div class="in">
+    <a class="logo" href="#">Lavie</a>
+    <nav aria-label="Sayfa"><a href="#ozellikler">Özellikler</a><a href="#olustur">Tasarımlar</a><a href="#paketler">Paketler</a><a href="#sss">Sorular</a></nav>
+    <a class="btn pri" href="#olustur">Davetiyemi oluştur</a>
+  </div>
+</header>
 
-  <div class="main">
-    <div class="stage" id="stage">
-      <div class="stage-top"><span class="label">Canlı önizleme · kaydırarak gez</span><button class="mini-btn" id="fullBtn" type="button">Tam ekran</button></div>
-      <div class="phone"><div class="screen" id="screen"></div></div>
-    </div>
+<main>
+<section class="hero">
+  <div class="in">
     <div>
-      <h2 style="margin-top:0">Bilgilerini yaz</h2>
-      <form id="f" autocomplete="off">
-        <div class="f"><span class="label">Davet türü</span><div class="seg" id="types"></div></div>
-        <div class="row">
-          <div class="f"><label class="label" for="gelin">Gelin</label><input id="gelin" value="Elif"></div>
-          <div class="f"><label class="label" for="damat">Damat</label><input id="damat" value="Burak"></div>
-        </div>
-        <div class="row">
-          <div class="f"><label class="label" for="tarih">Tarih</label><input id="tarih" type="date" value="2027-06-12"></div>
-          <div class="f"><label class="label" for="saat">Saat</label><input id="saat" type="time" value="19:30"></div>
-        </div>
-        <div class="f"><label class="label" for="mekan">Mekân</label><input id="mekan" value="Dragos Kır Bahçesi"></div>
-        <div class="f"><label class="label" for="adres">Adres</label><input id="adres" value="Orhantepe Mah., Kartal / İstanbul"></div>
-        <div class="f"><label class="label" for="konum">Konum linki (Google Maps)</label><input id="konum" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/...">
-          <span class="hint">Google Maps'te mekânı aç → Paylaş → Bağlantıyı kopyala → buraya yapıştır.</span></div>
-        <div class="f"><label class="label" for="aile">Aile isimleri (isteğe bağlı)</label><input id="aile" value="Yılmaz ve Demir aileleri"></div>
-        <div class="f"><label class="label" for="not">Davet notu</label><textarea id="not">Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız.</textarea></div>
-        <div class="f"><label class="label" for="program">Program (her satıra bir tane)</label><textarea id="program" rows="4">19:30 Karşılama
+      <div class="eyebrow">Düğün · Nişan · Kına · Söz</div>
+      <h1>Davetiyeniz, sevdiklerinizin <em>cebinde</em></h1>
+      <p class="lead">Zarfı açılan, müzikli ve geri sayımlı şık bir davetiye sitesi. Misafirleriniz katılımını tek dokunuşla bildirir, fotoğraflarınıza bakar, hatıra defterinize not bırakır. Siz de hepsini panelinizden takip edersiniz.</p>
+      <div class="cta">
+        <a class="btn pri" href="#olustur">Davetiyemi oluştur</a>
+        <a class="btn sec" href="d.html?c=ornek" target="_blank" rel="noopener">Örnek davetiyeyi aç</a>
+      </div>
+      <ul class="trust">
+        <li>Uygulama indirmek gerekmez</li>
+        <li>Tek seferlik ödeme</li>
+        <li id="trustFiyat">WhatsApp'tan birebir destek</li>
+      </ul>
+    </div>
+    <figure class="showcase" style="margin:0">
+      <div class="device"><iframe src="d.html?c=ornek" title="Örnek davetiye" loading="lazy"></iframe></div>
+      <figcaption>Canlı örnek · zarfa dokunun</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="blk" id="ozellikler" style="padding-top:24px">
+  <div class="in">
+    <div class="eyebrow">Her davetiyede</div>
+    <h2 class="t">Kâğıt davetiyenin yapamadıkları</h2>
+    <p class="lead">Tek bir linkte; misafirlerinizin ihtiyaç duyduğu her şey ve sizin takip etmeniz gereken her bilgi.</p>
+    <div class="feats">
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="13" rx="1"/><path d="M3 7l9 7 9-7"/></svg><b>Zarf ve müzik</b><p>Davetiye, açılan bir zarfla ve size özel bestelenmiş müzik kutusu ezgisiyle karşılar.</p></div>
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><b>Canlı geri sayım</b><p>Büyük güne kalan gün, saat ve dakika saniye saniye işler.</p></div>
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12l5 5L20 6"/></svg><b>Katılım formu</b><p>Misafirler gelip gelmeyeceğini ve kaç kişi olacağını iki dokunuşla bildirir.</p></div>
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 15h3"/></svg><b>Size özel panel</b><p>Gelecek ve gelmeyecek kişi sayıları, isim listesi ve Excel'e aktarma.</p></div>
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.1-7-11a7 7 0 0114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><b>Konum ve yol tarifi</b><p>Program akışı ve tek dokunuşla Google Haritalar'da yol tarifi.</p></div>
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg><b>Fotoğraf galerisi</b><p>En güzel karelerinizden 12 tanesini panelinizden kendiniz ekleyin.</p></div>
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h11"/></svg><b>Hatıra defteri</b><p>Misafirlerinizin bıraktığı güzel sözler davetiyede ve panelinizde saklanır.</p></div>
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><b>Paylaşım görseli</b><p>WhatsApp durumu ve Instagram hikâyesi için hazır davetiye görseli.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk make" id="olustur">
+  <div class="in">
+    <div class="eyebrow">Davetiyeni oluştur</div>
+    <h2 class="t">Tasarımını seç, bilgilerini yaz</h2>
+    <p class="lead">Yazdıklarınız telefondaki önizlemede anında görünür. Beğendiğinizde siparişi oluşturun.</p>
+    <div class="strip" id="strip" role="group" aria-label="Tasarımlar"></div>
+    <div class="main">
+      <div class="stage" id="stage">
+        <div class="stage-top"><span class="label">Canlı önizleme</span><button class="mini-btn" id="fullBtn" type="button">Tam ekran</button></div>
+        <div class="phone"><div class="screen" id="screen"></div></div>
+      </div>
+      <div class="formcard">
+        <form id="f" autocomplete="off">
+          <h3 class="fsec">Davet</h3>
+          <div class="f"><span class="label">Davet türü</span><div class="seg" id="types"></div></div>
+          <div class="row">
+            <div class="f"><label class="label" for="gelin">Gelin</label><input id="gelin" value="Elif"></div>
+            <div class="f"><label class="label" for="damat">Damat</label><input id="damat" value="Burak"></div>
+          </div>
+          <div class="row">
+            <div class="f"><label class="label" for="tarih">Tarih</label><input id="tarih" type="date" value="2027-06-12"></div>
+            <div class="f"><label class="label" for="saat">Saat</label><input id="saat" type="time" value="19:30"></div>
+          </div>
+          <div class="f"><label class="label" for="aile">Aile isimleri (isteğe bağlı)</label><input id="aile" value="Yılmaz ve Demir aileleri"></div>
+          <div class="f"><label class="label" for="not">Davet notu</label><textarea id="not">Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız.</textarea></div>
+
+          <h3 class="fsec">Mekân ve program</h3>
+          <div class="f"><label class="label" for="mekan">Mekân</label><input id="mekan" value="Dragos Kır Bahçesi"></div>
+          <div class="f"><label class="label" for="adres">Adres</label><input id="adres" value="Orhantepe Mah., Kartal / İstanbul"></div>
+          <div class="f"><label class="label" for="konum">Konum linki (Google Maps, isteğe bağlı)</label><input id="konum" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/...">
+            <span class="hint">Google Maps'te mekânı açın → Paylaş → Bağlantıyı kopyala.</span></div>
+          <div class="f"><label class="label" for="program">Program (her satıra bir tane)</label><textarea id="program" rows="4">19:30 Karşılama
 20:00 Nikâh töreni
 20:30 Akşam yemeği
 22:00 Eğlence</textarea></div>
-        <div class="f"><span class="label">Paket</span><div class="pk" id="pk"></div></div>
-        <div class="f"><label class="label" for="telefon">Telefonunuz (sipariş için)</label><input id="telefon" type="tel" inputmode="tel" placeholder="05XX XXX XX XX" autocomplete="tel"></div>
-      </form>
+
+          <h3 class="fsec">Müzik</h3>
+          <div class="f"><div class="seg" id="muzikSec"></div><span class="hint">Davetiye açılırken çalan, size özel bestelenmiş telifsiz müzik kutusu ezgisi.</span></div>
+
+          <h3 class="fsec">Paket ve iletişim</h3>
+          <div class="f"><div class="pk" id="pk"></div></div>
+          <div class="f"><label class="label" for="telefon">Telefonunuz</label><input id="telefon" type="tel" inputmode="tel" placeholder="05XX XXX XX XX" autocomplete="tel">
+            <span class="hint">Sipariş ve ödeme bilgisi için WhatsApp'tan size ulaşırız.</span></div>
+        </form>
+      </div>
     </div>
   </div>
+</section>
 
-  <div class="steps">
-    <div><b>Seç ve yaz</b><p>Tasarımını seç, bilgilerini gir, davetiyeni canlı gör.</p></div>
-    <div><b>Sipariş ver</b><p>WhatsApp'tan bilgilerin bize ulaşır, ödeme bilgisini iletiriz.</p></div>
-    <div><b>Linkini paylaş</b><p>Size özel davetiye linki ve misafir yanıtlarını gördüğünüz panel hazır.</p></div>
+<section class="blk">
+  <div class="in">
+    <div class="eyebrow">Nasıl çalışır</div>
+    <h2 class="t">Üç adımda hazır</h2>
+    <ol class="steps">
+      <li><b>Tasarla</b><p>Tasarımınızı seçin, bilgilerinizi yazın, davetiyenizi önizlemede görün.</p></li>
+      <li><b>Siparişi gönderin</b><p>Siparişiniz WhatsApp'tan bize ulaşır, ödeme bilgisini iletiriz.</p></li>
+      <li><b>Linkinizi paylaşın</b><p>Ödemeden sonra davetiye linkiniz ve size özel paneliniz açılır.</p></li>
+    </ol>
   </div>
-</div>
+</section>
 
-<div class="obar"><div class="obar-in">
+<section class="blk" id="paketler" style="padding-top:0">
+  <div class="in">
+    <div class="eyebrow">Paketler</div>
+    <h2 class="t">Tek seferlik ödeme, abonelik yok</h2>
+    <div class="plans" id="plans"></div>
+  </div>
+</section>
+
+<section class="blk" id="yorumlar" hidden style="padding-top:0">
+  <div class="in">
+    <div class="eyebrow">Çiftlerimizden</div>
+    <h2 class="t">Davetiyesini Lavie ile hazırlayanlar</h2>
+    <div class="yorumlar" id="ylist"></div>
+  </div>
+</section>
+
+<section class="blk" id="sss" style="padding-top:0">
+  <div class="in">
+    <div class="eyebrow">Sıkça sorulanlar</div>
+    <h2 class="t">Aklınıza takılanlar</h2>
+    <div class="sss">
+      <details><summary>Davetiyem ne kadar sürede hazır olur?</summary><p>Siparişiniz ve ödemeniz onaylandıktan sonra davetiye linkiniz genellikle aynı gün açılır.</p></details>
+      <details><summary>Misafirlerin uygulama indirmesi gerekir mi?</summary><p>Hayır. Davetiye bir link olarak WhatsApp'tan veya mesajla paylaşılır, telefonun tarayıcısında açılır.</p></details>
+      <details><summary>Ödemeyi nasıl yapıyorum?</summary><p>Siparişinizi oluşturduktan sonra WhatsApp'tan size ödeme bilgilerini iletiyoruz. Ödeme tek seferliktir.</p></details>
+      <details><summary>Sonradan bilgileri değiştirebilir miyim?</summary><p>Evet. Saat, mekân veya program değişirse WhatsApp'tan yazmanız yeterli; davetiye linkiniz değişmeden güncellenir.</p></details>
+      <details><summary>Katılım yanıtlarını nasıl görürüm?</summary><p>Size özel bir panel linki veriyoruz. Gelecek ve gelmeyecek kişi sayılarını, isim listesini ve hatıra defterini oradan takip eder, listeyi Excel'e aktarabilirsiniz.</p></details>
+      <details><summary>Fotoğraf ekleyebilir miyim?</summary><p>Evet, panelinizden 12 fotoğrafa kadar ekleyip çıkarabilirsiniz. Fotoğraflar davetiyenizdeki galeride görünür.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site">
+  <div class="in">
+    <div>
+      <a class="logo" href="#">Lavie</a>
+      <p>Düğün, nişan, kına ve söz için şık dijital davetiye siteleri.</p>
+    </div>
+    <ul>
+      <li><a id="ftWa" target="_blank" rel="noopener">WhatsApp: <span id="ftWaNo"></span></a></li>
+      <li><a id="ig" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="d.html?c=ornek" target="_blank" rel="noopener">Örnek davetiye</a></li>
+    </ul>
+    <small>© <span id="yil"></span> Lavie</small>
+  </div>
+</footer>
+
+<div class="obar" id="obar"><div class="obar-in">
   <div class="sum" id="sum"></div>
-  <button class="btn" id="order" type="button">Siparişi oluştur</button>
-  <a class="btn" id="wa" target="_blank" rel="noopener" hidden>WhatsApp'tan gönder</a>
+  <button class="obtn" id="order" type="button">Siparişi oluştur</button>
+  <a class="obtn" id="wa" target="_blank" rel="noopener" hidden>WhatsApp'tan gönder</a>
 </div>
 <div class="obar-note" id="note" hidden></div></div>
 
 <script src="ayarlar.js"></script>
 <script src="davetiye.js"></script>
+<script src="muzik.js"></script>
 <script>
 const A = window.LAVIE_AYAR, L = window.Lavie;
-const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id };
+const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id, muzik: "kutu" };
 const $ = id => document.getElementById(id);
 const ALANLAR = ["gelin","damat","tarih","saat","mekan","adres","konum","aile","not","program","telefon"];
-$("ig").href = "https://instagram.com/" + A.INSTAGRAM;
+const TIK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>`;
+const ORTAK = ["Zarf açılışı ve müzik kutusu","Canlı geri sayım, program ve konum","Katılım formu ve size özel panel","12 fotoğraflık galeri","Hatıra defteri","5 özel tasarım, size özel link"];
 
-function veri(){ const d = { tasarim:S.tasarim, tur:S.tur }; ALANLAR.forEach(k => d[k] = $(k).value.trim()); return d; }
+// Sabit metinler ve bağlantılar
+$("ig").href = "https://instagram.com/" + A.INSTAGRAM;
+$("ftWa").href = "https://wa.me/" + A.WHATSAPP;
+$("ftWaNo").textContent = "0" + A.WHATSAPP.slice(2).replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3 $4");
+$("yil").textContent = new Date().getFullYear();
+$("trustFiyat").textContent = Math.min(...A.PAKETLER.map(p => p.fiyat)) + " TL'den başlayan fiyatlar";
+
+function planCiz(){
+  $("plans").innerHTML = A.PAKETLER.map((p, i) => `<div class="plan ${i === A.PAKETLER.length - 1 ? "vurgu" : ""}">
+    ${i === A.PAKETLER.length - 1 ? `<span class="rozet">En çok tercih edilen</span>` : ""}
+    <h3>${L.esc(p.ad)}</h3>
+    <div class="fiyat">${p.fiyat}<small>TL</small></div>
+    <ul>${ORTAK.map(x => `<li>${TIK}<span>${x}</span></li>`).join("")}${p.id === "site-gorsel" ? `<li class="ek">${TIK}<span>Hikâye ve durum boyutunda paylaşım görseli</span></li>` : ""}</ul>
+    <button class="btn ${i === A.PAKETLER.length - 1 ? "pri" : "sec"}" type="button" data-p="${p.id}">Bu paketle oluştur</button>
+  </div>`).join("");
+  $("plans").querySelectorAll("[data-p]").forEach(b => b.onclick = () => { S.paket = b.dataset.p; ciz(); $("olustur").scrollIntoView(); });
+}
+
+function veri(){ const d = { tasarim:S.tasarim, tur:S.tur, muzik:S.muzik }; ALANLAR.forEach(k => d[k] = $(k).value.trim()); return d; }
 
 function seritCiz(){
   const st = $("strip"); st.innerHTML = "";
@@ -149,10 +385,19 @@ function seritCiz(){
     st.appendChild(b);
   });
 }
-function turCiz(){
-  const el = $("types"); el.innerHTML = "";
-  L.TURLER.forEach(t => { const b = document.createElement("button"); b.type = "button"; b.textContent = t;
-    b.setAttribute("aria-pressed", String(S.tur === t)); b.onclick = () => { S.tur = t; ciz(); }; el.appendChild(b); });
+function seg(el, ogeler, anahtar){
+  el.innerHTML = "";
+  ogeler.forEach(([deger, yazi]) => { const b = document.createElement("button"); b.type = "button"; b.textContent = yazi;
+    b.setAttribute("aria-pressed", String(S[anahtar] === deger)); b.onclick = () => { S[anahtar] = deger; ciz(); }; el.appendChild(b); });
+}
+function muzikCiz(){
+  seg($("muzikSec"), [["kutu","Müzik kutusu"],["yok","Müzik olmasın"]], "muzik");
+  const b = document.createElement("button"); b.type = "button";
+  const M = window.LavieMuzik;
+  b.textContent = M && M.calisiyor() ? "■ Durdur" : "▶ Dinle";
+  b.onclick = () => { if (!M) return; M.calisiyor() ? M.durdur() : M.baslat(); muzikCiz(); };
+  if (S.muzik === "kutu") $("muzikSec").appendChild(b);
+  else if (M && M.calisiyor()) M.durdur();
 }
 function paketCiz(){
   const pk = $("pk"); pk.innerHTML = "";
@@ -170,25 +415,31 @@ function mesaj(kod){
     `Tasarım: ${t.ad}`,`Tür: ${d.tur}`,`Gelin: ${d.gelin}`,`Damat: ${d.damat}`,
     `Tarih: ${L.uzunTarih(d)} ${d.saat}`,`Mekân: ${d.mekan}`,`Adres: ${d.adres}`,
     d.konum?`Konum: ${d.konum}`:null, d.aile?`Aile: ${d.aile}`:null, d.not?`Not: ${d.not}`:null,
-    d.program?`Program:\n${d.program}`:null, d.telefon?`Telefon: ${d.telefon}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`].filter(x => x !== null).join("\n");
+    d.program?`Program:\n${d.program}`:null, `Müzik: ${d.muzik==="yok"?"Yok":"Müzik kutusu"}`,
+    d.telefon?`Telefon: ${d.telefon}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`].filter(x => x !== null).join("\n");
 }
 function ciz(basa){
-  seritCiz(); turCiz(); paketCiz();
+  seritCiz(); seg($("types"), L.TURLER.map(t => [t, t]), "tur"); muzikCiz(); paketCiz();
   const sc = $("screen"), y = sc.scrollTop;
-  L.ciz(sc, veri(), async () => { await new Promise(r => setTimeout(r, 500)); });
+  L.ciz(sc, veri(), async () => { await new Promise(r => setTimeout(r, 500)); }, {
+    ornekGaleri: true,
+    mesajlar: [{ isim: "Örnek misafir", mesaj: "Mutluluğunuz daim olsun, bir ömür boyu el ele!", zaman: new Date().toISOString() }]
+  });
   sc.scrollTop = basa ? 0 : y;
   const p = A.PAKETLER.find(x => x.id === S.paket), t = L.TASARIMLAR.find(x => x.id === S.tasarim);
   $("sum").innerHTML = `${L.esc(t.ad)} · ${L.esc(p.ad)}<br><b>${p.fiyat} TL</b>`;
   siparisSifirla();
 }
-// Bilgiler değişirse sipariş adımı baştan başlar
 function siparisSifirla(){
   $("order").hidden = false; $("order").disabled = false; $("order").textContent = "Siparişi oluştur";
   $("wa").hidden = true; $("note").hidden = true;
 }
 $("order").addEventListener("click", async () => {
   const d = veri();
-  if (!d.gelin || !d.damat || !d.tarih || d.telefon.replace(/\D/g,"").length < 10) { $("note").textContent = "Lütfen gelin, damat, tarih ve telefon bilgilerini doldurun."; $("note").hidden = false; return; }
+  if (!d.gelin || !d.damat || !d.tarih || d.telefon.replace(/\D/g,"").length < 10) {
+    $("note").textContent = "Lütfen gelin, damat, tarih ve telefon bilgilerini doldurun."; $("note").hidden = false;
+    $(!d.gelin ? "gelin" : !d.damat ? "damat" : !d.tarih ? "tarih" : "telefon").focus(); return;
+  }
   $("order").disabled = true; $("order").textContent = "Hazırlanıyor...";
   let kod = null;
   try {
@@ -204,6 +455,24 @@ $("order").addEventListener("click", async () => {
 ALANLAR.forEach(k => $(k).addEventListener("input", () => ciz()));
 $("f").addEventListener("submit", e => e.preventDefault());
 $("fullBtn").addEventListener("click", () => { const f = $("stage").classList.toggle("full"); $("fullBtn").textContent = f ? "Kapat" : "Tam ekran"; });
+
+// Sipariş çubuğu yalnızca oluşturucu ve sonrasında görünür
+const obar = $("obar");
+if ("IntersectionObserver" in window) {
+  new IntersectionObserver(es => es.forEach(e => {
+    const altta = e.boundingClientRect.top < 0;
+    obar.classList.toggle("gor", e.isIntersecting || altta);
+  }), { rootMargin: "0px 0px -40% 0px" }).observe($("olustur"));
+} else obar.classList.add("gor");
+
+// Onaylı gerçek yorumlar
+fetch(A.API_URL + "/yorumlar").then(r => r.json()).then(j => {
+  if (!j.ok || !j.yorumlar.length) return;
+  $("ylist").innerHTML = j.yorumlar.map(y => `<figure class="yk"><div class="yildiz" aria-label="${y.puan} yıldız">${"★".repeat(y.puan)}</div><blockquote>${L.esc(y.yorum)}</blockquote><figcaption>${L.esc(y.ad)} · ${L.esc(y.tur)}</figcaption></figure>`).join("");
+  $("yorumlar").hidden = false;
+}).catch(() => {});
+
+planCiz();
 ciz(true);
 </script>
 </body>

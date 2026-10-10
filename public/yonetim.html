@@ -86,7 +86,7 @@ const TUR = ["Düğün","Nişan","Kına","Söz"];
 const DURUM = {bekliyor:"Ödeme bekliyor",aktif:"Yayında",kapali:"Kapalı"};
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let SIFRE = "", LISTE = [], FILTRE = "bekliyor", ACIK = null;
+let SIFRE = "", LISTE = [], YORUMLAR = [], FILTRE = "bekliyor", ACIK = null;
 
 try { SIFRE = localStorage.getItem("lavie_sifre") || ""; } catch {}
 
@@ -102,7 +102,7 @@ function hataMetni(h){
 }
 async function yukle(){
   const j = await api("GET");
-  LISTE = j.ciftler; ciz();
+  LISTE = j.ciftler; YORUMLAR = j.yorumlar || []; ciz();
 }
 async function giris(){
   $("lmsg").className="msg"; $("lmsg").textContent="Kontrol ediliyor...";
@@ -120,7 +120,19 @@ function ciz(){
   const say = {bekliyor:0,aktif:0,kapali:0,hepsi:LISTE.length};
   LISTE.forEach(c=>say[c.durum]=(say[c.durum]||0)+1);
   $("tabs").innerHTML = [["bekliyor","Bekleyen"],["aktif","Yayında"],["kapali","Kapalı"],["hepsi","Tümü"]]
-    .map(([k,l])=>`<button class="tab" type="button" data-f="${k}" aria-pressed="${FILTRE===k}">${l}<b>${say[k]||0}</b></button>`).join("");
+    .concat([["yorum","Yorumlar"]])
+    .map(([k,l])=>`<button class="tab" type="button" data-f="${k}" aria-pressed="${FILTRE===k}">${l}<b>${k==="yorum"?YORUMLAR.filter(y=>!y.onay).length+"/"+YORUMLAR.length:(say[k]||0)}</b></button>`).join("");
+  if (FILTRE === "yorum") {
+    $("list").innerHTML = YORUMLAR.length ? YORUMLAR.map(y => `<article class="card" data-y="${esc(y.slug)}">
+      <div class="top"><h2 class="names">${esc(y.ad)}</h2><span class="pill ${y.onay?"aktif":"bekliyor"}">${y.onay?"Sitede":"Onay bekliyor"}</span></div>
+      <div style="color:#b08a4f;letter-spacing:2px">${"★".repeat(y.puan)}<span style="color:#d8cfc6">${"★".repeat(5-y.puan)}</span></div>
+      <p style="margin:0;font-style:italic">${esc(y.yorum)}</p>
+      <div class="acts">
+        <button class="b ${y.onay?"":"main"}" data-ya="${y.onay?"gizle":"onay"}">${y.onay?"Siteden kaldır":"Onayla, sitede göster"}</button>
+        <button class="b danger" data-ya="sil">Sil</button>
+      </div></article>`).join("") : `<div class="empty">Henüz yorum yok. Çiftler panellerindeki "Bizi değerlendirin" bölümünden yorum bırakınca burada görünür.</div>`;
+    return;
+  }
   const liste = LISTE.filter(c=>FILTRE==="hepsi"||c.durum===FILTRE);
   $("list").innerHTML = liste.length ? liste.map(kart).join("") :
     `<div class="empty">${FILTRE==="bekliyor"?"Bekleyen sipariş yok. Yeni sipariş gelince burada görünecek.":"Bu bölümde davetiye yok."}</div>`;
@@ -167,6 +179,10 @@ function formHTML(c){
       <label class="f"><span>Tasarım</span><select name="tasarim">${Object.entries(TASARIM).map(([k,v])=>`<option value="${k}" ${c.tasarim===k?"selected":""}>${v}</option>`).join("")}</select></label>
       <label class="f"><span>Tür</span><select name="tur">${TUR.map(t=>`<option ${c.tur===t?"selected":""}>${t}</option>`).join("")}</select></label>
     </div>
+    <div class="row">
+      <label class="f"><span>Müzik</span><select name="muzik"><option value="kutu" ${c.muzik!=="yok"?"selected":""}>Müzik kutusu</option><option value="yok" ${c.muzik==="yok"?"selected":""}>Müzik yok</option></select></label>
+      <label class="f"><span>Paket</span><select name="paket"><option value="site" ${c.paket!=="site-gorsel"?"selected":""}>Davetiye sitesi</option><option value="site-gorsel" ${c.paket==="site-gorsel"?"selected":""}>Site + paylaşım görseli</option></select></label>
+    </div>
     ${inp("mekan","Mekân")}${inp("adres","Adres")}${inp("konum","Konum linki","url")}${inp("aile","Aile isimleri")}${inp("telefon","Telefon","tel")}
     <label class="f"><span>Davet notu</span><textarea name="not">${esc(c.not)}</textarea></label>
     <label class="f"><span>Program</span><textarea name="program" rows="4">${esc(c.program)}</textarea></label>
@@ -183,6 +199,18 @@ $("cikis").onclick=()=>{ try{localStorage.removeItem("lavie_sifre");}catch{} loc
 $("yenile").onclick=async()=>{ try{ await yukle(); toast("Güncellendi"); }catch(e){ toast(hataMetni(e.message)); } };
 $("tabs").addEventListener("click", e=>{ const b=e.target.closest(".tab"); if(!b) return; FILTRE=b.dataset.f; ciz(); });
 $("list").addEventListener("click", async e=>{
+  const yb=e.target.closest("button[data-ya]");
+  if(yb){
+    const ys=yb.closest(".card").dataset.y, y=YORUMLAR.find(x=>x.slug===ys), a=yb.dataset.ya;
+    if(a==="sil" && !confirm("Bu yorum silinsin mi?")) return;
+    yb.disabled=true;
+    try{
+      if(a==="sil"){ await api("POST",{islem:"yorum-sil",slug:ys}); YORUMLAR=YORUMLAR.filter(x=>x.slug!==ys); toast("Silindi"); }
+      else { await api("POST",{islem:"yorum-onay",slug:ys,onay:a==="onay"}); y.onay=a==="onay"; toast(y.onay?"Sitede yayında":"Siteden kaldırıldı"); }
+      ciz();
+    }catch(err){ yb.disabled=false; toast(hataMetni(err.message)); }
+    return;
+  }
   const b=e.target.closest("button[data-a]"); if(!b) return;
   const slug=b.closest(".card").dataset.s, c=LISTE.find(x=>x.slug===slug), a=b.dataset.a;
   if(a==="gorsel") return window.LavieGorsel.goster(c);

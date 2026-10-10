@@ -3,35 +3,65 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Misafir Paneli · Lavie</title>
+<title>Çift Paneli · Lavie</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Great+Vibes&family=Jost:wght@400;500&display=swap">
 <style>
-:root{--paper:#f6f3f1;--ink:#2b2a33;--muted:#6e6a72;--line:#e0d8d2;--accent:#5b4a6b;--field:#fff}
+/* Tek sütun: başlık, özet, sekmeli bölümler (misafirler, fotoğraflar, hatıra defteri, yorum) */
+:root{--paper:#f6f3f1;--ink:#2b2a33;--muted:#6e6a72;--line:#e0d8d2;--accent:#5b4a6b;--field:#fff;--gold:#b08a4f;--ok:#2f6440;--bad:#a2464b}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0}
 body{background:var(--paper);color:var(--ink);font-family:"Jost",system-ui,sans-serif;font-size:15px;line-height:1.5}
-.wrap{max-width:820px;margin:0 auto;padding-inline:16px;padding-block:24px 40px;display:grid;gap:16px}
-.brand{font-family:"Italiana",Georgia,serif;font-size:1.4rem;letter-spacing:.06em;color:var(--muted)}
-h1{font-family:"Italiana",Georgia,serif;font-weight:400;font-size:2rem;margin:0;text-wrap:balance}
+.wrap{max-width:820px;margin:0 auto;padding-inline:16px;padding-block:24px 48px;display:grid;gap:16px}
+.brand{font-family:"Italiana",Georgia,serif;font-size:1.3rem;letter-spacing:.06em;color:var(--muted)}
+h1{font-family:"Italiana",Georgia,serif;font-weight:400;font-size:2.1rem;margin:0;text-wrap:balance;line-height:1.15}
+h2{font-family:"Italiana",Georgia,serif;font-weight:400;font-size:1.4rem;margin:0}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .stat{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--field)}
 .stat b{display:block;font-family:"Italiana",Georgia,serif;font-size:2rem;font-weight:400;font-variant-numeric:tabular-nums;line-height:1.1}
 .stat.yes b{color:#3f7a4f}.stat.no b{color:#a2464b}
 .stat span{font-size:.8rem;color:var(--muted)}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.bar input{flex:1;min-width:160px;font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field)}
-.b{font:inherit;font-size:.88rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
+.bar input{flex:1;min-width:160px}
+input,textarea{font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);width:100%}
+textarea{resize:vertical;min-height:90px}
+.b{font:inherit;font-size:.88rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.b.main{background:var(--accent);border-color:var(--accent);color:#fff}
+.b[disabled]{opacity:.6;cursor:wait}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.linkbox{background:var(--field);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px}
+.linkbox code{font-family:inherit;font-size:.88rem;overflow-wrap:anywhere;color:var(--accent)}
+.tabs{display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--line);padding-bottom:0}
+.tab{font:inherit;font-size:.92rem;padding:10px 12px;border:0;border-bottom:2px solid transparent;background:none;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab b{font-weight:500;font-variant-numeric:tabular-nums;margin-left:4px}
+.pane{display:grid;gap:12px}
 .tbl{overflow-x:auto;background:var(--field);border:1px solid var(--line);border-radius:10px}
 table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:420px}
-th{text-align:left;font-weight:500;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px 10px;border-bottom:1px solid var(--line)}
+th{text-align:left;font-weight:500;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px;border-bottom:1px solid var(--line)}
 td{padding:10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
 tr:last-child td{border-bottom:0}
 .pill{font-size:.78rem;padding:3px 9px;border-radius:999px;white-space:nowrap}
-.pill.yes{background:#e3efe6;color:#2f6440}.pill.no{background:#f5e3e4;color:#8a3439}
+.pill.yes{background:#e3efe6;color:#2f6440}.pill.no{background:#f5e3e4;color:#8a3439}.pill.wait{background:#f8ecd6;color:#8a5a12}
+.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.foto{position:relative;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:#e9e4e0}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.foto button{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(20,18,24,.7);color:#fff;font-size:18px;line-height:1;cursor:pointer}
+.yukle{display:grid;place-items:center;aspect-ratio:3/4;border:1.5px dashed var(--line);border-radius:8px;color:var(--muted);font-size:.85rem;text-align:center;padding:8px;cursor:pointer;background:var(--field)}
+.yukle input{display:none}
+.mk{background:var(--field);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:6px}
+.mk p{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:1.1rem;line-height:1.45}
+.mk div{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
+.mk button{font:inherit;font-size:.8rem;border:0;background:none;color:var(--bad);cursor:pointer}
+.stars{display:flex;gap:4px}
+.stars button{font-size:1.8rem;line-height:1;border:0;background:none;cursor:pointer;color:#d8cfc6;padding:2px}
+.stars button.on{color:var(--gold)}
 .msg{color:var(--muted);padding:24px 0}
 .muted{color:var(--muted);font-size:.85rem}
+.note{background:#f8ecd6;color:#6b4710;border-radius:10px;padding:10px 12px;font-size:.88rem}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;font-size:.88rem;z-index:5}
 a{color:var(--accent)}
 </style>
 </head>
@@ -40,67 +70,166 @@ a{color:var(--accent)}
   <div class="brand">Lavie</div>
   <div class="msg" id="msg">Yükleniyor...</div>
 </div>
+<div class="toast" id="toast" hidden></div>
 <script src="ayarlar.js"></script>
 <script src="gorsel.js"></script>
 <script>
 const API = window.LAVIE_AYAR.API_URL;
 const q = new URLSearchParams(location.search), slug = q.get("c") || "", key = q.get("k") || "";
 const app = document.getElementById("app");
-const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let LISTE = [], CIFT = {};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let V = null, SEKME = "misafir", PUAN = 5;
 
-function cizim(filtre=""){
-  const f = filtre.toLocaleLowerCase("tr");
-  const gel = LISTE.filter(x => x.durum === "Katılacak");
-  const rows = LISTE.filter(x => !f || x.isim.toLocaleLowerCase("tr").includes(f));
-  document.getElementById("sYes").textContent = gel.reduce((a,x) => a + x.kisi, 0);
-  document.getElementById("sNo").textContent = LISTE.length - gel.length;
-  document.getElementById("sAll").textContent = LISTE.length;
-  document.getElementById("rows").innerHTML = rows.length ? rows.map(x => `<tr><td>${esc(x.isim)}</td><td>${x.durum==="Katılacak"?x.kisi:"–"}</td><td><span class="pill ${x.durum==="Katılacak"?"yes":"no"}">${esc(x.durum)}</span></td><td>${new Date(x.zaman).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</td></tr>`).join("")
-    : `<tr><td colspan="4" class="muted">${LISTE.length ? "Aramaya uyan misafir yok." : "Henüz yanıt yok. Davetiye linkinizi paylaştıkça yanıtlar burada görünecek."}</td></tr>`;
-}
-function csv(){
-  const lines = [["İsim","Kişi","Durum","Tarih"], ...LISTE.map(x => [x.isim, x.kisi, x.durum, new Date(x.zaman).toLocaleString("tr-TR")])]
-    .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(";")).join("\r\n");
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob(["﻿" + lines], {type:"text/csv;charset=utf-8"}));
-  a.download = `${slug}-misafirler.csv`; a.click();
-}
+function toast(m){ const t=$("toast"); t.textContent=m; t.hidden=false; clearTimeout(t._z); t._z=setTimeout(()=>t.hidden=true,2400); }
 async function yukle(){
   const r = await fetch(`${API}/panel?c=${encodeURIComponent(slug)}&k=${encodeURIComponent(key)}`);
   const j = await r.json();
   if (!j.ok) throw new Error(j.hata);
-  CIFT = j.cift; LISTE = j.yanitlar.sort((a,b) => new Date(b.zaman) - new Date(a.zaman));
+  V = j; if (V.yorum) PUAN = V.yorum.puan;
 }
-(async () => {
-  const msg = document.getElementById("msg");
-  if (!slug || !key) { msg.textContent = "Panel linki eksik. Size gönderilen linki tam olarak açın."; return; }
-  try { await yukle(); }
-  catch (e) { msg.textContent = e.message === "anahtar" || e.message === "bulunamadi" ? "Panel linki geçersiz. Size gönderilen linki tam olarak açın." : "Panel yüklenemedi. Sayfayı yenileyin."; return; }
-  const davetLink = location.href.replace(/panel\.html.*$/, "d.html?c=" + encodeURIComponent(slug));
+async function islem(body){
+  const r = await fetch(`${API}/panel`, { method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify({ c: slug, k: key, ...body }) });
+  const j = await r.json().catch(()=>({ok:false}));
+  if (!j.ok) throw new Error(j.hata || "hata");
+  return j;
+}
+const davetLink = () => location.origin + "/d.html?c=" + encodeURIComponent(slug);
+async function kopyala(t){ try{ await navigator.clipboard.writeText(t); toast("Link kopyalandı"); } catch { window.prompt("Linki kopyalayın:", t); } }
+
+function iskelet(){
+  const c = V.cift;
   app.innerHTML = `<div class="brand">Lavie</div>
-    <h1>${esc(CIFT.gelin)} &amp; ${esc(CIFT.damat)}</h1>
-    <div class="muted">Davetiye linkiniz: <a href="${esc(davetLink)}" target="_blank" rel="noopener">${esc(davetLink)}</a></div>
-    ${CIFT.paket === "site-gorsel" ? `<div class="bar"><button class="b" id="gorsel" type="button" style="background:var(--accent);border-color:var(--accent);color:#fff">Paylaşım görselini oluştur</button><span class="muted">WhatsApp durumu ve Instagram hikâyesi için</span></div>` : ""}
+    <h1>${esc(c.gelin)} &amp; ${esc(c.damat)}</h1>
+    ${V.ornek ? `<div class="note">Bu örnek bir paneldir; burada değişiklik yapılamaz.</div>` : ""}
+    <div class="linkbox">
+      <span class="muted">Misafirlerinizle paylaşacağınız davetiye linki</span>
+      <code>${esc(davetLink())}</code>
+      <div class="bar">
+        <button class="b main" id="kopya" type="button">Linki kopyala</button>
+        <a class="b" href="https://wa.me/?text=${encodeURIComponent("Davetiyemiz: " + davetLink())}" target="_blank" rel="noopener">WhatsApp'ta paylaş</a>
+        <a class="b" href="${esc(davetLink())}" target="_blank" rel="noopener">Davetiyeyi aç</a>
+        ${c.paket === "site-gorsel" ? `<button class="b" id="gorsel" type="button">Paylaşım görseli</button>` : ""}
+      </div>
+    </div>
     <div class="stats">
       <div class="stat yes"><b id="sYes">0</b><span>Gelecek kişi</span></div>
       <div class="stat no"><b id="sNo">0</b><span>Gelemeyecek</span></div>
       <div class="stat"><b id="sAll">0</b><span>Toplam yanıt</span></div>
     </div>
-    <div class="bar">
-      <input id="ara" placeholder="Misafir ara" aria-label="Misafir ara">
-      <button class="b" id="yenile" type="button">Yenile</button>
-      <button class="b" id="indir" type="button">Excel'e indir</button>
-    </div>
-    <div class="tbl"><table><thead><tr><th>İsim</th><th>Kişi</th><th>Durum</th><th>Tarih</th></tr></thead><tbody id="rows"></tbody></table></div>
-    <div class="muted">Bu link size özeldir, misafirlerinizle paylaşmayın.</div>`;
-  const ara = document.getElementById("ara");
-  ara.oninput = () => cizim(ara.value);
-  document.getElementById("indir").onclick = csv;
-  const g = document.getElementById("gorsel");
-  if (g) g.onclick = () => window.LavieGorsel.goster(CIFT);
-  document.getElementById("yenile").onclick = async e => { e.target.textContent = "Yenileniyor..."; try { await yukle(); cizim(ara.value); } finally { e.target.textContent = "Yenile"; } };
-  cizim();
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="pane" id="pane"></div>
+    <div class="muted">Bu panel linki size özeldir, misafirlerinizle paylaşmayın.</div>`;
+  $("kopya").onclick = () => kopyala(davetLink());
+  if ($("gorsel")) $("gorsel").onclick = () => window.LavieGorsel.goster(V.cift);
+  $("tabs").addEventListener("click", e => { const b = e.target.closest(".tab"); if (b) { SEKME = b.dataset.s; ciz(); } });
+}
+
+function ciz(){
+  const gel = V.yanitlar.filter(x => x.durum === "Katılacak");
+  $("sYes").textContent = gel.reduce((a,x) => a + x.kisi, 0);
+  $("sNo").textContent = V.yanitlar.length - gel.length;
+  $("sAll").textContent = V.yanitlar.length;
+  $("tabs").innerHTML = [["misafir","Misafirler",V.yanitlar.length],["foto","Fotoğraflar",V.fotolar.length],["defter","Hatıra defteri",V.mesajlar.length],["yorum","Bizi değerlendirin",""]]
+    .map(([k,l,n]) => `<button class="tab" role="tab" type="button" data-s="${k}" aria-selected="${SEKME===k}">${l}${n!==""?`<b>${n}</b>`:""}</button>`).join("");
+  const p = $("pane");
+  if (SEKME === "misafir") {
+    p.innerHTML = `<div class="bar"><input id="ara" placeholder="Misafir ara" aria-label="Misafir ara"><button class="b" id="yenile" type="button">Yenile</button><button class="b" id="indir" type="button">Excel'e indir</button></div>
+      <div class="tbl"><table><thead><tr><th>İsim</th><th>Kişi</th><th>Durum</th><th>Tarih</th></tr></thead><tbody id="rows"></tbody></table></div>`;
+    const satirlar = (f="") => {
+      f = f.toLocaleLowerCase("tr");
+      const rows = V.yanitlar.filter(x => !f || x.isim.toLocaleLowerCase("tr").includes(f));
+      $("rows").innerHTML = rows.length ? rows.map(x => `<tr><td>${esc(x.isim)}</td><td>${x.durum==="Katılacak"?x.kisi:"–"}</td><td><span class="pill ${x.durum==="Katılacak"?"yes":"no"}">${esc(x.durum)}</span></td><td>${new Date(x.zaman).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</td></tr>`).join("")
+        : `<tr><td colspan="4" class="muted">${V.yanitlar.length ? "Aramaya uyan misafir yok." : "Henüz yanıt yok. Davetiye linkinizi paylaştıkça yanıtlar burada görünecek."}</td></tr>`;
+    };
+    satirlar();
+    $("ara").oninput = e => satirlar(e.target.value);
+    $("indir").onclick = csv;
+    $("yenile").onclick = async e => { e.target.textContent = "Yenileniyor..."; try { await yukle(); ciz(); } finally { e.target.textContent = "Yenile"; } };
+  }
+  if (SEKME === "foto") {
+    const dolu = V.fotolar.length >= V.fotoSiniri;
+    p.innerHTML = `<p class="muted" style="margin:0">Davetiyenizdeki "Anılarımız" galerisinde görünür. En fazla ${V.fotoSiniri} fotoğraf (${V.fotolar.length}/${V.fotoSiniri}).</p>
+      <div class="fotos">
+        ${V.fotolar.map(f => `<div class="foto"><img src="${esc(f.url)}" alt="" loading="lazy"><button type="button" data-sil="${esc(f.id)}" aria-label="Fotoğrafı sil">×</button></div>`).join("")}
+        ${dolu || V.ornek ? "" : `<label class="yukle"><input type="file" id="dosya" accept="image/*" multiple><span>+ Fotoğraf ekle</span></label>`}
+      </div>
+      <div class="muted" id="ydurum"></div>`;
+    p.querySelectorAll("[data-sil]").forEach(b => b.onclick = async () => {
+      if (!confirm("Bu fotoğraf davetiyeden silinsin mi?")) return;
+      b.disabled = true;
+      try { await islem({ islem: "foto-sil", id: b.dataset.sil }); V.fotolar = V.fotolar.filter(f => f.id !== b.dataset.sil); ciz(); toast("Fotoğraf silindi"); }
+      catch { b.disabled = false; toast("Silinemedi, tekrar deneyin."); }
+    });
+    if ($("dosya")) $("dosya").onchange = e => fotoYukle([...e.target.files]);
+  }
+  if (SEKME === "defter") {
+    p.innerHTML = V.mesajlar.length ? V.mesajlar.map(m => `<div class="mk"><p>${esc(m.mesaj)}</p><div><span>${esc(m.isim)} · ${new Date(m.zaman).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})}</span>${V.ornek?"":`<button type="button" data-msil="${esc(m.id)}">Kaldır</button>`}</div></div>`).join("")
+      : `<p class="muted">Henüz mesaj yok. Misafirleriniz davetiyedeki Hatıra Defteri'ne yazdıkça burada görünecek.</p>`;
+    p.querySelectorAll("[data-msil]").forEach(b => b.onclick = async () => {
+      if (!confirm("Bu mesaj davetiyeden kaldırılsın mı?")) return;
+      try { await islem({ islem: "mesaj-sil", id: b.dataset.msil }); V.mesajlar = V.mesajlar.filter(m => m.id !== b.dataset.msil); ciz(); toast("Mesaj kaldırıldı"); }
+      catch { toast("Kaldırılamadı, tekrar deneyin."); }
+    });
+  }
+  if (SEKME === "yorum") {
+    const y = V.yorum;
+    p.innerHTML = `<p class="muted" style="margin:0">Lavie'den memnun kaldıysanız birkaç cümleyle anlatın. Onaylandıktan sonra sitemizde adlarınızla (yalnızca ilk isimler) yayınlanır.</p>
+      ${y ? `<div><span class="pill ${y.onay?"yes":"wait"}">${y.onay?"Sitede yayında":"Onay bekliyor"}</span></div>` : ""}
+      <div class="stars" id="stars" role="radiogroup" aria-label="Puan">${[1,2,3,4,5].map(i => `<button type="button" role="radio" aria-checked="${i===PUAN}" aria-label="${i} yıldız" data-p="${i}" class="${i<=PUAN?"on":""}">★</button>`).join("")}</div>
+      <textarea id="ytext" maxlength="500" placeholder="Deneyiminizi yazın">${esc(y?.yorum || "")}</textarea>
+      <div><button class="b main" id="ygonder" type="button" ${V.ornek?"disabled":""}>${y?"Yorumu güncelle":"Gönder"}</button></div>`;
+    $("stars").onclick = e => { const b = e.target.closest("[data-p]"); if (!b) return; PUAN = Number(b.dataset.p); p.querySelectorAll("[data-p]").forEach(x => { x.classList.toggle("on", Number(x.dataset.p) <= PUAN); x.setAttribute("aria-checked", Number(x.dataset.p) === PUAN); }); };
+    $("ygonder").onclick = async e => {
+      const t = $("ytext").value.trim();
+      if (t.length < 5) return toast("Lütfen birkaç kelime yazın.");
+      e.target.disabled = true;
+      try { await islem({ islem: "yorum", puan: PUAN, yorum: t }); V.yorum = { puan: PUAN, yorum: t, onay: false }; ciz(); toast("Teşekkürler! Yorumunuz onaya gönderildi."); }
+      catch { e.target.disabled = false; toast("Gönderilemedi, tekrar deneyin."); }
+    };
+  }
+}
+
+// Fotoğrafı telefonda küçültüp yükle
+async function kucult(dosya){
+  const url = URL.createObjectURL(dosya);
+  try {
+    const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = url; });
+    const o = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+    const cv = document.createElement("canvas"); cv.width = Math.round(img.naturalWidth * o); cv.height = Math.round(img.naturalHeight * o);
+    cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+    return await new Promise(r => cv.toBlob(r, "image/jpeg", .82));
+  } finally { URL.revokeObjectURL(url); }
+}
+async function fotoYukle(dosyalar){
+  const kalan = V.fotoSiniri - V.fotolar.length;
+  dosyalar = dosyalar.slice(0, kalan);
+  for (let i = 0; i < dosyalar.length; i++) {
+    $("ydurum").textContent = `Yükleniyor ${i + 1}/${dosyalar.length}...`;
+    try {
+      const blob = await kucult(dosyalar[i]);
+      const r = await fetch(`${API}/foto-yukle?c=${encodeURIComponent(slug)}&k=${encodeURIComponent(key)}`, { method: "POST", headers: { "content-type": "image/jpeg" }, body: blob });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.hata);
+    } catch (e) { toast(e.message === "sinir" ? "Fotoğraf sınırına ulaşıldı." : "Bir fotoğraf yüklenemedi."); }
+  }
+  await yukle(); SEKME = "foto"; ciz(); toast("Fotoğraflar eklendi");
+}
+
+function csv(){
+  const lines = [["İsim","Kişi","Durum","Tarih"], ...V.yanitlar.map(x => [x.isim, x.kisi, x.durum, new Date(x.zaman).toLocaleString("tr-TR")])]
+    .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(";")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿" + lines], {type:"text/csv;charset=utf-8"}));
+  a.download = `${slug}-misafirler.csv`; a.click();
+}
+
+(async () => {
+  const msg = $("msg");
+  if (!slug || !key) { msg.textContent = "Panel linki eksik. Size gönderilen linki tam olarak açın."; return; }
+  try { await yukle(); }
+  catch (e) { msg.textContent = e.message === "anahtar" || e.message === "bulunamadi" ? "Panel linki geçersiz. Size gönderilen linki tam olarak açın." : "Panel yüklenemedi. Sayfayı yenileyin."; return; }
+  iskelet(); ciz();
 })();
 </script>
 </body>
