@@ -44,7 +44,7 @@ export const ORNEK = {
   aile: "Yılmaz ve Demir aileleri",
   not: "Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız.",
   program: "19:30 Karşılama\n20:00 Nikâh töreni\n20:30 Akşam yemeği\n22:00 Eğlence",
-  telefon: "", paket: "site"
+  telefon: "", paket: "site-gorsel"
 };
 
 export function slugOku(v) { return String(v || "").toLowerCase().trim().slice(0, 60); }

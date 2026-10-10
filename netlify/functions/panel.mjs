@@ -7,7 +7,8 @@ export default async (req) => {
   if (!c || c.durum === "bekliyor") return json({ ok: false, hata: "bulunamadi" }, 404);
   if (!p.get("k") || p.get("k") !== c.anahtar) return json({ ok: false, hata: "anahtar" }, 403);
   const yanitlar = await yanitlariGetir(c.slug);
-  return json({ ok: true, cift: { gelin: c.gelin, damat: c.damat, slug: c.slug }, yanitlar });
+  const { anahtar, telefon, olusturma, durum, ...acik } = c;
+  return json({ ok: true, cift: acik, yanitlar });
 };
 
 export const config = { path: "/api/panel" };

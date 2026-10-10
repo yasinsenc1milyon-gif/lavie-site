@@ -6,7 +6,7 @@
 <title>Misafir Paneli · Lavie</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Great+Vibes&family=Jost:wght@400;500&display=swap">
 <style>
 :root{--paper:#f6f3f1;--ink:#2b2a33;--muted:#6e6a72;--line:#e0d8d2;--accent:#5b4a6b;--field:#fff}
 *{box-sizing:border-box}
@@ -41,6 +41,7 @@ a{color:var(--accent)}
   <div class="msg" id="msg">Yükleniyor...</div>
 </div>
 <script src="ayarlar.js"></script>
+<script src="gorsel.js"></script>
 <script>
 const API = window.LAVIE_AYAR.API_URL;
 const q = new URLSearchParams(location.search), slug = q.get("c") || "", key = q.get("k") || "";
@@ -80,6 +81,7 @@ async function yukle(){
   app.innerHTML = `<div class="brand">Lavie</div>
     <h1>${esc(CIFT.gelin)} &amp; ${esc(CIFT.damat)}</h1>
     <div class="muted">Davetiye linkiniz: <a href="${esc(davetLink)}" target="_blank" rel="noopener">${esc(davetLink)}</a></div>
+    ${CIFT.paket === "site-gorsel" ? `<div class="bar"><button class="b" id="gorsel" type="button" style="background:var(--accent);border-color:var(--accent);color:#fff">Paylaşım görselini oluştur</button><span class="muted">WhatsApp durumu ve Instagram hikâyesi için</span></div>` : ""}
     <div class="stats">
       <div class="stat yes"><b id="sYes">0</b><span>Gelecek kişi</span></div>
       <div class="stat no"><b id="sNo">0</b><span>Gelemeyecek</span></div>
@@ -95,6 +97,8 @@ async function yukle(){
   const ara = document.getElementById("ara");
   ara.oninput = () => cizim(ara.value);
   document.getElementById("indir").onclick = csv;
+  const g = document.getElementById("gorsel");
+  if (g) g.onclick = () => window.LavieGorsel.goster(CIFT);
   document.getElementById("yenile").onclick = async e => { e.target.textContent = "Yenileniyor..."; try { await yukle(); cizim(ara.value); } finally { e.target.textContent = "Yenile"; } };
   cizim();
 })();
