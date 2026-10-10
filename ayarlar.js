@@ -6,12 +6,12 @@ window.LAVIE_AYAR = {
   API_URL: "https://script.google.com/macros/s/AKfycbxaxE5lCN8DYyB_-JFqfVmIOhNwvgQFyZxtkswmkpy7Kc3GKzbD3wDyM8gEABXKRmMYew/exec",
 
   // Siparişlerin geleceği WhatsApp numarası: başında 90, boşluksuz
-  WHATSAPP: "905XXXXXXXXX",
+  WHATSAPP: "905355066329",
 
   // Paketler ve fiyatlar
   PAKETLER: [
-    { id: "site", ad: "Davetiye sitesi", aciklama: "Size özel link, geri sayım, program, konum ve katılım formu", fiyat: 549 },
-    { id: "site-gorsel", ad: "Site + paylaşım görseli", aciklama: "Siteye ek olarak WhatsApp/Instagram için davetiye görseli", fiyat: 699 }
+    { id: "site", ad: "Davetiye sitesi", aciklama: "Size özel link, geri sayım, program, konum ve katılım formu", fiyat: 500 },
+    { id: "site-gorsel", ad: "Site + paylaşım görseli", aciklama: "Siteye ek olarak WhatsApp/Instagram için davetiye görseli", fiyat: 550 }
   ],
 
   // Instagram kullanıcı adın (@ olmadan)
