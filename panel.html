@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Misafir Paneli · Lavie</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@400;500&display=swap">
+<style>
+:root{--paper:#f6f3f1;--ink:#2b2a33;--muted:#6e6a72;--line:#e0d8d2;--accent:#5b4a6b;--field:#fff}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:"Jost",system-ui,sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:820px;margin:0 auto;padding-inline:16px;padding-block:24px 40px;display:grid;gap:16px}
+.brand{font-family:"Italiana",Georgia,serif;font-size:1.4rem;letter-spacing:.06em;color:var(--muted)}
+h1{font-family:"Italiana",Georgia,serif;font-weight:400;font-size:2rem;margin:0;text-wrap:balance}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--field)}
+.stat b{display:block;font-family:"Italiana",Georgia,serif;font-size:2rem;font-weight:400;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat.yes b{color:#3f7a4f}.stat.no b{color:#a2464b}
+.stat span{font-size:.8rem;color:var(--muted)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bar input{flex:1;min-width:160px;font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field)}
+.b{font:inherit;font-size:.88rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
+.tbl{overflow-x:auto;background:var(--field);border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:420px}
+th{text-align:left;font-weight:500;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.pill{font-size:.78rem;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill.yes{background:#e3efe6;color:#2f6440}.pill.no{background:#f5e3e4;color:#8a3439}
+.msg{color:var(--muted);padding:24px 0}
+.muted{color:var(--muted);font-size:.85rem}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="brand">Lavie</div>
+  <div class="msg" id="msg">Yükleniyor...</div>
+</div>
+<script src="ayarlar.js"></script>
+<script>
+const API = window.LAVIE_AYAR.API_URL;
+const q = new URLSearchParams(location.search), slug = q.get("c") || "", key = q.get("k") || "";
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let LISTE = [], CIFT = {};
+
+function cizim(filtre=""){
+  const f = filtre.toLocaleLowerCase("tr");
+  const gel = LISTE.filter(x => x.durum === "Katılacak");
+  const rows = LISTE.filter(x => !f || x.isim.toLocaleLowerCase("tr").includes(f));
+  document.getElementById("sYes").textContent = gel.reduce((a,x) => a + x.kisi, 0);
+  document.getElementById("sNo").textContent = LISTE.length - gel.length;
+  document.getElementById("sAll").textContent = LISTE.length;
+  document.getElementById("rows").innerHTML = rows.length ? rows.map(x => `<tr><td>${esc(x.isim)}</td><td>${x.durum==="Katılacak"?x.kisi:"–"}</td><td><span class="pill ${x.durum==="Katılacak"?"yes":"no"}">${esc(x.durum)}</span></td><td>${new Date(x.zaman).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</td></tr>`).join("")
+    : `<tr><td colspan="4" class="muted">${LISTE.length ? "Aramaya uyan misafir yok." : "Henüz yanıt yok. Davetiye linkinizi paylaştıkça yanıtlar burada görünecek."}</td></tr>`;
+}
+function csv(){
+  const lines = [["İsim","Kişi","Durum","Tarih"], ...LISTE.map(x => [x.isim, x.kisi, x.durum, new Date(x.zaman).toLocaleString("tr-TR")])]
+    .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(";")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿" + lines], {type:"text/csv;charset=utf-8"}));
+  a.download = `${slug}-misafirler.csv`; a.click();
+}
+async function yukle(){
+  const r = await fetch(`${API}?islem=panel&c=${encodeURIComponent(slug)}&k=${encodeURIComponent(key)}`);
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.hata);
+  CIFT = j.cift; LISTE = j.yanitlar.sort((a,b) => new Date(b.zaman) - new Date(a.zaman));
+}
+(async () => {
+  const msg = document.getElementById("msg");
+  if (!slug || !key) { msg.textContent = "Panel linki eksik. Size gönderilen linki tam olarak açın."; return; }
+  try { await yukle(); }
+  catch (e) { msg.textContent = e.message === "anahtar" || e.message === "bulunamadi" ? "Panel linki geçersiz. Size gönderilen linki tam olarak açın." : "Panel yüklenemedi. Sayfayı yenileyin."; return; }
+  const davetLink = location.href.replace(/panel\.html.*$/, "d.html?c=" + encodeURIComponent(slug));
+  app.innerHTML = `<div class="brand">Lavie</div>
+    <h1>${esc(CIFT.gelin)} &amp; ${esc(CIFT.damat)}</h1>
+    <div class="muted">Davetiye linkiniz: <a href="${esc(davetLink)}" target="_blank" rel="noopener">${esc(davetLink)}</a></div>
+    <div class="stats">
+      <div class="stat yes"><b id="sYes">0</b><span>Gelecek kişi</span></div>
+      <div class="stat no"><b id="sNo">0</b><span>Gelemeyecek</span></div>
+      <div class="stat"><b id="sAll">0</b><span>Toplam yanıt</span></div>
+    </div>
+    <div class="bar">
+      <input id="ara" placeholder="Misafir ara" aria-label="Misafir ara">
+      <button class="b" id="yenile" type="button">Yenile</button>
+      <button class="b" id="indir" type="button">Excel'e indir</button>
+    </div>
+    <div class="tbl"><table><thead><tr><th>İsim</th><th>Kişi</th><th>Durum</th><th>Tarih</th></tr></thead><tbody id="rows"></tbody></table></div>
+    <div class="muted">Bu link size özeldir, misafirlerinizle paylaşmayın.</div>`;
+  const ara = document.getElementById("ara");
+  ara.oninput = () => cizim(ara.value);
+  document.getElementById("indir").onclick = csv;
+  document.getElementById("yenile").onclick = async e => { e.target.textContent = "Yenileniyor..."; try { await yukle(); cizim(ara.value); } finally { e.target.textContent = "Yenile"; } };
+  cizim();
+})();
+</script>
+</body>
+</html>

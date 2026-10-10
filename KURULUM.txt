@@ -1,0 +1,57 @@
+LAVIE · ÜCRETSİZ KURULUM
+=========================
+
+Dosyalar
+- index.html   : Vitrin. Müşteri tasarım seçer, bilgilerini yazar, WhatsApp'tan sipariş verir.
+- d.html       : Çiftin canlı davetiyesi (siteadin/d.html?c=elif-burak)
+- panel.html   : Çiftin misafir paneli (siteadin/panel.html?c=elif-burak&k=ANAHTAR)
+- davetiye.js / davetiye.css : 5 tasarımın kodu
+- ayarlar.js   : WhatsApp numaran, fiyatlar, Apps Script linki (sadece bunu düzenlersin)
+- Code.gs      : Google E-Tablolar tarafındaki kod
+
+1) GOOGLE E-TABLO (siparişler ve katılım yanıtları burada durur)
+   a. sheets.google.com'da yeni bir boş e-tablo aç, adını "Lavie" yap.
+   b. Uzantılar > Apps Script menüsünü aç.
+   c. Oradaki kodu tamamen sil, Code.gs dosyasının içeriğini yapıştır, kaydet.
+   d. Üstteki fonksiyon listesinden "kurulum" seç, Çalıştır'a bas.
+      Google izin isteyecek: hesabını seç > Gelişmiş > "Lavie'ye git (güvenli değil)" > İzin ver.
+      (Bu uyarı, kodu kendin yazdığın için çıkar; kod sadece bu e-tabloya erişir.)
+   e. E-tabloda "Ciftler" ve "Yanitlar" sayfaları oluşur. Ciftler'de örnek bir çift (elif-burak) var.
+
+2) WEB UYGULAMASI OLARAK YAYINLA
+   a. Apps Script'te sağ üstte Dağıt > Yeni dağıtım.
+   b. Tür: Web uygulaması.  Yürüten: Ben.  Erişimi olanlar: Herkes.
+   c. Dağıt'a bas, verilen "Web uygulaması URL"sini kopyala (https://script.google.com/macros/s/.../exec).
+   d. ayarlar.js dosyasında API_URL kısmına bu linki yapıştır.
+      Aynı dosyada WHATSAPP numaranı, fiyatlarını ve Instagram adını da düzelt.
+   Not: Code.gs'yi sonradan değiştirirsen Dağıt > Dağıtımları yönet > düzenle > Yeni sürüm demen gerekir.
+
+3) SİTEYİ ÜCRETSİZ YAYINLA (Netlify)
+   a. Bilgisayardan app.netlify.com/drop adresine gir, ücretsiz hesap aç.
+   b. lavie-site klasörünü olduğu gibi sayfaya sürükle bırak.
+   c. Site hemen yayına girer. Site ayarlarından adını değiştirip ör. lavie-davetiye.netlify.app yapabilirsin.
+   d. Daha sonra dosya değiştirirsen klasörü tekrar sürükle bırak ("Deploys" sekmesi).
+   İleride kendi alan adını (lavie.com.tr gibi) Netlify'a bağlayabilirsin; site aynı kalır.
+
+4) TEST
+   - siteadin/d.html?c=elif-burak  → örnek davetiye açılmalı. Katılım formunu doldur.
+   - E-tablodaki "Yanitlar" sayfasında yanıtın görünmeli.
+   - siteadin/panel.html?c=elif-burak&k=ANAHTAR  → ANAHTAR, Ciftler sayfasındaki anahtar sütunu.
+
+YENİ SİPARİŞ GELİNCE (yaklaşık 3 dakika)
+   1. Ödemeyi IBAN'dan al.
+   2. Ciftler sayfasına yeni satır ekle:
+      slug     : linkte görünecek isim, küçük harf ve tire, Türkçe karakter yok (ör. ayse-mehmet)
+      anahtar  : en az 10 karakterlik rastgele harf-rakam (Apps Script'te "yeniAnahtarGoster" çalıştırınca üretir)
+      tasarim  : zeytin / gece / gul / mono / ege
+      tur      : Düğün / Nişan / Kına / Söz
+      tarih    : 2027-06-12 ya da 12.06.2027      saat: 19:30
+      program  : her satıra bir tane (hücre içinde alt satır için Ctrl+Enter / Alt+Enter)
+      aktif    : EVET  (HAYIR yazarsan davetiye kapanır)
+      Diğerleri WhatsApp mesajındaki bilgilerden kopyalanır.
+   3. Çifte iki link gönder:
+      Davetiye (misafirlerle paylaşılacak): siteadin/d.html?c=SLUG
+      Panel (sadece çift):                 siteadin/panel.html?c=SLUG&k=ANAHTAR
+
+YASAL NOT
+   Düzenli satış yapmaya başlarsan vergi kaydı gerekir. Bir muhasebeciye danışmanı öneririm.

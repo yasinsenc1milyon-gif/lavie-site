@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Davetiye · Lavie</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Great+Vibes&family=Jost:wght@400;500&display=swap">
+<link rel="stylesheet" href="davetiye.css">
+<style>
+html,body{margin:0;background:#e9e6e3}
+#kok{max-width:480px;margin:0 auto;container-type:inline-size;min-height:100vh;box-shadow:0 0 40px rgba(0,0,0,.08)}
+.durum{font-family:"Cormorant Garamond",Georgia,serif;text-align:center;padding:40vh 24px 0;color:#5a5560;font-size:1.2rem}
+</style>
+</head>
+<body>
+<main id="kok"><div class="durum">Davetiye yükleniyor...</div></main>
+<script src="ayarlar.js"></script>
+<script src="davetiye.js"></script>
+<script>
+(async () => {
+  const kok = document.getElementById("kok");
+  const API = window.LAVIE_AYAR.API_URL;
+  const slug = new URLSearchParams(location.search).get("c") || "";
+  const hata = m => { kok.innerHTML = `<div class="durum">${m}</div>`; };
+  if (!slug) return hata("Davetiye linki eksik.");
+  try {
+    const r = await fetch(API + "?c=" + encodeURIComponent(slug));
+    const j = await r.json();
+    if (!j.ok) return hata("Bu davetiye bulunamadı.");
+    const d = j.cift;
+    document.title = `${d.gelin} & ${d.damat} · ${d.tur || "Davetiye"}`;
+    window.Lavie.ciz(kok, d, async v => {
+      const r2 = await fetch(API, { method: "POST", body: JSON.stringify({ c: slug, ...v }) });
+      const j2 = await r2.json();
+      if (!j2.ok) throw new Error(j2.hata || "hata");
+    });
+  } catch (e) {
+    hata("Davetiye yüklenemedi. Lütfen sayfayı yenileyin.");
+  }
+})();
+</script>
+</body>
+</html>
