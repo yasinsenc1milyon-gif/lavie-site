@@ -72,6 +72,10 @@ h2.t em{font-family:"Pinyon Script",cursive;font-style:normal;color:var(--accent
 .nav.kay{border-bottom-color:var(--line)}
 .nav .in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
 .logo{font-family:var(--display);font-size:1.9rem;letter-spacing:.06em;text-decoration:none;line-height:1;white-space:nowrap}
+.logo.img{display:block;line-height:0}
+.logo.img img{height:46px;width:auto;display:block}
+footer.site .logo.img img{height:56px}
+@media (max-width:400px){.logo.img img{height:40px}}
 .logo span{font-size:.6em;letter-spacing:.16em;color:var(--muted);margin-left:2px}
 .nav nav{display:flex;gap:26px;font-size:.92rem}
 .nav nav a{text-decoration:none;color:var(--muted);transition:color .15s}
@@ -378,7 +382,7 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 
 <header class="nav" id="nav">
   <div class="in">
-    <a class="logo" href="#">LaVie <span>Davetiye</span></a>
+    <a class="logo img" href="#" aria-label="LaVie Davetiye"><img src="logo.png" alt="La Vie Creative Studio" width="640" height="168"></a>
     <nav aria-label="Sayfa"><a href="#tasarimlar">Tasarımlar</a><a href="#ozellikler">Özellikler</a><a href="#paketler">Paketler</a><a href="#sss">Sorular</a></nav>
     <div class="sag"><a class="igb" id="igNav" target="_blank" rel="noopener" aria-label="Instagram: @la.viecreative"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a class="btn pri" href="#olustur">Davetiyemi oluştur</a></div>
   </div>
@@ -657,7 +661,7 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 <footer class="site">
   <div class="in">
     <div>
-      <a class="logo" href="#">LaVie <span>Davetiye</span></a>
+      <a class="logo img" href="#" aria-label="LaVie Davetiye"><img src="logo-acik.png" alt="La Vie Creative Studio" width="640" height="168" loading="lazy"></a>
       <p>Düğün, nişan, kına ve söz için zarfı açılan, müzikli dijital davetiye siteleri.</p>
     </div>
     <div>
