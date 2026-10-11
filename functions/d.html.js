@@ -1,2 +1,4 @@
 // Eski /d.html?c=... linkleri için aynı sayfa
-export { onRequestGet } from "../lib/onizleme.js";
+import { davetiyeSayfasi } from "../lib/onizleme.js";
+
+export const onRequestGet = (ctx) => davetiyeSayfasi(ctx);
