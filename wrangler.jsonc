@@ -9,7 +9,7 @@
     "binding": "ASSETS",
     "not_found_handling": "none",
     // Bu adresler önce koda gelir; geri kalan her şey doğrudan statik dosya olarak sunulur (ücretsiz, sınırsız)
-    "run_worker_first": ["/api/*", "/d", "/d.html"]
+    "run_worker_first": ["/api/*", "/d", "/d.html", "/google26fc845d62d4047b.html"]
   },
   "d1_databases": [
     { "binding": "DB", "database_name": "lavie", "database_id": "acf23174-0488-4cda-86fa-ba5a77231265" }

@@ -17,9 +17,13 @@ const ROTALAR = {
   "/d": { onRequestGet: davetiyeSayfasi }, "/d.html": { onRequestGet: davetiyeSayfasi }
 };
 
+// Google Search Console doğrulama dosyası (yönlendirmesiz, birebir içerik)
+const GOOGLE_DOGRULAMA = "google26fc845d62d4047b.html";
+
 export default {
   async fetch(request, env, ctx) {
     const yol = new URL(request.url).pathname.replace(/\/+$/, "") || "/";
+    if (yol === "/" + GOOGLE_DOGRULAMA) return new Response("google-site-verification: " + GOOGLE_DOGRULAMA, { headers: { "content-type": "text/html; charset=utf-8" } });
     const mod = ROTALAR[yol];
     if (!mod) return env.ASSETS.fetch(request);
     const yontem = request.method.charAt(0) + request.method.slice(1).toLowerCase();
