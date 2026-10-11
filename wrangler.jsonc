@@ -1,6 +1,6 @@
 // Lavie · Cloudflare Worker ayarları (workers.dev üzerinden yayın)
 {
-  "name": "laviedavetiye",
+  "name": "www",
   "main": "worker.js",
   "compatibility_date": "2025-09-01",
   "workers_dev": true,

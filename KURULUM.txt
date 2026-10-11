@@ -18,7 +18,7 @@ Sayfalar
 - /d?c=ornek            Örnek davetiye
 
 CLOUDFLARE AYARLARI (bir kerelik)
-  Worker projesi: GitHub'daki lavie-site deposu, proje adı: laviedavetiye
+  Worker projesi: GitHub'daki lavie-site deposu, proje adı: www (adres: www.laviedavetiye.workers.dev)
     Build command: boş · Deploy command: npx wrangler deploy
   Veritabanı bağlantısı wrangler.jsonc içinde (D1: lavie)
   Settings → Variables and Secrets: ADMIN_SIFRE (Secret) = yönetim şifren
