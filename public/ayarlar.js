@@ -15,10 +15,10 @@ window.LAVIE_AYAR = {
 
   // Müşterilerin izniyle eklenen gerçek yorumlar (sadece baş harfler)
   MUSTERI_YORUMLARI: [
-    { ad: "B. & Ö.", kaynak: "Instagram yorumu", yorum: "Çok teşekkür ederiz, ilginiz ve nezaketiniz için. Sayenizde davetiyemiz harika oldu." },
-    { ad: "A. K.", kaynak: "WhatsApp mesajı", yorum: "Davetiyemize herkes bayılıyor. Sizi öneriyorum." },
-    { ad: "A. & R.", kaynak: "Instagram yorumu", yorum: "Çok çok beğendim, her şey için teşekkürler." },
-    { ad: "K. & A.", kaynak: "Instagram yorumu", yorum: "İyi ki sen, iyi ki!" }
+    { ad: "B. & Ö.", kaynak: "Instagram yorumu", puan: 5, yorum: "Çok teşekkür ederiz, ilginiz ve nezaketiniz için. Sayenizde davetiyemiz harika oldu." },
+    { ad: "A. K.", kaynak: "WhatsApp mesajı", puan: 5, yorum: "Davetiyemize herkes bayılıyor. Sizi öneriyorum." },
+    { ad: "A. & R.", kaynak: "Instagram yorumu", puan: 5, yorum: "Çok çok beğendim, her şey için teşekkürler." },
+    { ad: "K. & A.", kaynak: "Instagram yorumu", puan: 5, yorum: "İyi ki sen, iyi ki!" }
   ],
 
   // Instagram kullanıcı adın (@ olmadan)
