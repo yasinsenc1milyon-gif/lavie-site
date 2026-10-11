@@ -6,7 +6,7 @@ window.LAVIE_AYAR = {
   API_URL: "/api",
 
   // Siparişlerin geleceği WhatsApp numarası: başında 90, boşluksuz
-  WHATSAPP: "905355066329",
+  WHATSAPP: "905051782155",
 
   // Paketler ve fiyatlar
   PAKETLER: [
