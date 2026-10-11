@@ -67,7 +67,8 @@ html,body{margin:0;background:#e9e6e3}
     const j2 = await r2.json();
     if (!j2.ok) throw new Error(j2.hata || "hata");
   }, {
-    fotolar: j.fotolar, mesajlar: j.mesajlar,
+    mesajlar: j.mesajlar,
+    albumYukle: window.Lavie.albumYukleyici(API, slug),
     mesajGonder: async v => {
       const r3 = await fetch(API + "/mesaj", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ c: slug, ...v }) });
       const j3 = await r3.json();

@@ -194,7 +194,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
     <div>
       <div class="eyebrow">Düğün · Nişan · Kına · Söz</div>
       <h1>Davetiyeniz, sevdiklerinizin <em>cebinde</em></h1>
-      <p class="lead">Zarfı açılan, müzikli ve geri sayımlı şık bir davetiye sitesi. Misafirleriniz katılımını tek dokunuşla bildirir, fotoğraflarınıza bakar, hatıra defterinize not bırakır. Siz de hepsini panelinizden takip edersiniz.</p>
+      <p class="lead">Zarfı açılan, müzikli ve geri sayımlı şık bir davetiye sitesi. Misafirleriniz katılımını tek dokunuşla bildirir, hatıra defterinize not bırakır, düğünde çektikleri fotoğraf ve videoları albümünüze yükler. Siz de hepsini panelinizden takip edersiniz.</p>
       <div class="cta">
         <a class="btn pri" href="#olustur">Davetiyemi oluştur</a>
         <a class="btn sec" href="d.html?c=ornek" target="_blank" rel="noopener">Örnek davetiyeyi aç</a>
@@ -223,7 +223,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
       <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12l5 5L20 6"/></svg><b>Katılım formu</b><p>Misafirler gelip gelmeyeceğini ve kaç kişi olacağını iki dokunuşla bildirir.</p></div>
       <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 15h3"/></svg><b>Size özel panel</b><p>Gelecek ve gelmeyecek kişi sayıları, isim listesi ve Excel'e aktarma.</p></div>
       <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.1-7-11a7 7 0 0114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><b>Konum ve yol tarifi</b><p>Program akışı ve tek dokunuşla Google Haritalar'da yol tarifi.</p></div>
-      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg><b>Fotoğraf galerisi</b><p>En güzel karelerinizden 12 tanesini panelinizden kendiniz ekleyin.</p></div>
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg><b>Anı albümü</b><p>Misafirleriniz düğünde çektikleri fotoğraf ve videoları yükler, hepsi panelinizde toplanır.</p></div>
       <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h11"/></svg><b>Hatıra defteri</b><p>Misafirlerinizin bıraktığı güzel sözler davetiyede ve panelinizde saklanır.</p></div>
       <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><b>Paylaşım görseli</b><p>WhatsApp durumu ve Instagram hikâyesi için hazır davetiye görseli.</p></div>
     </div>
@@ -321,7 +321,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
       <details><summary>Ödemeyi nasıl yapıyorum?</summary><p>Siparişinizi oluşturduktan sonra WhatsApp'tan size ödeme bilgilerini iletiyoruz. Ödeme tek seferliktir.</p></details>
       <details><summary>Sonradan bilgileri değiştirebilir miyim?</summary><p>Evet. Size özel panelinizden saat, mekân, program, davet notu, tasarım, yazı stili ve müzik dahil tüm bilgileri dilediğiniz zaman kendiniz değiştirebilirsiniz; davetiyeniz linki değişmeden anında güncellenir. İsterseniz WhatsApp'tan yazın, biz de yapabiliriz.</p></details>
       <details><summary>Katılım yanıtlarını nasıl görürüm?</summary><p>Size özel bir panel linki veriyoruz. Gelecek ve gelmeyecek kişi sayılarını, isim listesini ve hatıra defterini oradan takip eder, listeyi Excel'e aktarabilirsiniz.</p></details>
-      <details><summary>Fotoğraf ekleyebilir miyim?</summary><p>Evet, panelinizden 12 fotoğrafa kadar ekleyip çıkarabilirsiniz. Fotoğraflar davetiyenizdeki galeride görünür.</p></details>
+      <details><summary>Misafirler çektikleri fotoğraf ve videoları nasıl paylaşır?</summary><p>Davetiyedeki Anı Albümü bölümünden telefonlarındaki fotoğraf ve videoları yüklerler. Yüklenenleri yalnızca siz panelinizden görür, tek tek ya da toplu olarak indirirsiniz. Video başına sınır 100 MB'tır (telefonla yaklaşık 1 dakika).</p></details>
     </div>
   </div>
 </section>
@@ -358,7 +358,7 @@ const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id, muzik: 
 const $ = id => document.getElementById(id);
 const ALANLAR = ["gelin","damat","tarih","saat","mekan","adres","konum","aile","not","program","katilimNotu","telefon"];
 const TIK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>`;
-const ORTAK = ["Zarf açılışı ve müzik","Canlı geri sayım, program ve konum","Katılım formu ve size özel panel","12 fotoğraflık galeri","Hatıra defteri","5 özel tasarım, size özel link"];
+const ORTAK = ["Zarf açılışı ve müzik","Canlı geri sayım, program ve konum","Katılım formu ve size özel panel","Misafir anı albümü: fotoğraf ve video","Hatıra defteri","5 özel tasarım, size özel link"];
 
 // Sabit metinler ve bağlantılar
 $("ig").href = "https://instagram.com/" + A.INSTAGRAM;
@@ -442,7 +442,6 @@ function ciz(basa){
   seritCiz(); seg($("types"), L.TURLER.map(t => [t, t]), "tur"); yaziCiz(); muzikCiz(); paketCiz();
   const sc = $("screen"), y = sc.scrollTop;
   L.ciz(sc, veri(), async () => { await new Promise(r => setTimeout(r, 500)); }, {
-    ornekGaleri: true,
     mesajlar: [{ isim: "Örnek misafir", mesaj: "Mutluluğunuz daim olsun, bir ömür boyu el ele!", zaman: new Date().toISOString() }]
   });
   sc.scrollTop = basa ? 0 : y;

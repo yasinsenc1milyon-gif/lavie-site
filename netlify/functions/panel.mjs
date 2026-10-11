@@ -1,5 +1,5 @@
 // Çiftin paneli: yanıtlar, hatıra defteri, fotoğraflar ve yorum
-import { CIFT_DUZENLER, FOTO_SINIR, ciftStore, temizle, ciftGetir, fotoListesi, fotoStore, fotoUrl, govde, json, mesajStore, mesajlariGetir, ornekMi, yanitlariGetir, yorumStore } from "../lib/ortak.mjs";
+import { CIFT_DUZENLER, ciftStore, temizle, ciftGetir, govde, json, mesajStore, mesajlariGetir, ornekMi, yanitlariGetir, yorumStore } from "../lib/ortak.mjs";
 
 const gecerliId = id => /^[\w-]{1,80}$/.test(String(id || ""));
 
@@ -12,13 +12,12 @@ export default async (req) => {
   if (!k || k !== c.anahtar) return json({ ok: false, hata: "anahtar" }, 403);
 
   if (req.method === "GET") {
-    const [yanitlar, mesajlar, fotolar, yorum] = await Promise.all([
-      yanitlariGetir(c.slug), mesajlariGetir(c.slug), fotoListesi(c.slug), yorumStore().get(c.slug, { type: "json" })
+    const [yanitlar, mesajlar, yorum] = await Promise.all([
+      yanitlariGetir(c.slug), mesajlariGetir(c.slug), yorumStore().get(c.slug, { type: "json" })
     ]);
     const { anahtar, telefon, olusturma, durum, ...acik } = c;
     return json({
       ok: true, cift: acik, yanitlar, mesajlar,
-      fotolar: fotolar.map(id => ({ id, url: fotoUrl(c.slug, id) })), fotoSiniri: FOTO_SINIR,
       yorum: yorum ? { puan: yorum.puan, yorum: yorum.yorum, onay: yorum.onay } : null,
       ornek: ornekMi(c.slug)
     });
@@ -36,7 +35,6 @@ export default async (req) => {
       return json({ ok: true, cift: acik });
     }
     if (d.islem === "mesaj-sil" && gecerliId(d.id)) { await mesajStore().delete(`${c.slug}/${d.id}`); return json({ ok: true }); }
-    if (d.islem === "foto-sil" && gecerliId(d.id)) { await fotoStore().delete(`${c.slug}/${d.id}`); return json({ ok: true }); }
     if (d.islem === "yorum") {
       const puan = Math.min(Math.max(parseInt(d.puan, 10) || 5, 1), 5);
       const yorum = String(d.yorum || "").trim().slice(0, 500);

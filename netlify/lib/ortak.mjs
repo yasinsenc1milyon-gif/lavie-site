@@ -4,7 +4,8 @@ import { getStore } from "@netlify/blobs";
 export const ciftStore = () => getStore({ name: "ciftler", consistency: "strong" });
 export const yanitStore = () => getStore({ name: "yanitlar", consistency: "strong" });
 export const mesajStore = () => getStore({ name: "mesajlar", consistency: "strong" });
-export const fotoStore = () => getStore({ name: "fotograflar", consistency: "strong" });
+export const albumStore = () => getStore({ name: "album", consistency: "strong" });
+export const albumVeriStore = () => getStore({ name: "albumveri", consistency: "strong" });
 export const yorumStore = () => getStore({ name: "yorumlar", consistency: "strong" });
 
 export const TASARIMLAR = ["zeytin", "gece", "gul", "mono", "ege"];
@@ -14,7 +15,9 @@ export const MUZIKLER = ["piyano", "kirlar", "yok"];
 export const YAZILAR = ["", "el", "zarif", "klasik", "modern", "bodoni", "sade"];
 export const ALANLAR = ["tasarim", "tur", "gelin", "damat", "tarih", "saat", "mekan", "adres", "konum", "aile", "not", "program", "telefon", "paket", "muzik", "yazi", "katilimNotu"];
 export const CIFT_DUZENLER = ALANLAR.filter(k => k !== "telefon" && k !== "paket");
-export const FOTO_SINIR = 12;
+// Anı albümü sınırları
+export const ALBUM = { parca: 4 * 1024 * 1024, fotoMaks: 15 * 1024 * 1024, videoMaks: 100 * 1024 * 1024, toplamMaks: 2 * 1024 * 1024 * 1024, adetMaks: 1000 };
+export const ALBUM_TURLER = { foto: ["image/jpeg", "image/png", "image/webp"], video: ["video/mp4", "video/quicktime", "video/webm", "video/3gpp"] };
 
 export const json = (o, status = 200) =>
   new Response(JSON.stringify(o), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
@@ -77,19 +80,21 @@ async function hepsiJSON(store, prefix) {
 export const yanitlariGetir = slug => hepsiJSON(yanitStore(), slug + "/");
 export const mesajlariGetir = slug => hepsiJSON(mesajStore(), slug + "/");
 
-export async function fotoListesi(slug) {
-  const { blobs } = await fotoStore().list({ prefix: slug + "/" });
-  return blobs.map(b => b.key.slice(slug.length + 1)).sort();
+export async function albumListesi(slug) {
+  const s = albumStore();
+  const { blobs } = await s.list({ prefix: slug + "/" });
+  const liste = await Promise.all(blobs.map(b => s.get(b.key, { type: "json" })));
+  return liste.filter(x => x && x.tamam).sort((a, b) => String(b.zaman).localeCompare(String(a.zaman)));
 }
-export const fotoUrl = (slug, id) => `/api/foto?c=${encodeURIComponent(slug)}&id=${encodeURIComponent(id)}`;
 
 // Çift silinince bağlı her şeyi temizler
 export async function ciftVerisiniSil(slug) {
-  for (const s of [yanitStore(), mesajStore(), fotoStore()]) {
+  for (const s of [yanitStore(), mesajStore(), albumStore(), albumVeriStore()]) {
     const { blobs } = await s.list({ prefix: slug + "/" });
     await Promise.all(blobs.map(b => s.delete(b.key)));
   }
   await yorumStore().delete(slug);
+  await albumStore().delete(`_ozet/${slug}`);
 }
 
 export function linkler(req, c) {

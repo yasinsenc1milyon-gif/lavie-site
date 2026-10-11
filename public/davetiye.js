@@ -59,7 +59,6 @@
       ${prog ? `<section><h3>Program</h3><p style="margin-bottom:5cqw;color:var(--soft)">${esc(gun(d))}, ${esc(uzunTarih(d))}</p><ol>${prog}</ol></section>` : ""}
       ${d.mekan || d.adres ? `<section><h3>Konum</h3><div class="venue">${esc(d.mekan)}</div><div class="addr">${esc(d.adres)}</div>
         <a class="ibtn" href="${esc(haritaLinki(d))}" target="_blank" rel="noopener">Yol tarifi al</a></section>` : ""}
-      ${galeri(ek)}
       <section><h3>Katılım</h3>
         ${d.katilimNotu ? `<p class="knot">${esc(d.katilimNotu)}</p>` : ""}
         <form class="rsvp">
@@ -79,32 +78,56 @@
         </form>
         <div class="mesajlar">${(ek.mesajlar || []).map(mesajKart).join("")}</div>
       </section>
+      <section class="album"><h3>Anı Albümü</h3>
+        <p style="color:var(--soft);margin-bottom:5cqw">Düğünümüzde çektiğiniz fotoğraf ve videoları bizimle paylaşın. Yüklediklerinizi yalnızca biz görürüz.</p>
+        <form class="album-f">
+          <input name="isim" placeholder="Adınız (isteğe bağlı)" aria-label="Adınız" maxlength="60">
+          <label class="ibtn solid album-sec">Fotoğraf veya video seç<input type="file" accept="image/*,video/*" multiple hidden></label>
+          <div class="album-bar" hidden><span></span></div>
+          <div class="rsvp-ok album-durum" hidden></div>
+        </form>
+      </section>
       <footer>${gelin} &amp; ${damat}<small>Lavie ile hazırlandı</small></footer>
     </div>`;
   }
 
-  function galeri(ek) {
-    const f = ek.fotolar || [];
-    if (f.length) return `<section><h3>Anılarımız</h3><div class="gal">${f.map((u, i) => `<button type="button" class="gal-i" data-i="${i}" aria-label="Fotoğraf ${i + 1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join("")}</div></section>`;
-    if (ek.ornekGaleri) return `<section><h3>Anılarımız</h3><div class="gal">${[1, 2, 3, 4].map(i => `<div class="gal-i gal-bos"><span>Fotoğraf ${i}</span></div>`).join("")}</div><p style="color:var(--soft);font-size:3.4cqw;margin-top:3cqw">Fotoğraflarınızı sipariş sonrası panelinizden eklersiniz.</p></section>`;
-    return "";
-  }
   function mesajKart(m) {
     const z = m.zaman ? new Date(m.zaman).toLocaleDateString("tr-TR", { day: "numeric", month: "long" }) : "";
     return `<figure class="mk"><blockquote>${esc(m.mesaj)}</blockquote><figcaption>${esc(m.isim)}${z ? ` · ${esc(z)}` : ""}</figcaption></figure>`;
   }
-  function buyut(kok, fotolar, i) {
-    const o = document.createElement("div");
-    o.className = "lb"; o.setAttribute("role", "dialog");
-    o.innerHTML = `<img alt=""><button type="button" class="lb-x" aria-label="Kapat">×</button>`;
-    const img = o.querySelector("img");
-    const goster = () => { img.src = fotolar[i]; };
-    goster();
-    o.addEventListener("click", e => {
-      if (e.target.classList.contains("lb-x") || e.target === o) return o.remove();
-      i = (i + (e.clientX > innerWidth / 2 ? 1 : -1) + fotolar.length) % fotolar.length; goster();
-    });
-    document.body.appendChild(o);
+  // Anı albümü: fotoğrafı telefonda küçültür, dosyayı 4 MB'lık parçalarla yükler
+  const UZANTI = { mov: "video/quicktime", mp4: "video/mp4", m4v: "video/mp4", webm: "video/webm", "3gp": "video/3gpp", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
+  function mimeBul(f) { return (f.type || UZANTI[(f.name.split(".").pop() || "").toLowerCase()] || "").toLowerCase(); }
+  async function kucult(dosya) {
+    const url = URL.createObjectURL(dosya);
+    try {
+      const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = url; });
+      const o = Math.min(1, 2000 / Math.max(img.naturalWidth, img.naturalHeight));
+      const cv = document.createElement("canvas"); cv.width = Math.round(img.naturalWidth * o); cv.height = Math.round(img.naturalHeight * o);
+      cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+      return await new Promise(r => cv.toBlob(r, "image/jpeg", .86));
+    } finally { URL.revokeObjectURL(url); }
+  }
+  function albumYukleyici(API, slug) {
+    const postJ = async b => { const r = await fetch(API + "/album", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ c: slug, ...b }) }); const j = await r.json(); if (!j.ok) throw new Error(j.hata || "hata"); return j; };
+    return async (dosya, isim, ilerleme) => {
+      let mime = mimeBul(dosya), tur = mime.startsWith("video/") ? "video" : "foto", veri = dosya;
+      if (tur === "foto") { try { veri = await kucult(dosya); mime = "image/jpeg"; } catch { throw new Error("tur"); } }
+      const b = await postJ({ islem: "baslat", tur, mime, boyut: veri.size, isim });
+      for (let i = 0; i < b.parca; i++) {
+        const parca = veri.slice(i * b.parcaBoyutu, (i + 1) * b.parcaBoyutu);
+        let deneme = 0;
+        while (true) {
+          try {
+            const r = await fetch(`${API}/album?islem=parca&c=${encodeURIComponent(slug)}&id=${b.id}&i=${i}`, { method: "POST", headers: { "content-type": "application/octet-stream" }, body: parca });
+            if (!(await r.json()).ok) throw new Error("parca");
+            break;
+          } catch (e) { if (++deneme >= 3) throw e; await new Promise(r => setTimeout(r, 1500)); }
+        }
+        ilerleme && ilerleme((i + 1) / b.parca);
+      }
+      await postJ({ islem: "bitir", id: b.id });
+    };
   }
 
   function sayac() {
@@ -117,11 +140,30 @@
   setInterval(sayac, 1000);
 
   // kok: kapsayıcı eleman, d: çift bilgileri, yanitGonder: async ({isim,kisi,durum}) => void
-  // ek: { fotolar, mesajlar, ornekGaleri, mesajGonder: async ({isim,mesaj}) => kayıt }
+  // ek: { mesajlar, mesajGonder: async ({isim,mesaj}) => kayıt, albumYukle: async (dosya, isim, ilerleme) => void }
   function ciz(kok, d, yanitGonder, ek) {
     ek = ek || {};
     kok.innerHTML = html(d, ek);
-    kok.querySelectorAll(".gal-i[data-i]").forEach(b => b.addEventListener("click", () => buyut(kok, ek.fotolar, Number(b.dataset.i))));
+    const af = kok.querySelector("form.album-f");
+    af.addEventListener("submit", e => e.preventDefault());
+    af.querySelector("input[type=file]").addEventListener("change", async e => {
+      const dosyalar = [...e.target.files]; e.target.value = "";
+      if (!dosyalar.length) return;
+      const durum = af.querySelector(".album-durum"), bar = af.querySelector(".album-bar"), dol = bar.querySelector("span"), sec = af.querySelector(".album-sec");
+      durum.hidden = false;
+      if (!ek.albumYukle) { durum.textContent = "Önizlemede yükleme yapılmaz; davetiyenizde misafirleriniz buradan yükler."; return; }
+      sec.style.pointerEvents = "none"; sec.style.opacity = ".6"; bar.hidden = false;
+      let basari = 0; const hatalar = [];
+      for (let n = 0; n < dosyalar.length; n++) {
+        const f = dosyalar[n];
+        durum.textContent = `${n + 1}/${dosyalar.length} yükleniyor...`;
+        try { await ek.albumYukle(f, af.isim.value.trim(), p => { dol.style.width = Math.round(((n + p) / dosyalar.length) * 100) + "%"; }); basari++; }
+        catch (err) { hatalar.push(err.message); }
+      }
+      bar.hidden = true; dol.style.width = "0"; sec.style.pointerEvents = ""; sec.style.opacity = "";
+      const m = { boyut: "100 MB'den büyük videolar yüklenemiyor; daha kısa bir video seçin.", tur: "Bu dosya türü desteklenmiyor.", dolu: "Albüm doldu, yeni dosya eklenemiyor.", ornek: "Bu örnek davetiyede yükleme kapalıdır." };
+      durum.textContent = (basari ? `Teşekkürler! ${basari} dosya çiftimize ulaştı. ` : "") + (hatalar.length ? (m[hatalar[0]] || `${hatalar.length} dosya yüklenemedi, bağlantınızı kontrol edip tekrar deneyin.`) : "");
+    });
     const mf = kok.querySelector("form.mesaj-f");
     const mok = mf.querySelector(".rsvp-ok"), mbtn = mf.querySelector("button");
     mf.addEventListener("submit", async e => {
@@ -157,5 +199,5 @@
     });
   }
 
-  window.Lavie = { TASARIMLAR, TURLER, UST, YAZILAR, KATILIM_NOTLARI, esc, ciz, uzunTarih };
+  window.Lavie = { albumYukleyici, TASARIMLAR, TURLER, UST, YAZILAR, KATILIM_NOTLARI, esc, ciz, uzunTarih };
 })();
