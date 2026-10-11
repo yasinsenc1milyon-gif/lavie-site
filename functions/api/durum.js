@@ -8,6 +8,14 @@ export async function onRequestGet({ env }) {
     const r = await db.prepare("SELECT COUNT(*) AS n FROM ciftler").first();
     sonuc.veritabani_calisiyor = true;
     sonuc.cift_sayisi = r ? r.n : 0;
+    // tabloları tek tek dene
+    sonuc.tablolar = {};
+    for (const [ad, q] of [["mesajlar", "SELECT id, isim, mesaj, zaman FROM mesajlar WHERE slug = ? ORDER BY zaman DESC, id DESC"], ["yanitlar", "SELECT id, isim, kisi, durum, zaman FROM yanitlar WHERE slug = ? ORDER BY zaman DESC, id DESC"], ["yorumlar", "SELECT puan, yorum, onay FROM yorumlar WHERE slug = ?"]]) {
+      try { const x = await db.prepare(q).bind("ornek").all(); sonuc.tablolar[ad] = "ok:" + (x.results || []).length; }
+      catch (e) { sonuc.tablolar[ad] = "hata: " + String((e && e.message) || e).slice(0, 200); }
+    }
+    try { const m = await import("../../lib/ortak.js"); const l = await m.mesajlariGetir(db, "ornek"); sonuc.mesajlariGetir = "ok:" + l.length; }
+    catch (e) { sonuc.mesajlariGetir = "hata: " + String((e && e.message) || e).slice(0, 200); }
   } catch (e) {
     sonuc.hata = String((e && e.message) || e).slice(0, 300);
   }
