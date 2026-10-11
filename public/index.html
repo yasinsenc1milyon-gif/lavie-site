@@ -900,6 +900,15 @@ $("order").addEventListener("click", async () => {
 
 // ---- Kartla ödeme (Shopier) ----
 let O = null, OZAMAN = null;
+// Shopier'in ürün sayfasını ve sepet adımını atlayıp doğrudan ödeme formunu açar
+function shopierAc(url){
+  const m = String(url).match(/shopier\.com\/([^\/?#]+)\/(\d+)/);
+  if (!m) { window.open(url, "_blank", "noopener"); return; }
+  const f = document.createElement("form");
+  f.method = "POST"; f.target = "_blank"; f.action = "https://www.shopier.com/s/shipping/" + encodeURIComponent(m[1]);
+  [["product_id", m[2]], ["quantity", "1"]].forEach(([n, v]) => { const i = document.createElement("input"); i.type = "hidden"; i.name = n; i.value = v; f.appendChild(i); });
+  document.body.appendChild(f); f.submit(); f.remove();
+}
 const KILIT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>`;
 function sheet(html){ $("okutu").innerHTML = html; $("osheet").hidden = false; document.body.style.overflow = "hidden"; }
 function sheetKapat(){ $("osheet").hidden = true; document.body.style.overflow = ""; clearInterval(OZAMAN); }
@@ -918,7 +927,7 @@ function odemeSec(){
   $("okutu").querySelectorAll("[data-y]").forEach(b => b.onclick = () => { O.yontem = b.dataset.y; odemeSec(); });
   $("oDevam").onclick = () => {
     if (O.yontem === "havale") { window.open($("wa").href, "_blank", "noopener"); sheetKapat(); return; }
-    window.open(O.url, "_blank", "noopener");
+    shopierAc(O.url);
     fetch(A.API_URL + "/odeme", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ c: O.c, k: O.k }) }).catch(() => {});
     odemeBekle();
   };
@@ -929,8 +938,9 @@ function odemeBekle(){
     <p class="mut">Açılan Shopier sayfasında ödemeyi tamamlayın, sonra bu sayfaya dönün. Ödeme görüldüğü anda davetiyeniz yayına girer.</p></div>
     <div class="uyari"><b>Önemli:</b> Ödeme sayfasında telefon numaranızı <b>${L.esc(O.d.telefon)}</b> olarak yazın; ödemenizi bu numarayla tanıyoruz.</div>
     <button type="button" class="btn sec" id="oTekrar">Ödeme sayfasını tekrar aç</button>
+    <a class="bagl" target="_blank" rel="noopener" href="${L.esc(O.url)}" style="margin-top:8px">Ödeme formu açılmadıysa ürün sayfasından ödeyin</a>
     <a class="bagl" target="_blank" rel="noopener" href="https://wa.me/${A.WHATSAPP}?text=${encodeURIComponent("Merhaba LaVie, kartla ödeme yaptım. Sipariş kodum: " + O.c)}">Ödeme yaptım ama burada görünmüyor</a>`);
-  $("oTekrar").onclick = () => window.open(O.url, "_blank", "noopener");
+  $("oTekrar").onclick = () => shopierAc(O.url);
   clearInterval(OZAMAN);
   const kontrol = async () => {
     try {
