@@ -91,6 +91,7 @@ a{color:var(--accent)}
 <script src="ayarlar.js"></script>
 <script src="gorsel.js"></script>
 <script src="davetiye.js"></script>
+<script src="muzik.js"></script>
 <script>
 const API = window.LAVIE_AYAR.API_URL;
 const q = new URLSearchParams(location.search), slug = q.get("c") || "", key = q.get("k") || "";
@@ -227,7 +228,7 @@ function bilgiCiz(p){
       ${ta("program","Program (her satıra bir tane)",4)}
       <label class="f"><span>Katılım notu (formun üstünde görünür)</span><input name="katilimNotu" maxlength="240" value="${esc(TASLAK.katilimNotu)}" placeholder="Örn. Çocuklarımıza iyi uykular dileriz."></label>
       <div class="seg" id="knHazir" style="margin-top:-4px">${L.KATILIM_NOTLARI.map(t => `<button type="button" style="font-size:.78rem;padding:5px 10px">${esc(t)}</button>`).join("")}</div>
-      <div class="f"><span>Müzik</span><div class="seg" data-alan="muzik"><button type="button" data-v="kutu" aria-pressed="${TASLAK.muzik!=="yok"}">Müzik kutusu</button><button type="button" data-v="yok" aria-pressed="${TASLAK.muzik==="yok"}">Müzik olmasın</button></div></div>
+      <div class="f"><span>Müzik (dokununca dinlersiniz)</span><div class="seg" data-alan="muzik">${window.LavieMuzik.PARCALAR.concat([{ id: "yok", ad: "Müzik olmasın" }]).map(m => `<button type="button" data-v="${m.id}" aria-pressed="${(window.LavieMuzik.bul(TASLAK.muzik)||{id:"yok"}).id===m.id}">${m.ad}</button>`).join("")}</div></div>
       <div class="bar"><button class="b main" type="submit" ${V.ornek?"disabled":""}>Kaydet ve yayınla</button><button class="b" type="button" id="geri">Değişiklikleri geri al</button></div>
       <span class="muted">Kaydettiğinizde davetiyeniz anında güncellenir, linkiniz değişmez.</span>
     </form>
@@ -240,6 +241,7 @@ function bilgiCiz(p){
   f.querySelectorAll(".seg[data-alan]").forEach(sg => sg.addEventListener("click", e => {
     const b = e.target.closest("[data-v]"); if (!b) return;
     TASLAK[sg.dataset.alan] = b.dataset.v;
+    if (sg.dataset.alan === "muzik") { const M = window.LavieMuzik; (b.dataset.v === "yok" || M.calan() === b.dataset.v) ? M.durdur() : M.baslat(b.dataset.v); }
     sg.querySelectorAll("[data-v]").forEach(x => x.setAttribute("aria-pressed", x === b));
     onizle();
   }));

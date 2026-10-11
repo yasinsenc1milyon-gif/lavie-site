@@ -10,7 +10,7 @@ export const yorumStore = () => getStore({ name: "yorumlar", consistency: "stron
 export const TASARIMLAR = ["zeytin", "gece", "gul", "mono", "ege"];
 export const TURLER = ["Düğün", "Nişan", "Kına", "Söz"];
 export const DURUMLAR = ["bekliyor", "aktif", "kapali"];
-export const MUZIKLER = ["kutu", "yok"];
+export const MUZIKLER = ["piyano", "kirlar", "yok"];
 export const YAZILAR = ["", "el", "zarif", "klasik", "modern", "bodoni", "sade"];
 export const ALANLAR = ["tasarim", "tur", "gelin", "damat", "tarih", "saat", "mekan", "adres", "konum", "aile", "not", "program", "telefon", "paket", "muzik", "yazi", "katilimNotu"];
 export const CIFT_DUZENLER = ALANLAR.filter(k => k !== "telefon" && k !== "paket");
@@ -31,7 +31,7 @@ export function temizle(d) {
   }
   if (!TASARIMLAR.includes(o.tasarim)) o.tasarim = "zeytin";
   if (!TURLER.includes(o.tur)) o.tur = "Düğün";
-  if (!MUZIKLER.includes(o.muzik)) o.muzik = "kutu";
+  if (o.muzik === "kutu" || !MUZIKLER.includes(o.muzik)) o.muzik = "piyano";
   if (!YAZILAR.includes(o.yazi)) o.yazi = "";
   return o;
 }
@@ -54,7 +54,7 @@ export const ORNEK = {
   aile: "Yılmaz ve Demir aileleri",
   not: "Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız.",
   program: "19:30 Karşılama\n20:00 Nikâh töreni\n20:30 Akşam yemeği\n22:00 Eğlence",
-  telefon: "", paket: "site-gorsel", muzik: "kutu"
+  telefon: "", paket: "site-gorsel", muzik: "piyano"
 };
 export const ornekMi = slug => slug === "ornek";
 
@@ -65,7 +65,7 @@ export async function ciftGetir(slug) {
   if (!slug) return null;
   if (slug === "ornek" || slug === "elif-burak") return ORNEK;
   const c = await ciftStore().get(slug, { type: "json" });
-  if (c && !c.muzik) c.muzik = "kutu";
+  if (c && (!c.muzik || c.muzik === "kutu")) c.muzik = "piyano";
   return c;
 }
 

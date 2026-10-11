@@ -218,7 +218,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
     <h2 class="t">Kâğıt davetiyenin yapamadıkları</h2>
     <p class="lead">Tek bir linkte; misafirlerinizin ihtiyaç duyduğu her şey ve sizin takip etmeniz gereken her bilgi.</p>
     <div class="feats">
-      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="13" rx="1"/><path d="M3 7l9 7 9-7"/></svg><b>Zarf ve müzik</b><p>Davetiye, açılan bir zarfla ve size özel bestelenmiş müzik kutusu ezgisiyle karşılar.</p></div>
+      <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="13" rx="1"/><path d="M3 7l9 7 9-7"/></svg><b>Zarf ve müzik</b><p>Davetiye, açılan bir zarfla ve seçtiğiniz müzikle karşılar.</p></div>
       <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><b>Canlı geri sayım</b><p>Büyük güne kalan gün, saat ve dakika saniye saniye işler.</p></div>
       <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12l5 5L20 6"/></svg><b>Katılım formu</b><p>Misafirler gelip gelmeyeceğini ve kaç kişi olacağını iki dokunuşla bildirir.</p></div>
       <div class="feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 15h3"/></svg><b>Size özel panel</b><p>Gelecek ve gelmeyecek kişi sayıları, isim listesi ve Excel'e aktarma.</p></div>
@@ -271,7 +271,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
             <div class="seg hazir" id="knHazir"></div><span class="hint">Katılım formunun üstünde görünür. Hazır cümlelerden birine dokunabilir ya da kendiniz yazabilirsiniz.</span></div>
 
           <h3 class="fsec">Müzik</h3>
-          <div class="f"><div class="seg" id="muzikSec"></div><span class="hint">Davetiye açılırken çalan, size özel bestelenmiş telifsiz müzik kutusu ezgisi.</span></div>
+          <div class="f"><div class="seg" id="muzikSec"></div><span class="hint">Davetiye zarfı açılınca çalar. Dinlemek için parçaya dokunun.</span></div>
 
           <h3 class="fsec">Paket ve iletişim</h3>
           <div class="f"><div class="pk" id="pk"></div></div>
@@ -338,7 +338,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
       <li><a id="ig" target="_blank" rel="noopener">Instagram</a></li>
       <li><a href="d.html?c=ornek" target="_blank" rel="noopener">Örnek davetiye</a></li>
     </ul>
-    <small>© <span id="yil"></span> Lavie</small>
+    <small>© <span id="yil"></span> Lavie · Müzikler: Leberch, Pixabay</small>
   </div>
 </footer>
 
@@ -354,11 +354,11 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
 <script src="muzik.js"></script>
 <script>
 const A = window.LAVIE_AYAR, L = window.Lavie;
-const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id, muzik: "kutu", yazi: "" };
+const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id, muzik: "piyano", yazi: "" };
 const $ = id => document.getElementById(id);
 const ALANLAR = ["gelin","damat","tarih","saat","mekan","adres","konum","aile","not","program","katilimNotu","telefon"];
 const TIK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>`;
-const ORTAK = ["Zarf açılışı ve müzik kutusu","Canlı geri sayım, program ve konum","Katılım formu ve size özel panel","12 fotoğraflık galeri","Hatıra defteri","5 özel tasarım, size özel link"];
+const ORTAK = ["Zarf açılışı ve müzik","Canlı geri sayım, program ve konum","Katılım formu ve size özel panel","12 fotoğraflık galeri","Hatıra defteri","5 özel tasarım, size özel link"];
 
 // Sabit metinler ve bağlantılar
 $("ig").href = "https://instagram.com/" + A.INSTAGRAM;
@@ -404,13 +404,20 @@ function yaziCiz(){
   el.querySelectorAll("[data-y]").forEach(b => b.onclick = () => { S.yazi = b.dataset.y; ciz(); });
 }
 function muzikCiz(){
-  seg($("muzikSec"), [["kutu","Müzik kutusu"],["yok","Müzik olmasın"]], "muzik");
-  const b = document.createElement("button"); b.type = "button";
-  const M = window.LavieMuzik;
-  b.textContent = M && M.calisiyor() ? "■ Durdur" : "▶ Dinle";
-  b.onclick = () => { if (!M) return; M.calisiyor() ? M.durdur() : M.baslat(); muzikCiz(); };
-  if (S.muzik === "kutu") $("muzikSec").appendChild(b);
-  else if (M && M.calisiyor()) M.durdur();
+  const M = window.LavieMuzik, el = $("muzikSec");
+  el.innerHTML = "";
+  M.PARCALAR.concat([{ id: "yok", ad: "Müzik olmasın" }]).forEach(p => {
+    const b = document.createElement("button"); b.type = "button";
+    const calan = M.calan() === p.id;
+    b.innerHTML = p.id === "yok" ? p.ad : `${calan ? "■" : "▶"} ${L.esc(p.ad)}`;
+    b.setAttribute("aria-pressed", String(S.muzik === p.id));
+    b.onclick = () => {
+      S.muzik = p.id;
+      if (p.id === "yok" || calan) M.durdur(); else M.baslat(p.id);
+      ciz();
+    };
+    el.appendChild(b);
+  });
 }
 function paketCiz(){
   const pk = $("pk"); pk.innerHTML = "";
@@ -428,7 +435,7 @@ function mesaj(kod){
     `Tasarım: ${t.ad}`,`Tür: ${d.tur}`,`Gelin: ${d.gelin}`,`Damat: ${d.damat}`,
     `Tarih: ${L.uzunTarih(d)} ${d.saat}`,`Mekân: ${d.mekan}`,`Adres: ${d.adres}`,
     d.konum?`Konum: ${d.konum}`:null, d.aile?`Aile: ${d.aile}`:null, d.not?`Not: ${d.not}`:null,
-    d.program?`Program:\n${d.program}`:null, d.katilimNotu?`Katılım notu: ${d.katilimNotu}`:null, `Yazı stili: ${(L.YAZILAR.find(y => y[0] === d.yazi) || L.YAZILAR[0])[1]}`, `Müzik: ${d.muzik==="yok"?"Yok":"Müzik kutusu"}`,
+    d.program?`Program:\n${d.program}`:null, d.katilimNotu?`Katılım notu: ${d.katilimNotu}`:null, `Yazı stili: ${(L.YAZILAR.find(y => y[0] === d.yazi) || L.YAZILAR[0])[1]}`, `Müzik: ${(window.LavieMuzik.bul(d.muzik)||{ad:"Yok"}).ad}`,
     d.telefon?`Telefon: ${d.telefon}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`].filter(x => x !== null).join("\n");
 }
 function ciz(basa){

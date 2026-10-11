@@ -109,13 +109,13 @@ html,body{margin:0;background:#e9e6e3}
     mz = document.createElement("button");
     mz.type = "button"; mz.className = `mz ${tema}`; mz.hidden = true;
     mz.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/><path class="cizgi" d="M3 3l18 18"/></svg>`;
-    mz.onclick = () => { M.calisiyor() ? M.durdur() : M.baslat(); guncelle(); };
+    mz.onclick = () => { M.calisiyor() ? M.durdur() : M.baslat(d.muzik); guncelle(); };
     document.addEventListener("visibilitychange", () => setTimeout(guncelle, 50));
     document.body.appendChild(mz);
   }
 
   zarf.querySelector(".ac").addEventListener("click", () => {
-    if (muzikVar) { M.baslat(); mz.hidden = false; guncelle(); }
+    if (muzikVar) { M.baslat(d.muzik); mz.hidden = false; guncelle(); }
     zarf.classList.add("acik");
     setTimeout(() => zarf.classList.add("bitti"), 900);
     setTimeout(() => { zarf.remove(); document.body.style.overflow = ""; }, 1800);
