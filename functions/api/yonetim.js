@@ -1,4 +1,5 @@
 // Yönetim sayfası: siparişleri listele, onayla, düzenle, sil; çift yorumlarını onayla
+import { shopierTest } from "../../lib/shopier.js";
 import { ALANLAR, DURUMLAR, ciftGetir, ciftKaydet, ciftVerisiniSil, govde, json, linkler, temizle, uc, yorumSatiri } from "../../lib/ortak.js";
 
 export const onRequest = uc(async ({ request, env, db }) => {
@@ -22,6 +23,7 @@ export const onRequest = uc(async ({ request, env, db }) => {
 
   if (request.method !== "POST") return json({ ok: false, hata: "yontem" }, 405);
   const d = await govde(request);
+  if (d && d.islem === "shopier-test") return json({ ok: true, sonuc: await shopierTest(env) });
   if (!d || !d.slug) return json({ ok: false, hata: "veri" }, 400);
   const slug = String(d.slug);
 

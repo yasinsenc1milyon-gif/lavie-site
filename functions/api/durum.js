@@ -2,7 +2,7 @@
 import { json, mesajlariGetir, veritabani } from "../../lib/ortak.js";
 
 export async function onRequestGet({ env }) {
-  const sonuc = { veritabani_tanimli: !!(env && env.DB), sifre_tanimli: !!(env && env.ADMIN_SIFRE), veritabani_calisiyor: false, hata: null };
+  const sonuc = { veritabani_tanimli: !!(env && env.DB), sifre_tanimli: !!(env && env.ADMIN_SIFRE), shopier_tanimli: !!(env && env.SHOPIER_PAT), veritabani_calisiyor: false, hata: null };
   try {
     const db = await veritabani(env);
     const r = await db.prepare("SELECT COUNT(*) AS n FROM ciftler").first();

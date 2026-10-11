@@ -72,6 +72,8 @@ textarea{min-height:70px;resize:vertical}
   </form>
 
   <div id="app" hidden>
+    <div class="card" style="margin-bottom:12px"><div class="top"><h2 class="names" style="font-size:1.3rem">Shopier bağlantısı</h2><button class="b" id="spTest" type="button">Test et</button></div>
+      <pre id="spSonuc" hidden style="white-space:pre-wrap;font-size:.8rem;margin:10px 0 0;background:#f6f3f1;padding:10px;border-radius:8px"></pre></div>
     <div class="tabs" id="tabs" role="group" aria-label="Filtre"></div>
     <div class="list" id="list" style="margin-top:12px"></div>
   </div>
@@ -98,6 +100,13 @@ async function api(method, body){
 }
 function hataMetni(h){
   return h==="sifre" ? "Şifre yanlış." : h==="sifre_ayarlanmamis" ? "Yönetim şifresi henüz Cloudflare'da (ADMIN_SIFRE) ayarlanmamış." : "Bağlantı sorunu, tekrar deneyin.";
+}
+async function shopierTestEt(){
+  const el=$("spSonuc"); el.hidden=false; el.textContent="Test ediliyor...";
+  try { const j=await api("POST",{islem:"shopier-test"}); const r=j.sonuc;
+    const st=x=>x.durum===200?"✓ çalışıyor":(x.durum===0?"✗ anahtar yok":"✗ "+x.durum+(x.hata?" · "+x.hata:""));
+    el.textContent=`Anahtar: ${r.anahtar?"✓ tanımlı":"✗ yok (SHOPIER_PAT)"}\nMağaza: ${st(r.magaza)}${r.magaza.ad?" · "+r.magaza.ad:""}${r.magaza.adres?" · "+r.magaza.adres:""}\nÜrünler: ${st(r.urunler)}\nSiparişler: ${st(r.siparisler)}\nBildirimler (webhook): ${st(r.webhooklar)}\nAlanlar: ${(r.magazaAlanlari||[]).join(", ")}`;
+  } catch(e){ el.textContent="Test yapılamadı: "+e.message; }
 }
 async function yukle(){
   const j = await api("GET");
@@ -234,6 +243,7 @@ $("list").addEventListener("submit", async e=>{
 });
 
 if (SIFRE) { $("sifre").value=SIFRE; giris(); }
+$("spTest").onclick=shopierTestEt;
 </script>
 </body>
 </html>
