@@ -105,6 +105,7 @@ h2.t{font-family:var(--display);font-weight:400;font-size:clamp(2rem,4.5vw,2.8re
 .seg{display:flex;flex-wrap:wrap;gap:6px}
 .seg button{font:inherit;font-size:.88rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.hazir button{font-size:.8rem;padding:5px 11px}
 .yazi-seg button{font-size:1.05rem;padding:6px 14px;line-height:1.3}
 .yazi-seg button small{display:block;font-family:var(--body);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
 .pk{display:grid;gap:8px}
@@ -266,6 +267,9 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
 20:30 Akşam yemeği
 22:00 Eğlence</textarea></div>
 
+          <div class="f"><label class="label" for="katilimNotu">Katılım notu (isteğe bağlı)</label><input id="katilimNotu" maxlength="240" placeholder="Örn. Çocuklarımıza iyi uykular dileriz.">
+            <div class="seg hazir" id="knHazir"></div><span class="hint">Katılım formunun üstünde görünür. Hazır cümlelerden birine dokunabilir ya da kendiniz yazabilirsiniz.</span></div>
+
           <h3 class="fsec">Müzik</h3>
           <div class="f"><div class="seg" id="muzikSec"></div><span class="hint">Davetiye açılırken çalan, size özel bestelenmiş telifsiz müzik kutusu ezgisi.</span></div>
 
@@ -352,7 +356,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
 const A = window.LAVIE_AYAR, L = window.Lavie;
 const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id, muzik: "kutu", yazi: "" };
 const $ = id => document.getElementById(id);
-const ALANLAR = ["gelin","damat","tarih","saat","mekan","adres","konum","aile","not","program","telefon"];
+const ALANLAR = ["gelin","damat","tarih","saat","mekan","adres","konum","aile","not","program","katilimNotu","telefon"];
 const TIK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>`;
 const ORTAK = ["Zarf açılışı ve müzik kutusu","Canlı geri sayım, program ve konum","Katılım formu ve size özel panel","12 fotoğraflık galeri","Hatıra defteri","5 özel tasarım, size özel link"];
 
@@ -424,7 +428,7 @@ function mesaj(kod){
     `Tasarım: ${t.ad}`,`Tür: ${d.tur}`,`Gelin: ${d.gelin}`,`Damat: ${d.damat}`,
     `Tarih: ${L.uzunTarih(d)} ${d.saat}`,`Mekân: ${d.mekan}`,`Adres: ${d.adres}`,
     d.konum?`Konum: ${d.konum}`:null, d.aile?`Aile: ${d.aile}`:null, d.not?`Not: ${d.not}`:null,
-    d.program?`Program:\n${d.program}`:null, `Yazı stili: ${(L.YAZILAR.find(y => y[0] === d.yazi) || L.YAZILAR[0])[1]}`, `Müzik: ${d.muzik==="yok"?"Yok":"Müzik kutusu"}`,
+    d.program?`Program:\n${d.program}`:null, d.katilimNotu?`Katılım notu: ${d.katilimNotu}`:null, `Yazı stili: ${(L.YAZILAR.find(y => y[0] === d.yazi) || L.YAZILAR[0])[1]}`, `Müzik: ${d.muzik==="yok"?"Yok":"Müzik kutusu"}`,
     d.telefon?`Telefon: ${d.telefon}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`].filter(x => x !== null).join("\n");
 }
 function ciz(basa){
@@ -481,6 +485,8 @@ fetch(A.API_URL + "/yorumlar").then(r => r.json()).then(j => {
   $("yorumlar").hidden = false;
 }).catch(() => {});
 
+$("knHazir").innerHTML = L.KATILIM_NOTLARI.map(t => `<button type="button">${L.esc(t)}</button>`).join("");
+$("knHazir").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; $("katilimNotu").value = b.textContent; ciz(); });
 planCiz();
 ciz(true);
 </script>

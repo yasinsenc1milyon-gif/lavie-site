@@ -186,6 +186,7 @@ function formHTML(c){
     </div>
     ${inp("mekan","Mekân")}${inp("adres","Adres")}${inp("konum","Konum linki","url")}${inp("aile","Aile isimleri")}${inp("telefon","Telefon","tel")}
     <label class="f"><span>Davet notu</span><textarea name="not">${esc(c.not)}</textarea></label>
+    ${inp("katilimNotu","Katılım notu")}
     <label class="f"><span>Program</span><textarea name="program" rows="4">${esc(c.program)}</textarea></label>
     <button class="b main" type="submit">Kaydet</button>
   </form>`;

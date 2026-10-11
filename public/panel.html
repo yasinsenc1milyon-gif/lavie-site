@@ -225,6 +225,8 @@ function bilgiCiz(p){
       ${inp("aile","Aile isimleri")}${ta("not","Davet notu")}
       ${inp("mekan","Mekân")}${inp("adres","Adres")}${inp("konum","Konum linki (Google Maps)","url")}
       ${ta("program","Program (her satıra bir tane)",4)}
+      <label class="f"><span>Katılım notu (formun üstünde görünür)</span><input name="katilimNotu" maxlength="240" value="${esc(TASLAK.katilimNotu)}" placeholder="Örn. Çocuklarımıza iyi uykular dileriz."></label>
+      <div class="seg" id="knHazir" style="margin-top:-4px">${L.KATILIM_NOTLARI.map(t => `<button type="button" style="font-size:.78rem;padding:5px 10px">${esc(t)}</button>`).join("")}</div>
       <div class="f"><span>Müzik</span><div class="seg" data-alan="muzik"><button type="button" data-v="kutu" aria-pressed="${TASLAK.muzik!=="yok"}">Müzik kutusu</button><button type="button" data-v="yok" aria-pressed="${TASLAK.muzik==="yok"}">Müzik olmasın</button></div></div>
       <div class="bar"><button class="b main" type="submit" ${V.ornek?"disabled":""}>Kaydet ve yayınla</button><button class="b" type="button" id="geri">Değişiklikleri geri al</button></div>
       <span class="muted">Kaydettiğinizde davetiyeniz anında güncellenir, linkiniz değişmez.</span>
@@ -241,6 +243,7 @@ function bilgiCiz(p){
     sg.querySelectorAll("[data-v]").forEach(x => x.setAttribute("aria-pressed", x === b));
     onizle();
   }));
+  $("knHazir").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; TASLAK.katilimNotu = b.textContent; f.katilimNotu.value = b.textContent; onizle(); });
   $("geri").onclick = () => { TASLAK = { ...V.cift }; bilgiCiz(p); toast("Değişiklikler geri alındı"); };
   f.addEventListener("submit", async e => {
     e.preventDefault();

@@ -12,7 +12,7 @@ export const TURLER = ["Düğün", "Nişan", "Kına", "Söz"];
 export const DURUMLAR = ["bekliyor", "aktif", "kapali"];
 export const MUZIKLER = ["kutu", "yok"];
 export const YAZILAR = ["", "el", "zarif", "klasik", "modern", "bodoni", "sade"];
-export const ALANLAR = ["tasarim", "tur", "gelin", "damat", "tarih", "saat", "mekan", "adres", "konum", "aile", "not", "program", "telefon", "paket", "muzik", "yazi"];
+export const ALANLAR = ["tasarim", "tur", "gelin", "damat", "tarih", "saat", "mekan", "adres", "konum", "aile", "not", "program", "telefon", "paket", "muzik", "yazi", "katilimNotu"];
 export const CIFT_DUZENLER = ALANLAR.filter(k => k !== "telefon" && k !== "paket");
 export const FOTO_SINIR = 12;
 
@@ -26,7 +26,7 @@ export async function govde(req) {
 export function temizle(d) {
   const o = {};
   for (const k of ALANLAR) {
-    const sinir = k === "not" || k === "program" ? 600 : 200;
+    const sinir = k === "not" || k === "program" ? 600 : k === "katilimNotu" ? 240 : 200;
     o[k] = String(d?.[k] ?? "").trim().slice(0, sinir);
   }
   if (!TASARIMLAR.includes(o.tasarim)) o.tasarim = "zeytin";

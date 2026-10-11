@@ -15,6 +15,7 @@
   ];
   const TURLER = ["Düğün", "Nişan", "Kına", "Söz"];
   const YAZILAR = [["", "Tasarımın yazısı", null], ["el", "El yazısı", "Great Vibes"], ["zarif", "Zarif", "Pinyon Script"], ["klasik", "Klasik", "Cormorant Garamond"], ["modern", "Modern", "Italiana"], ["bodoni", "Moda", "Bodoni Moda"], ["sade", "Sade", "Marcellus"]];
+  const KATILIM_NOTLARI = ["Çocuklarımıza iyi uykular dileriz.", "Lütfen katılım durumunuzu düğünden bir hafta önce bildiriniz.", "Davetiyemiz kişiye özeldir.", "Kıyafet önerisi: şık ve açık renkler."];
   const UST = { "Düğün": "Evleniyoruz", "Nişan": "Nişanlanıyoruz", "Kına": "Kına gecemize davetlisiniz", "Söz": "Söz törenimize davetlisiniz" };
 
   function hedef(d) {
@@ -60,6 +61,7 @@
         <a class="ibtn" href="${esc(haritaLinki(d))}" target="_blank" rel="noopener">Yol tarifi al</a></section>` : ""}
       ${galeri(ek)}
       <section><h3>Katılım</h3>
+        ${d.katilimNotu ? `<p class="knot">${esc(d.katilimNotu)}</p>` : ""}
         <form class="rsvp">
           <input name="isim" placeholder="Adınız soyadınız" aria-label="Adınız soyadınız" maxlength="80" required>
           <select name="kisi" aria-label="Kişi sayısı"><option value="1">1 kişi</option><option value="2">2 kişi</option><option value="3">3 kişi</option><option value="4">4 kişi</option><option value="5">5+ kişi</option></select>
@@ -155,5 +157,5 @@
     });
   }
 
-  window.Lavie = { TASARIMLAR, TURLER, UST, YAZILAR, esc, ciz, uzunTarih };
+  window.Lavie = { TASARIMLAR, TURLER, UST, YAZILAR, KATILIM_NOTLARI, esc, ciz, uzunTarih };
 })();

@@ -90,3 +90,6 @@
 .inv.y-sade{--fn:"Marcellus",serif}
 .inv.y-el .names,.inv.y-zarif .names{font-size:15cqw}
 .inv.y-sade .names,.inv.y-modern .names{font-size:12.5cqw}
+
+/* Katılım notu */
+.inv .knot{font-style:italic;font-size:4.4cqw;color:var(--acc);margin:-1cqw 0 5cqw;line-height:1.5}
