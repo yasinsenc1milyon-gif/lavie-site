@@ -13,6 +13,14 @@ window.LAVIE_AYAR = {
     { id: "site", ad: "Davetiye sitesi", aciklama: "Size özel link, geri sayım, program, konum ve katılım formu", fiyat: 500 }
   ],
 
+  // Müşterilerin izniyle eklenen gerçek yorumlar (sadece baş harfler)
+  MUSTERI_YORUMLARI: [
+    { ad: "B. & Ö.", kaynak: "Instagram yorumu", yorum: "Çok teşekkür ederiz, ilginiz ve nezaketiniz için. Sayenizde davetiyemiz harika oldu." },
+    { ad: "A. K.", kaynak: "WhatsApp mesajı", yorum: "Davetiyemize herkes bayılıyor. Sizi öneriyorum." },
+    { ad: "A. & R.", kaynak: "Instagram yorumu", yorum: "Çok çok beğendim, her şey için teşekkürler." },
+    { ad: "K. & A.", kaynak: "Instagram yorumu", yorum: "İyi ki sen, iyi ki!" }
+  ],
+
   // Instagram kullanıcı adın (@ olmadan)
   INSTAGRAM: "la.viecreative"
 };
