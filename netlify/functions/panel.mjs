@@ -1,5 +1,5 @@
 // Çiftin paneli: yanıtlar, hatıra defteri, fotoğraflar ve yorum
-import { FOTO_SINIR, ciftGetir, fotoListesi, fotoStore, fotoUrl, govde, json, mesajStore, mesajlariGetir, ornekMi, yanitlariGetir, yorumStore } from "../lib/ortak.mjs";
+import { CIFT_DUZENLER, FOTO_SINIR, ciftStore, temizle, ciftGetir, fotoListesi, fotoStore, fotoUrl, govde, json, mesajStore, mesajlariGetir, ornekMi, yanitlariGetir, yorumStore } from "../lib/ortak.mjs";
 
 const gecerliId = id => /^[\w-]{1,80}$/.test(String(id || ""));
 
@@ -26,6 +26,15 @@ export default async (req) => {
 
   if (req.method === "POST") {
     if (ornekMi(c.slug)) return json({ ok: false, hata: "ornek" }, 400);
+    if (d.islem === "guncelle" && d.alanlar && typeof d.alanlar === "object") {
+      const izinli = Object.fromEntries(CIFT_DUZENLER.filter(k => k in d.alanlar).map(k => [k, d.alanlar[k]]));
+      const yeni = temizle({ ...c, ...izinli });
+      if (!yeni.gelin || !yeni.damat || !yeni.tarih) return json({ ok: false, hata: "eksik" }, 400);
+      for (const k of CIFT_DUZENLER) c[k] = yeni[k];
+      await ciftStore().setJSON(c.slug, c);
+      const { anahtar, telefon, olusturma, durum, ...acik } = c;
+      return json({ ok: true, cift: acik });
+    }
     if (d.islem === "mesaj-sil" && gecerliId(d.id)) { await mesajStore().delete(`${c.slug}/${d.id}`); return json({ ok: true }); }
     if (d.islem === "foto-sil" && gecerliId(d.id)) { await fotoStore().delete(`${c.slug}/${d.id}`); return json({ ok: true }); }
     if (d.islem === "yorum") {

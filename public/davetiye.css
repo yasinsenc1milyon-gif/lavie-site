@@ -78,3 +78,15 @@
 .inv .mk{margin:0;padding:4cqw 5cqw;background:var(--bg2);border-left:2px solid var(--acc)}
 .inv .mk blockquote{margin:0 0 2cqw;font-style:italic;font-size:4.2cqw;line-height:1.55;color:var(--fg)}
 .inv .mk figcaption{font-size:3.2cqw;letter-spacing:.08em;color:var(--soft)}
+
+/* Yazı stili seçimi (isimler) */
+.inv[class*=" y-"] .names{font-style:normal}
+.inv.y-el{--fn:"Great Vibes",cursive}
+.inv.y-zarif{--fn:"Pinyon Script",cursive}
+.inv.y-klasik{--fn:"Cormorant Garamond",serif}
+.inv.y-modern{--fn:"Italiana",serif}
+.inv.y-bodoni{--fn:"Bodoni Moda",serif}
+.inv.y-bodoni .names{font-style:italic}
+.inv.y-sade{--fn:"Marcellus",serif}
+.inv.y-el .names,.inv.y-zarif .names{font-size:15cqw}
+.inv.y-sade .names,.inv.y-modern .names{font-size:12.5cqw}

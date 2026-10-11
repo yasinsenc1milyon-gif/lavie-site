@@ -7,6 +7,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Great+Vibes&family=Jost:wght@400;500&display=swap">
+<link rel="stylesheet" href="davetiye.css">
 <style>
 /* Tek sütun: başlık, özet, sekmeli bölümler (misafirler, fotoğraflar, hatıra defteri, yorum) */
 :root{--paper:#f6f3f1;--ink:#2b2a33;--muted:#6e6a72;--line:#e0d8d2;--accent:#5b4a6b;--field:#fff;--gold:#b08a4f;--ok:#2f6440;--bad:#a2464b}
@@ -63,6 +64,22 @@ tr:last-child td{border-bottom:0}
 .note{background:#f8ecd6;color:#6b4710;border-radius:10px;padding:10px 12px;font-size:.88rem}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;font-size:.88rem;z-index:5}
 a{color:var(--accent)}
+.duz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:20px;align-items:start}
+@media (max-width:760px){.duz{grid-template-columns:minmax(0,1fr)}}
+.duz form{display:grid;gap:12px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:16px}
+.duz .f{display:grid;gap:4px;min-width:0}
+.duz .f > span{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.duz .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.duz .row{grid-template-columns:1fr}}
+.duz input,.duz textarea{font-size:16px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:inherit;font-size:.86rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.seg.yz button{font-size:1rem}
+.onizle-kap{position:sticky;top:12px;display:grid;gap:6px;justify-items:center}
+@media (max-width:760px){.onizle-kap{position:static}}
+.onizle{width:100%;max-width:340px;height:min(600px,75vh);border-radius:28px;border:8px solid #1d1b22;background:#1d1b22;overflow:hidden}
+.onizle > div{height:100%;overflow-y:auto;border-radius:20px;container-type:inline-size}
 </style>
 </head>
 <body>
@@ -73,13 +90,14 @@ a{color:var(--accent)}
 <div class="toast" id="toast" hidden></div>
 <script src="ayarlar.js"></script>
 <script src="gorsel.js"></script>
+<script src="davetiye.js"></script>
 <script>
 const API = window.LAVIE_AYAR.API_URL;
 const q = new URLSearchParams(location.search), slug = q.get("c") || "", key = q.get("k") || "";
 const app = document.getElementById("app");
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let V = null, SEKME = "misafir", PUAN = 5;
+let V = null, SEKME = "misafir", PUAN = 5, TASLAK = null;
 
 function toast(m){ const t=$("toast"); t.textContent=m; t.hidden=false; clearTimeout(t._z); t._z=setTimeout(()=>t.hidden=true,2400); }
 async function yukle(){
@@ -130,7 +148,7 @@ function ciz(){
   $("sYes").textContent = gel.reduce((a,x) => a + x.kisi, 0);
   $("sNo").textContent = V.yanitlar.length - gel.length;
   $("sAll").textContent = V.yanitlar.length;
-  $("tabs").innerHTML = [["misafir","Misafirler",V.yanitlar.length],["foto","Fotoğraflar",V.fotolar.length],["defter","Hatıra defteri",V.mesajlar.length],["yorum","Bizi değerlendirin",""]]
+  $("tabs").innerHTML = [["misafir","Misafirler",V.yanitlar.length],["bilgi","Davetiye bilgileri",""],["foto","Fotoğraflar",V.fotolar.length],["defter","Hatıra defteri",V.mesajlar.length],["yorum","Bizi değerlendirin",""]]
     .map(([k,l,n]) => `<button class="tab" role="tab" type="button" data-s="${k}" aria-selected="${SEKME===k}">${l}${n!==""?`<b>${n}</b>`:""}</button>`).join("");
   const p = $("pane");
   if (SEKME === "misafir") {
@@ -147,6 +165,7 @@ function ciz(){
     $("indir").onclick = csv;
     $("yenile").onclick = async e => { e.target.textContent = "Yenileniyor..."; try { await yukle(); ciz(); } finally { e.target.textContent = "Yenile"; } };
   }
+  if (SEKME === "bilgi") bilgiCiz(p);
   if (SEKME === "foto") {
     const dolu = V.fotolar.length >= V.fotoSiniri;
     p.innerHTML = `<p class="muted" style="margin:0">Davetiyenizdeki "Anılarımız" galerisinde görünür. En fazla ${V.fotoSiniri} fotoğraf (${V.fotolar.length}/${V.fotoSiniri}).</p>
@@ -188,6 +207,48 @@ function ciz(){
       catch { e.target.disabled = false; toast("Gönderilemedi, tekrar deneyin."); }
     };
   }
+}
+
+// Çiftin davetiye bilgilerini kendisinin düzenlemesi
+function bilgiCiz(p){
+  const L = window.Lavie;
+  if (!TASLAK) TASLAK = { ...V.cift };
+  const inp = (k, l, t="text", ek="") => `<label class="f"><span>${l}</span><input name="${k}" type="${t}" value="${esc(TASLAK[k])}" ${ek}></label>`;
+  const ta = (k, l, r=3) => `<label class="f"><span>${l}</span><textarea name="${k}" rows="${r}">${esc(TASLAK[k])}</textarea></label>`;
+  p.innerHTML = `<div class="duz">
+    <form id="bf">
+      <div class="f"><span>Davet türü</span><div class="seg" data-alan="tur">${L.TURLER.map(t => `<button type="button" data-v="${t}" aria-pressed="${TASLAK.tur===t}">${t}</button>`).join("")}</div></div>
+      <div class="f"><span>Tasarım</span><div class="seg" data-alan="tasarim">${L.TASARIMLAR.map(t => `<button type="button" data-v="${t.id}" aria-pressed="${TASLAK.tasarim===t.id}">${t.ad}</button>`).join("")}</div></div>
+      <div class="f"><span>İsimlerin yazı stili</span><div class="seg yz" data-alan="yazi">${L.YAZILAR.map(([k, ad, font]) => `<button type="button" data-v="${k}" aria-pressed="${(TASLAK.yazi||"")===k}" ${font?`style="font-family:'${font}',serif"`:""}>${ad}</button>`).join("")}</div></div>
+      <div class="row">${inp("gelin","Gelin","text",'maxlength="60"')}${inp("damat","Damat","text",'maxlength="60"')}</div>
+      <div class="row">${inp("tarih","Tarih","date")}${inp("saat","Saat","time")}</div>
+      ${inp("aile","Aile isimleri")}${ta("not","Davet notu")}
+      ${inp("mekan","Mekân")}${inp("adres","Adres")}${inp("konum","Konum linki (Google Maps)","url")}
+      ${ta("program","Program (her satıra bir tane)",4)}
+      <div class="f"><span>Müzik</span><div class="seg" data-alan="muzik"><button type="button" data-v="kutu" aria-pressed="${TASLAK.muzik!=="yok"}">Müzik kutusu</button><button type="button" data-v="yok" aria-pressed="${TASLAK.muzik==="yok"}">Müzik olmasın</button></div></div>
+      <div class="bar"><button class="b main" type="submit" ${V.ornek?"disabled":""}>Kaydet ve yayınla</button><button class="b" type="button" id="geri">Değişiklikleri geri al</button></div>
+      <span class="muted">Kaydettiğinizde davetiyeniz anında güncellenir, linkiniz değişmez.</span>
+    </form>
+    <div class="onizle-kap"><span class="muted">Önizleme</span><div class="onizle"><div id="oz"></div></div></div>
+  </div>`;
+  const onizle = () => L.ciz($("oz"), TASLAK, async () => {}, { fotolar: V.fotolar.map(f => f.url), mesajlar: V.mesajlar });
+  onizle();
+  const f = $("bf");
+  f.addEventListener("input", e => { if (e.target.name) { TASLAK[e.target.name] = e.target.value; onizle(); } });
+  f.querySelectorAll(".seg[data-alan]").forEach(sg => sg.addEventListener("click", e => {
+    const b = e.target.closest("[data-v]"); if (!b) return;
+    TASLAK[sg.dataset.alan] = b.dataset.v;
+    sg.querySelectorAll("[data-v]").forEach(x => x.setAttribute("aria-pressed", x === b));
+    onizle();
+  }));
+  $("geri").onclick = () => { TASLAK = { ...V.cift }; bilgiCiz(p); toast("Değişiklikler geri alındı"); };
+  f.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!TASLAK.gelin?.trim() || !TASLAK.damat?.trim() || !TASLAK.tarih) return toast("Gelin, damat ve tarih boş olamaz.");
+    const btn = f.querySelector("[type=submit]"); btn.disabled = true; btn.textContent = "Kaydediliyor...";
+    try { const j = await islem({ islem: "guncelle", alanlar: TASLAK }); V.cift = j.cift; TASLAK = { ...j.cift }; iskelet(); SEKME = "bilgi"; ciz(); toast("Kaydedildi, davetiyeniz güncellendi"); }
+    catch { btn.disabled = false; btn.textContent = "Kaydet ve yayınla"; toast("Kaydedilemedi, tekrar deneyin."); }
+  });
 }
 
 // Fotoğrafı telefonda küçültüp yükle

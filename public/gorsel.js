@@ -96,8 +96,11 @@
     try { await Promise.race([Promise.all(istek.map(f => document.fonts.load(f))), new Promise(r => setTimeout(r, 4000))]); } catch {}
   }
 
+  const YAZI = { el: ["Great Vibes", "", 160], zarif: ["Pinyon Script", "", 150], klasik: ["Cormorant Garamond", "", 140], modern: ["Italiana", "", 130], bodoni: ["Bodoni Moda", "italic ", 140], sade: ["Marcellus", "", 120] };
   async function olustur(c) {
-    const id = TEMA[c.tasarim] ? c.tasarim : "zeytin", t = TEMA[id];
+    const id = TEMA[c.tasarim] ? c.tasarim : "zeytin";
+    let t = TEMA[id];
+    if (YAZI[c.yazi]) t = { ...t, fn: YAZI[c.yazi][0], fnStil: YAZI[c.yazi][1], ad: YAZI[c.yazi][2] };
     await fontlariYukle(t);
     const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
     const ctx = cv.getContext("2d");

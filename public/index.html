@@ -105,6 +105,8 @@ h2.t{font-family:var(--display);font-weight:400;font-size:clamp(2rem,4.5vw,2.8re
 .seg{display:flex;flex-wrap:wrap;gap:6px}
 .seg button{font:inherit;font-size:.88rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.yazi-seg button{font-size:1.05rem;padding:6px 14px;line-height:1.3}
+.yazi-seg button small{display:block;font-family:var(--body);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
 .pk{display:grid;gap:8px}
 .pk label{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--paper);cursor:pointer}
 .pk label:has(input:checked){border-color:var(--accent);background:#f3eef5}
@@ -242,6 +244,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
         <form id="f" autocomplete="off">
           <h3 class="fsec">Davet</h3>
           <div class="f"><span class="label">Davet türü</span><div class="seg" id="types"></div></div>
+          <div class="f"><span class="label">İsimlerin yazı stili</span><div class="seg yazi-seg" id="yaziSec"></div></div>
           <div class="row">
             <div class="f"><label class="label" for="gelin">Gelin</label><input id="gelin" value="Elif"></div>
             <div class="f"><label class="label" for="damat">Damat</label><input id="damat" value="Burak"></div>
@@ -312,7 +315,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
       <details><summary>Davetiyem ne kadar sürede hazır olur?</summary><p>Siparişiniz ve ödemeniz onaylandıktan sonra davetiye linkiniz genellikle aynı gün açılır.</p></details>
       <details><summary>Misafirlerin uygulama indirmesi gerekir mi?</summary><p>Hayır. Davetiye bir link olarak WhatsApp'tan veya mesajla paylaşılır, telefonun tarayıcısında açılır.</p></details>
       <details><summary>Ödemeyi nasıl yapıyorum?</summary><p>Siparişinizi oluşturduktan sonra WhatsApp'tan size ödeme bilgilerini iletiyoruz. Ödeme tek seferliktir.</p></details>
-      <details><summary>Sonradan bilgileri değiştirebilir miyim?</summary><p>Evet. Saat, mekân veya program değişirse WhatsApp'tan yazmanız yeterli; davetiye linkiniz değişmeden güncellenir.</p></details>
+      <details><summary>Sonradan bilgileri değiştirebilir miyim?</summary><p>Evet. Size özel panelinizden saat, mekân, program, davet notu, tasarım, yazı stili ve müzik dahil tüm bilgileri dilediğiniz zaman kendiniz değiştirebilirsiniz; davetiyeniz linki değişmeden anında güncellenir. İsterseniz WhatsApp'tan yazın, biz de yapabiliriz.</p></details>
       <details><summary>Katılım yanıtlarını nasıl görürüm?</summary><p>Size özel bir panel linki veriyoruz. Gelecek ve gelmeyecek kişi sayılarını, isim listesini ve hatıra defterini oradan takip eder, listeyi Excel'e aktarabilirsiniz.</p></details>
       <details><summary>Fotoğraf ekleyebilir miyim?</summary><p>Evet, panelinizden 12 fotoğrafa kadar ekleyip çıkarabilirsiniz. Fotoğraflar davetiyenizdeki galeride görünür.</p></details>
     </div>
@@ -347,7 +350,7 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
 <script src="muzik.js"></script>
 <script>
 const A = window.LAVIE_AYAR, L = window.Lavie;
-const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id, muzik: "kutu" };
+const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id, muzik: "kutu", yazi: "" };
 const $ = id => document.getElementById(id);
 const ALANLAR = ["gelin","damat","tarih","saat","mekan","adres","konum","aile","not","program","telefon"];
 const TIK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>`;
@@ -371,7 +374,7 @@ function planCiz(){
   $("plans").querySelectorAll("[data-p]").forEach(b => b.onclick = () => { S.paket = b.dataset.p; ciz(); $("olustur").scrollIntoView(); });
 }
 
-function veri(){ const d = { tasarim:S.tasarim, tur:S.tur, muzik:S.muzik }; ALANLAR.forEach(k => d[k] = $(k).value.trim()); return d; }
+function veri(){ const d = { tasarim:S.tasarim, tur:S.tur, muzik:S.muzik, yazi:S.yazi }; ALANLAR.forEach(k => d[k] = $(k).value.trim()); return d; }
 
 function seritCiz(){
   const st = $("strip"); st.innerHTML = "";
@@ -389,6 +392,12 @@ function seg(el, ogeler, anahtar){
   el.innerHTML = "";
   ogeler.forEach(([deger, yazi]) => { const b = document.createElement("button"); b.type = "button"; b.textContent = yazi;
     b.setAttribute("aria-pressed", String(S[anahtar] === deger)); b.onclick = () => { S[anahtar] = deger; ciz(); }; el.appendChild(b); });
+}
+function yaziCiz(){
+  const el = $("yaziSec"), d = veri(), varsayilan = L.TASARIMLAR.find(t => t.id === S.tasarim).mini[2];
+  const ad = `${(d.gelin||"E")[0]} & ${(d.damat||"B")[0]}`;
+  el.innerHTML = L.YAZILAR.map(([k, yazi, font]) => `<button type="button" data-y="${k}" aria-pressed="${S.yazi===k}" style="font-family:'${font||varsayilan}',serif${k==="bodoni"?";font-style:italic":""}">${L.esc(ad)}<small>${yazi}</small></button>`).join("");
+  el.querySelectorAll("[data-y]").forEach(b => b.onclick = () => { S.yazi = b.dataset.y; ciz(); });
 }
 function muzikCiz(){
   seg($("muzikSec"), [["kutu","Müzik kutusu"],["yok","Müzik olmasın"]], "muzik");
@@ -415,11 +424,11 @@ function mesaj(kod){
     `Tasarım: ${t.ad}`,`Tür: ${d.tur}`,`Gelin: ${d.gelin}`,`Damat: ${d.damat}`,
     `Tarih: ${L.uzunTarih(d)} ${d.saat}`,`Mekân: ${d.mekan}`,`Adres: ${d.adres}`,
     d.konum?`Konum: ${d.konum}`:null, d.aile?`Aile: ${d.aile}`:null, d.not?`Not: ${d.not}`:null,
-    d.program?`Program:\n${d.program}`:null, `Müzik: ${d.muzik==="yok"?"Yok":"Müzik kutusu"}`,
+    d.program?`Program:\n${d.program}`:null, `Yazı stili: ${(L.YAZILAR.find(y => y[0] === d.yazi) || L.YAZILAR[0])[1]}`, `Müzik: ${d.muzik==="yok"?"Yok":"Müzik kutusu"}`,
     d.telefon?`Telefon: ${d.telefon}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`].filter(x => x !== null).join("\n");
 }
 function ciz(basa){
-  seritCiz(); seg($("types"), L.TURLER.map(t => [t, t]), "tur"); muzikCiz(); paketCiz();
+  seritCiz(); seg($("types"), L.TURLER.map(t => [t, t]), "tur"); yaziCiz(); muzikCiz(); paketCiz();
   const sc = $("screen"), y = sc.scrollTop;
   L.ciz(sc, veri(), async () => { await new Promise(r => setTimeout(r, 500)); }, {
     ornekGaleri: true,

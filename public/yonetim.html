@@ -181,6 +181,7 @@ function formHTML(c){
     </div>
     <div class="row">
       <label class="f"><span>Müzik</span><select name="muzik"><option value="kutu" ${c.muzik!=="yok"?"selected":""}>Müzik kutusu</option><option value="yok" ${c.muzik==="yok"?"selected":""}>Müzik yok</option></select></label>
+      <label class="f"><span>Yazı stili</span><select name="yazi">${[["","Tasarımın yazısı"],["el","El yazısı"],["zarif","Zarif"],["klasik","Klasik"],["modern","Modern"],["bodoni","Moda"],["sade","Sade"]].map(([k,v])=>`<option value="${k}" ${(c.yazi||"")===k?"selected":""}>${v}</option>`).join("")}</select></label>
       <label class="f"><span>Paket</span><select name="paket"><option value="site" ${c.paket!=="site-gorsel"?"selected":""}>Davetiye sitesi</option><option value="site-gorsel" ${c.paket==="site-gorsel"?"selected":""}>Site + paylaşım görseli</option></select></label>
     </div>
     ${inp("mekan","Mekân")}${inp("adres","Adres")}${inp("konum","Konum linki","url")}${inp("aile","Aile isimleri")}${inp("telefon","Telefon","tel")}

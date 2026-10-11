@@ -14,6 +14,7 @@
     { id: "ege", ad: "Ege", mini: ["#fbfaf6", "#2a4c9a", "Marcellus"], hero: () => `<div class="deco tile top" style="background-image:${TILE}"></div><div class="deco tile bot" style="background-image:${TILE}"></div>` }
   ];
   const TURLER = ["Düğün", "Nişan", "Kına", "Söz"];
+  const YAZILAR = [["", "Tasarımın yazısı", null], ["el", "El yazısı", "Great Vibes"], ["zarif", "Zarif", "Pinyon Script"], ["klasik", "Klasik", "Cormorant Garamond"], ["modern", "Modern", "Italiana"], ["bodoni", "Moda", "Bodoni Moda"], ["sade", "Sade", "Marcellus"]];
   const UST = { "Düğün": "Evleniyoruz", "Nişan": "Nişanlanıyoruz", "Kına": "Kına gecemize davetlisiniz", "Söz": "Söz törenimize davetlisiniz" };
 
   function hedef(d) {
@@ -43,7 +44,8 @@
       return m ? `<li><b>${esc(m[1].replace(".", ":"))}</b><span>${esc(m[2])}</span></li>` : `<li><b></b><span>${esc(l)}</span></li>`;
     }).join("");
     const t0 = hedef(d);
-    return `<div class="inv t-${t.id}">
+    const yazi = YAZILAR.some(y => y[0] && y[0] === d.yazi) ? ` y-${d.yazi}` : "";
+    return `<div class="inv t-${t.id}${yazi}">
       <section class="hero">${t.hero()}
         <div class="eyebrow">${esc(UST[tur])}</div>
         <h1 class="names">${gelin}<span class="amp">&amp;</span>${damat}</h1>
@@ -153,5 +155,5 @@
     });
   }
 
-  window.Lavie = { TASARIMLAR, TURLER, UST, esc, ciz, uzunTarih };
+  window.Lavie = { TASARIMLAR, TURLER, UST, YAZILAR, esc, ciz, uzunTarih };
 })();

@@ -11,7 +11,9 @@ export const TASARIMLAR = ["zeytin", "gece", "gul", "mono", "ege"];
 export const TURLER = ["Düğün", "Nişan", "Kına", "Söz"];
 export const DURUMLAR = ["bekliyor", "aktif", "kapali"];
 export const MUZIKLER = ["kutu", "yok"];
-export const ALANLAR = ["tasarim", "tur", "gelin", "damat", "tarih", "saat", "mekan", "adres", "konum", "aile", "not", "program", "telefon", "paket", "muzik"];
+export const YAZILAR = ["", "el", "zarif", "klasik", "modern", "bodoni", "sade"];
+export const ALANLAR = ["tasarim", "tur", "gelin", "damat", "tarih", "saat", "mekan", "adres", "konum", "aile", "not", "program", "telefon", "paket", "muzik", "yazi"];
+export const CIFT_DUZENLER = ALANLAR.filter(k => k !== "telefon" && k !== "paket");
 export const FOTO_SINIR = 12;
 
 export const json = (o, status = 200) =>
@@ -30,6 +32,7 @@ export function temizle(d) {
   if (!TASARIMLAR.includes(o.tasarim)) o.tasarim = "zeytin";
   if (!TURLER.includes(o.tur)) o.tur = "Düğün";
   if (!MUZIKLER.includes(o.muzik)) o.muzik = "kutu";
+  if (!YAZILAR.includes(o.yazi)) o.yazi = "";
   return o;
 }
 
