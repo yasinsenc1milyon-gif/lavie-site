@@ -1,0 +1,4 @@
+/muzik/*
+  Cache-Control: public, max-age=2592000, immutable
+/og/*
+  Cache-Control: public, max-age=604800

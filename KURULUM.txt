@@ -1,29 +1,32 @@
-LAVIE · NASIL ÇALIŞIR
-=====================
+LAVIE · NASIL ÇALIŞIR (Cloudflare)
+==================================
 
-Her şey Netlify'da çalışır. Google E-Tablo veya Apps Script gerekmez.
-GitHub'a gönderilen her değişiklik 1-2 dakikada siteye yansır.
+Site Cloudflare Pages üzerinde çalışır; veriler Cloudflare D1 veritabanındadır.
+GitHub'a gönderilen her değişiklik 1-2 dakikada siteye yansır (ayda 500 yayınlama ücretsiz).
+
+Klasörler
+- public/      Sitenin sayfaları, müzikler, görseller
+- functions/   Arka plan: sipariş, katılım, panel, yönetim, link önizlemesi
+- lib/         Arka planın ortak kodu
 
 Sayfalar
-- laviedavetiye.netlify.app                 Vitrin: tasarım seç, bilgileri yaz, sipariş ver
-- laviedavetiye.netlify.app/d.html?c=KOD    Çiftin davetiyesi (misafirler açar)
-- laviedavetiye.netlify.app/panel.html?...  Çiftin misafir paneli (şifreli link)
-- laviedavetiye.netlify.app/yonetim.html    Senin yönetim sayfan
-- Örnek davetiye: laviedavetiye.netlify.app/d.html?c=ornek
+- /                     Vitrin
+- /d?c=KOD              Çiftin davetiyesi (misafirler açar)
+- /panel?c=KOD&k=ŞİFRE  Çiftin paneli
+- /yonetim              Senin yönetim sayfan
+- /d?c=ornek            Örnek davetiye
 
-BİR KERELİK AYAR: YÖNETİM ŞİFRESİ
-  1. app.netlify.com → laviedavetiye → Project configuration → Environment variables
-  2. Add a variable → Key: ADMIN_SIFRE   Value: kendi şifren (en az 10 karakter)
-  3. Kaydet, sonra Deploys → Trigger deploy → Deploy project
-  4. laviedavetiye.netlify.app/yonetim.html adresinden şifrenle gir.
+CLOUDFLARE AYARLARI (bir kerelik)
+  Pages projesi: GitHub'daki lavie-site deposu
+    Framework: None · Build command: boş · Build output directory: public
+  Bindings: D1 database → Variable name: DB → veritabanı: lavie
+  Variables and Secrets: ADMIN_SIFRE (Secret) = yönetim şifren
 
 YENİ SİPARİŞ GELİNCE
-  1. Müşteri vitrinde "Siparişi oluştur"a basar; davetiyesi "Ödeme bekliyor" olarak oluşur.
-     WhatsApp'tan sana sipariş kodu ve bilgileri gelir.
+  1. Müşteri vitrinde "Siparişi oluştur"a basar; WhatsApp'tan sipariş kodu gelir.
   2. Ödemeyi IBAN'dan al.
   3. Yönetim sayfasında "Ödeme alındı, yayınla"ya bas.
-  4. "Linkleri çifte gönder" ile davetiye ve panel linkleri çiftin WhatsApp'ına hazır mesaj olarak gider.
-  Bilgi düzeltmek için kartta "Düzenle"yi kullan; davetiye anında güncellenir.
+  4. "Linkleri çifte gönder" ile davetiye ve panel linklerini gönder.
 
 YASAL NOT
   Düzenli satış yapmaya başlarsan vergi kaydı gerekir. Bir muhasebeciye danışmanı öneririm.

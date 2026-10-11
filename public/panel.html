@@ -107,7 +107,7 @@ async function islem(body){
   if (!j.ok) throw new Error(j.hata || "hata");
   return j;
 }
-const davetLink = () => location.origin + "/d.html?c=" + encodeURIComponent(slug);
+const davetLink = () => location.origin + "/d?c=" + encodeURIComponent(slug);
 async function kopyala(t){ try{ await navigator.clipboard.writeText(t); toast("Link kopyalandı"); } catch { window.prompt("Linki kopyalayın:", t); } }
 
 function iskelet(){
