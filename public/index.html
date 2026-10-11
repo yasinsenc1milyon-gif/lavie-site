@@ -387,7 +387,7 @@ function planCiz(){
     <ul>${ORTAK.map(x => `<li>${TIK}<span>${x}</span></li>`).join("")}${p.id === "site-gorsel" ? `<li class="ek">${TIK}<span>Hikâye ve durum boyutunda paylaşım görseli</span></li>` : ""}</ul>
     <button class="btn ${i === A.PAKETLER.length - 1 ? "pri" : "sec"}" type="button" data-p="${p.id}">Bu paketle oluştur</button>
   </div>`).join("");
-  const PRO = ["Özel şablon koleksiyonumuzdan seçim ya da sıfırdan kişiye özel tasarım", "Konseptinize göre renk paleti, yazı tipleri ve süslemeler", "Birebir tasarım görüşmesi ve onayınıza sunulan önizleme", "Sınırsız revizyon hakkı", "Premium WhatsApp desteği, öncelikli yanıt", "Paylaşım görseli dahil", "Diğer paketlerdeki tüm özellikler"];
+  const PRO = ["Özel şablon koleksiyonumuzdan seçim ya da sıfırdan kişiye özel tasarım", "Konseptinize göre renk paleti, yazı tipleri ve süslemeler", "Birebir tasarım görüşmesi ve onayınıza sunulan önizleme", "Sınırsız revizyon hakkı", "Premium WhatsApp desteği, öncelikli yanıt", "Diğer paketlerdeki tüm özellikler"];
   $("plans").insertAdjacentHTML("beforeend", `<div class="plan pro">
     <span class="rozet">Kişiye özel</span>
     <h3>Profesyonel Tasarım</h3>
