@@ -938,7 +938,7 @@ function odemeBekle(){
   sheet(`<div class="ust"><span class="lb">Kartla ödeme</span><button class="kapat" data-kapat aria-label="Kapat">×</button></div>
     <div class="c"><div class="spin"></div><h3 style="font-size:1.7rem">Ödemeniz bekleniyor</h3>
     <p class="mut">Açılan Shopier sayfasında ödemeyi tamamlayın, sonra bu sayfaya dönün. Ödeme görüldüğü anda davetiyeniz yayına girer.</p></div>
-    <div class="uyari"><b>Önemli:</b> Ödeme sayfasındaki "Cep telefonu" alanına bu siparişteki numaranızı yazın: <b>+90 ${L.esc(telGoster(O.d.telefon))}</b>. Ödemenizi bu numarayla tanıyoruz.</div>
+    <div class="uyari"><b>Önemli:</b> Ödemenizi telefon numaranızla tanıyoruz. Shopier sayfasında:<br>• "Cep telefonu" alanına: <b>+90 ${L.esc(telGoster(O.d.telefon))}</b><br>• "Not" alanına: <b>0${L.esc(telGoster(O.d.telefon))}</b></div>
     <button type="button" class="btn sec" id="oTekrar">Ödeme sayfasını tekrar aç</button>
     <a class="bagl" target="_blank" rel="noopener" href="${L.esc(O.url)}" style="margin-top:8px">Ödeme formu açılmadıysa ürün sayfasından ödeyin</a>
     <a class="bagl" target="_blank" rel="noopener" href="https://wa.me/${A.WHATSAPP}?text=${encodeURIComponent("Merhaba LaVie, kartla ödeme yaptım. Sipariş kodum: " + O.c)}">Ödeme yaptım ama burada görünmüyor</a>`);
