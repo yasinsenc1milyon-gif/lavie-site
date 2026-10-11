@@ -6,6 +6,8 @@
   "workers_dev": true,
   // Panelden eklenen değişkenler (ör. ADMIN_SIFRE) yayınlarda silinmesin
   "keep_vars": true,
+  // Kartla ödeme için Shopier ürün linki (herkese açık). Boşsa kart seçeneği görünmez.
+  "vars": { "SHOPIER_URUN_URL": "https://www.shopier.com/LaVieCreative/51738578" },
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",

@@ -377,6 +377,37 @@ footer.site small{grid-column:1/-1;display:block;padding-top:24px;border-top:1px
 body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 @media (max-width:520px){.destek span{display:none}.destek{padding:12px}body.bar-acik .destek{bottom:calc(132px + env(safe-area-inset-bottom,0px))}}
 
+
+/* Ödeme penceresi */
+.osheet{position:fixed;inset:0;z-index:50;background:rgba(20,18,24,.55);display:grid;align-items:end;justify-items:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.osheet .kutu{width:100%;max-width:480px;max-height:92vh;overflow-y:auto;background:var(--paper);border-radius:24px 24px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom,0px));box-shadow:0 -20px 60px -20px rgba(0,0,0,.5)}
+@media (min-width:560px){.osheet{align-items:center}.osheet .kutu{border-radius:24px}}
+.osheet .ust{display:flex;justify-content:space-between;align-items:center}
+.osheet .kapat{border:0;background:#fff;border:1px solid var(--line);width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;line-height:1}
+.osheet h3{font-family:var(--display);font-weight:400;font-size:2rem;margin:4px 0 2px}
+.osheet .mut{color:var(--muted);font-size:.92rem;margin:0}
+.osheet .okart{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-top:14px}
+.osheet .ozet{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.osheet .ozet b{font-weight:500}.osheet .ozet strong{font-family:var(--display);font-weight:400;font-size:1.8rem}
+.osheet .sec{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:16px;padding:14px;background:#fff;margin-top:10px;cursor:pointer;text-align:left;width:100%;font:inherit;color:inherit}
+.osheet .sec[aria-pressed="true"]{border-color:var(--accent);background:#faf7fb}
+.osheet .rd{width:20px;height:20px;border-radius:50%;border:2px solid #c8bfcc;flex:0 0 auto;margin-top:2px}.osheet .sec[aria-pressed="true"] .rd{border:6px solid var(--accent)}
+.osheet .sec b{font-weight:500;display:block}.osheet .sec small{color:var(--muted);font-size:.84rem;display:block;margin-top:2px}
+.osheet .etk{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.osheet .etk i{font-style:normal;font-size:.7rem;font-weight:500;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:#4a4550}
+.osheet .hiz{font-size:.72rem;color:#2f7a4b;background:#e5f4ea;border-radius:999px;padding:2px 8px;margin-left:6px;font-weight:500}
+.osheet .btn{width:100%;margin-top:16px}
+.osheet .not{display:flex;gap:8px;font-size:.8rem;color:var(--muted);margin-top:12px;line-height:1.45}.osheet .not svg{flex:0 0 16px;width:16px;height:16px;color:var(--gold)}
+.osheet .uyari{background:#fbf6ea;border:1px solid #eadcbc;border-radius:12px;padding:10px 12px;font-size:.86rem;margin-top:12px}
+.osheet .spin{width:42px;height:42px;border-radius:50%;border:3px solid var(--soft);border-top-color:var(--accent);margin:18px auto 12px;animation:don 1s linear infinite}
+@keyframes don{to{transform:rotate(360deg)}}
+.osheet .c{text-align:center}
+.osheet .tik{width:70px;height:70px;border-radius:50%;background:#e5f4ea;color:#2f7a4b;display:grid;place-items:center;margin:8px auto}.osheet .tik svg{width:34px;height:34px}
+.osheet .lnk{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:9px 10px 9px 12px;background:var(--paper);margin-top:8px;font-size:.84rem}
+.osheet .lnk span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.osheet .lnk button{font:inherit;font-size:.78rem;font-weight:500;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 11px;cursor:pointer}
+.osheet .lb{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.osheet .kirmizi{font-size:.78rem;color:#a14d4d;margin-top:6px}
+.osheet .bagl{display:block;text-align:center;margin-top:12px;font-size:.86rem;color:var(--accent)}
+
 /* Kaydırınca beliren bölümler */
 @media (prefers-reduced-motion:no-preference){.bel{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}.bel.gor{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.obar,.destek{transition:none}}
@@ -709,6 +740,7 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 </div>
 <div class="obar-note" id="note" hidden></div></div>
 
+<div class="osheet" id="osheet" hidden role="dialog" aria-modal="true" aria-label="Ödeme"><div class="kutu" id="okutu"></div></div>
 <script src="ayarlar.js"></script>
 <script src="davetiye.js"></script>
 <script src="muzik.js"></script>
@@ -849,17 +881,83 @@ $("order").addEventListener("click", async () => {
     $(!d.gelin ? "gelin" : !d.damat ? "damat" : !d.tarih ? "tarih" : "telefon").focus(); return;
   }
   $("order").disabled = true; $("order").textContent = "Hazırlanıyor...";
-  let kod = null;
+  let j = null;
   try {
     const r = await fetch(A.API_URL + "/siparis", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...d, paket: S.paket }) });
-    const j = await r.json();
-    if (j.ok && j.slug) kod = j.slug;
+    j = await r.json();
   } catch (_) {}
+  const kod = j && j.ok ? j.slug : null;
   $("wa").href = `https://wa.me/${A.WHATSAPP}?text=${encodeURIComponent(mesaj(kod))}`;
   $("order").hidden = true; $("wa").hidden = false;
   $("note").textContent = kod ? "Davetiyeniz hazırlandı. Siparişi tamamlamak için WhatsApp'tan gönderin; ödemeden sonra linkiniz açılır." : "Siparişinizi WhatsApp'tan gönderin.";
   $("note").hidden = false;
+  if (kod && j.kart) {
+    O = { c: kod, k: j.k, url: j.kart, d, yontem: "kart" };
+    try { localStorage.setItem("lavie_odeme", JSON.stringify({ c: O.c, k: O.k, url: O.url, d: { gelin: d.gelin, damat: d.damat, tur: d.tur, tarih: d.tarih, telefon: d.telefon } })); } catch {}
+    odemeSec();
+  }
 });
+
+// ---- Kartla ödeme (Shopier) ----
+let O = null, OZAMAN = null;
+const KILIT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>`;
+function sheet(html){ $("okutu").innerHTML = html; $("osheet").hidden = false; document.body.style.overflow = "hidden"; }
+function sheetKapat(){ $("osheet").hidden = true; document.body.style.overflow = ""; clearInterval(OZAMAN); }
+$("osheet").addEventListener("click", e => { if (e.target.id === "osheet" || e.target.closest("[data-kapat]")) sheetKapat(); });
+const fiyat = () => (A.PAKETLER.find(x => x.id === S.paket) || A.PAKETLER[0]).fiyat;
+function odemeSec(){
+  const d = O.d, t = L.TASARIMLAR.find(x => x.id === S.tasarim);
+  sheet(`<div class="ust"><span class="lb">Son adım</span><button class="kapat" data-kapat aria-label="Kapat">×</button></div>
+    <h3>Ödeme</h3><p class="mut">Davetiyeniz hazır, ödemeyle birlikte yayına girer.</p>
+    <div class="okart"><div class="ozet"><div><b>${L.esc(d.gelin)} &amp; ${L.esc(d.damat)} · ${L.esc(d.tur || S.tur)}</b><div class="mut">${L.esc(t ? t.ad : "")} · ${L.esc(L.uzunTarih(d))}</div></div><strong>${fiyat()} TL</strong></div></div>
+    <div class="lb" style="margin-top:16px">Ödeme yöntemi</div>
+    <button type="button" class="sec" data-y="kart" aria-pressed="${O.yontem === "kart"}"><span class="rd"></span><span><b>Kart ile öde <span class="hiz">Anında yayında</span></b><small>Ödeme onaylanınca davetiyeniz kendiliğinden yayına girer, linkleriniz burada belirir.</small><span class="etk"><i>VISA</i><i>Mastercard</i><i>TROY</i><i>3D Secure</i></span></span></button>
+    <button type="button" class="sec" data-y="havale" aria-pressed="${O.yontem === "havale"}"><span class="rd"></span><span><b>Havale / EFT</b><small>IBAN bilgisini WhatsApp'tan iletiriz; ödemeniz görülünce davetiyeniz aynı gün yayına alınır.</small></span></button>
+    <button type="button" class="btn pri" id="oDevam">${O.yontem === "kart" ? KILIT + " " + fiyat() + " TL Öde" : "WhatsApp'tan devam et"}</button>
+    <div class="not">${KILIT}<span>Kart bilgileriniz Shopier'in güvenli ödeme sayfasında, 3D Secure ile alınır. LaVie kart bilgilerinizi görmez ve saklamaz.</span></div>`);
+  $("okutu").querySelectorAll("[data-y]").forEach(b => b.onclick = () => { O.yontem = b.dataset.y; odemeSec(); });
+  $("oDevam").onclick = () => {
+    if (O.yontem === "havale") { window.open($("wa").href, "_blank", "noopener"); sheetKapat(); return; }
+    window.open(O.url, "_blank", "noopener");
+    fetch(A.API_URL + "/odeme", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ c: O.c, k: O.k }) }).catch(() => {});
+    odemeBekle();
+  };
+}
+function odemeBekle(){
+  sheet(`<div class="ust"><span class="lb">Kartla ödeme</span><button class="kapat" data-kapat aria-label="Kapat">×</button></div>
+    <div class="c"><div class="spin"></div><h3 style="font-size:1.7rem">Ödemeniz bekleniyor</h3>
+    <p class="mut">Açılan Shopier sayfasında ödemeyi tamamlayın, sonra bu sayfaya dönün. Ödeme görüldüğü anda davetiyeniz yayına girer.</p></div>
+    <div class="uyari"><b>Önemli:</b> Ödeme sayfasında telefon numaranızı <b>${L.esc(O.d.telefon)}</b> olarak yazın; ödemenizi bu numarayla tanıyoruz.</div>
+    <button type="button" class="btn sec" id="oTekrar">Ödeme sayfasını tekrar aç</button>
+    <a class="bagl" target="_blank" rel="noopener" href="https://wa.me/${A.WHATSAPP}?text=${encodeURIComponent("Merhaba LaVie, kartla ödeme yaptım. Sipariş kodum: " + O.c)}">Ödeme yaptım ama burada görünmüyor</a>`);
+  $("oTekrar").onclick = () => window.open(O.url, "_blank", "noopener");
+  clearInterval(OZAMAN);
+  const kontrol = async () => {
+    try {
+      const r = await fetch(`${A.API_URL}/odeme?c=${encodeURIComponent(O.c)}&k=${encodeURIComponent(O.k)}`);
+      const j = await r.json();
+      if (j.ok && j.durum === "aktif" && j.linkler) { clearInterval(OZAMAN); try { localStorage.removeItem("lavie_odeme"); } catch {} odemeTamam(j.linkler); }
+    } catch (_) {}
+  };
+  OZAMAN = setInterval(kontrol, 5000); kontrol();
+}
+function odemeTamam(l){
+  const kisa = u => u.replace(/^https?:\/\//, "");
+  const paylas = `https://wa.me/?text=${encodeURIComponent("Davetiyemiz: " + l.davetiye)}`;
+  sheet(`<div class="ust"><span></span><button class="kapat" data-kapat aria-label="Kapat">×</button></div>
+    <div class="c"><div class="tik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg></div>
+    <h3>Ödemeniz alındı</h3><p class="mut">Davetiyeniz yayında. Sipariş kodu: <b>${L.esc(O.c)}</b></p></div>
+    <div class="okart"><div class="lb">Davetiye linkiniz · misafirlere gönderin</div>
+      <div class="lnk"><span>${L.esc(kisa(l.davetiye))}</span><button type="button" data-kop="${L.esc(l.davetiye)}">Kopyala</button></div>
+      <a class="btn obtn" style="display:flex;justify-content:center;margin-top:12px" target="_blank" rel="noopener" href="${paylas}">WhatsApp'ta paylaş</a></div>
+    <div class="okart"><div class="lb">Size özel paneliniz</div>
+      <div class="lnk"><span>${L.esc(kisa(l.panel))}</span><button type="button" data-kop="${L.esc(l.panel)}">Kopyala</button></div>
+      <div class="kirmizi">Bu linki kimseyle paylaşmayın; katılım listeniz ve düzenleme burada. Kaybetmemek için kaydedin.</div>
+      <a class="btn sec" style="margin-top:12px" href="${L.esc(l.panel)}">Panelimi aç</a></div>`);
+  $("okutu").querySelectorAll("[data-kop]").forEach(b => b.onclick = async () => { try { await navigator.clipboard.writeText(b.dataset.kop); b.textContent = "Kopyalandı"; } catch { b.textContent = "Kopyalanamadı"; } setTimeout(() => b.textContent = "Kopyala", 1800); });
+}
+// Sayfa yenilenirse yarım kalan kart ödemesine devam et
+try { const k = JSON.parse(localStorage.getItem("lavie_odeme") || "null"); if (k && k.c && k.k && k.url) { O = { ...k, yontem: "kart" }; odemeBekle(); } } catch {}
 ALANLAR.forEach(k => $(k).addEventListener("input", () => ciz()));
 $("f").addEventListener("submit", e => e.preventDefault());
 $("fullBtn").addEventListener("click", () => { const f = $("stage").classList.toggle("full"); $("fullBtn").textContent = f ? "Kapat" : "Tam ekran"; });

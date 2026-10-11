@@ -72,7 +72,7 @@ textarea{min-height:70px;resize:vertical}
   </form>
 
   <div id="app" hidden>
-    <div class="card" style="margin-bottom:12px"><div class="top"><h2 class="names" style="font-size:1.3rem">Shopier bağlantısı</h2><button class="b" id="spTest" type="button">Test et</button></div>
+    <div class="card" style="margin-bottom:12px"><div class="top"><h2 class="names" style="font-size:1.3rem">Shopier bağlantısı</h2><div style="display:flex;gap:6px"><button class="b" id="spBagla" type="button">Bildirimleri bağla</button><button class="b" id="spTest" type="button">Test et</button></div></div>
       <pre id="spSonuc" hidden style="white-space:pre-wrap;font-size:.8rem;margin:10px 0 0;background:#f6f3f1;padding:10px;border-radius:8px"></pre></div>
     <div class="tabs" id="tabs" role="group" aria-label="Filtre"></div>
     <div class="list" id="list" style="margin-top:12px"></div>
@@ -105,7 +105,7 @@ async function shopierTestEt(){
   const el=$("spSonuc"); el.hidden=false; el.textContent="Test ediliyor...";
   try { const j=await api("POST",{islem:"shopier-test"}); const r=j.sonuc;
     const st=x=>x.durum===200?"✓ çalışıyor":(x.durum===0?"✗ anahtar yok":"✗ "+x.durum+(x.hata?" · "+x.hata:""));
-    el.textContent=`Anahtar: ${r.anahtar?"✓ tanımlı":"✗ yok (SHOPIER_PAT)"}\nMağaza: ${st(r.magaza)}${r.magaza.ad?" · "+r.magaza.ad:""}${r.magaza.adres?" · "+r.magaza.adres:""}\nÜrünler: ${st(r.urunler)}\nSiparişler: ${st(r.siparisler)}\nBildirimler (webhook): ${st(r.webhooklar)}\nAlanlar: ${(r.magazaAlanlari||[]).join(", ")}`;
+    el.textContent=`Anahtar: ${r.anahtar?"✓ tanımlı":"✗ yok (SHOPIER_PAT)"}\nMağaza: ${st(r.magaza)}${r.magaza.ad?" · "+r.magaza.ad:""}${r.magaza.adres?" · "+r.magaza.adres:""}\nÜrünler: ${st(r.urunler)}\nSiparişler: ${st(r.siparisler)}\nBildirimler (webhook): ${st(r.webhooklar)}\nKartla ödeme: ${r.kartAcik?"✓ açık":"✗ kapalı (ürün linki eklenmedi)"}${r.urunId?" · ürün "+r.urunId:""}\nOtomatik bildirim: ${r.bildirimBagli?"✓ bağlı":"✗ bağlı değil (Bildirimleri bağla)"}`;
   } catch(e){ el.textContent="Test yapılamadı: "+e.message; }
 }
 async function yukle(){
@@ -155,13 +155,13 @@ function kart(c){
       <dt>Tarih</dt><dd>${esc(tarihYaz(c))}</dd>
       <dt>Mekân</dt><dd>${esc(c.mekan)}</dd>
       <dt>Telefon</dt><dd>${c.telefon?esc(c.telefon):"–"}</dd>
-      <dt>Paket</dt><dd>${c.paket==="site-gorsel"?"Site + paylaşım görseli":"Davetiye sitesi"}</dd>
+      <dt>Ödeme</dt><dd>${c.odeme?`Kartla ödendi · Shopier #${esc(c.odeme.siparis)}`:(c.kartZaman?"Kartla ödeme başlatıldı":"–")}</dd>
       <dt>Kod</dt><dd>${esc(c.slug)}</dd>
       <dt>Yanıt</dt><dd>${c.yanitSayisi} misafir</dd>
       <dt>Sipariş</dt><dd>${c.olusturma?esc(new Date(c.olusturma).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})):"–"}</dd>
     </dl>
     <div class="acts">
-      ${c.durum==="bekliyor"?`<button class="b main" data-a="aktif">Ödeme alındı, yayınla</button>`:""}
+      ${c.durum==="bekliyor"?`<button class="b main" data-a="aktif">Ödeme alındı, yayınla</button><button class="b" data-a="odemeAra">Shopier'de ödeme ara</button>`:""}
       ${c.durum==="aktif"?`<button class="b" data-a="kapali">Yayından kaldır</button>`:""}
       ${c.durum==="kapali"?`<button class="b" data-a="aktif">Tekrar yayınla</button>`:""}
       ${c.durum==="aktif"&&wa?`<a class="b green" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${encodeURIComponent(mesaj(c))}">Linkleri çifte gönder</a>`:""}
@@ -225,6 +225,9 @@ $("list").addEventListener("click", async e=>{
   if(a==="kopyaD") return kopyala(c.linkler.davetiye);
   if(a==="kopyaP") return kopyala(c.linkler.panel);
   if(a==="duzenle"){ ACIK = ACIK===slug?null:slug; return ciz(); }
+  if(a==="odemeAra"){ b.disabled=true; b.textContent="Aranıyor...";
+    try{ const j=await api("POST",{islem:"odeme-ara",slug}); Object.assign(c,j.cift); toast(j.bulundu?"Ödeme bulundu, yayında":"Shopier'de eşleşen ödeme yok"); if(j.bulundu) FILTRE="aktif"; ciz(); }
+    catch(err){ b.disabled=false; b.textContent="Shopier'de ödeme ara"; toast("Shopier'e ulaşılamadı: "+err.message); } return; }
   if(a==="sil" && !confirm(`${c.gelin} & ${c.damat} davetiyesi ve tüm misafir yanıtları silinsin mi? Bu geri alınamaz.`)) return;
   b.disabled=true;
   try{
@@ -244,6 +247,9 @@ $("list").addEventListener("submit", async e=>{
 
 if (SIFRE) { $("sifre").value=SIFRE; giris(); }
 $("spTest").onclick=shopierTestEt;
+$("spBagla").onclick=async()=>{ const el=$("spSonuc"); el.hidden=false; el.textContent="Bağlanıyor...";
+  try{ const j=await api("POST",{islem:"shopier-bagla"}); const r=j.sonuc; el.textContent=r.ok?"✓ Bildirimler bağlandı. Shopier'de her yeni siparişte site otomatik kontrol edecek.":"✗ Bağlanamadı: "+(r.durum||"")+" "+(r.hata||""); }
+  catch(e){ el.textContent="Bağlanamadı: "+e.message; } };
 </script>
 </body>
 </html>

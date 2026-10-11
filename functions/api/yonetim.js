@@ -1,5 +1,6 @@
 // Yönetim sayfası: siparişleri listele, onayla, düzenle, sil; çift yorumlarını onayla
 import { shopierTest } from "../../lib/shopier.js";
+import { bildirimBagla, odemeAra, odemeAcik, urunId } from "../../lib/odeme.js";
 import { ALANLAR, DURUMLAR, ciftGetir, ciftKaydet, ciftVerisiniSil, govde, json, linkler, temizle, uc, yorumSatiri } from "../../lib/ortak.js";
 
 export const onRequest = uc(async ({ request, env, db }) => {
@@ -23,7 +24,11 @@ export const onRequest = uc(async ({ request, env, db }) => {
 
   if (request.method !== "POST") return json({ ok: false, hata: "yontem" }, 405);
   const d = await govde(request);
-  if (d && d.islem === "shopier-test") return json({ ok: true, sonuc: await shopierTest(env) });
+  if (d && d.islem === "shopier-test") {
+    const t = await db.prepare("SELECT 1 AS v FROM ayarlar WHERE anahtar = 'webhook_token'").first();
+    return json({ ok: true, sonuc: { ...(await shopierTest(env)), urun: env.SHOPIER_URUN_URL || null, urunId: urunId(env), kartAcik: odemeAcik(env), bildirimBagli: !!t } });
+  }
+  if (d && d.islem === "shopier-bagla") return json({ ok: true, sonuc: await bildirimBagla(env, db, new URL(request.url).origin) });
   if (!d || !d.slug) return json({ ok: false, hata: "veri" }, 400);
   const slug = String(d.slug);
 
@@ -44,6 +49,9 @@ export const onRequest = uc(async ({ request, env, db }) => {
   } else if (d.islem === "guncelle") {
     const yeni = temizle({ ...c, ...d.alanlar });
     for (const k of ALANLAR) c[k] = yeni[k];
+  } else if (d.islem === "odeme-ara") {
+    const bulundu = await odemeAra(env, db, c);
+    return json({ ok: true, bulundu, cift: { ...c, linkler: linkler(request, c) } });
   } else if (d.islem === "sil") {
     await ciftVerisiniSil(db, c.slug);
     return json({ ok: true });
