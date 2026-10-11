@@ -1,5 +1,5 @@
 // Kurulum kontrolü: veritabanı bağlı mı, yönetim şifresi tanımlı mı (gizli bilgi göstermez)
-import { json, veritabani } from "../../lib/ortak.js";
+import { json, mesajlariGetir, veritabani } from "../../lib/ortak.js";
 
 export async function onRequestGet({ env }) {
   const sonuc = { veritabani_tanimli: !!(env && env.DB), sifre_tanimli: !!(env && env.ADMIN_SIFRE), veritabani_calisiyor: false, hata: null };
@@ -14,7 +14,7 @@ export async function onRequestGet({ env }) {
       try { const x = await db.prepare(q).bind("ornek").all(); sonuc.tablolar[ad] = "ok:" + (x.results || []).length; }
       catch (e) { sonuc.tablolar[ad] = "hata: " + String((e && e.message) || e).slice(0, 200); }
     }
-    try { const m = await import("../../lib/ortak.js"); const l = await m.mesajlariGetir(db, "ornek"); sonuc.mesajlariGetir = "ok:" + l.length; }
+    try { const l = await mesajlariGetir(db, "ornek"); sonuc.mesajlariGetir = "ok:" + l.length; }
     catch (e) { sonuc.mesajlariGetir = "hata: " + String((e && e.message) || e).slice(0, 200); }
   } catch (e) {
     sonuc.hata = String((e && e.message) || e).slice(0, 300);

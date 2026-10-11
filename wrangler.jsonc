@@ -1,0 +1,18 @@
+// Lavie · Cloudflare Worker ayarları (workers.dev üzerinden yayın)
+{
+  "name": "laviedavetiye",
+  "main": "worker.js",
+  "compatibility_date": "2025-09-01",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "none",
+    // Bu adresler önce koda gelir; geri kalan her şey doğrudan statik dosya olarak sunulur (ücretsiz, sınırsız)
+    "run_worker_first": ["/api/*", "/d", "/d.html"]
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "lavie", "database_id": "acf23174-0488-4cda-86fa-ba5a77231265" }
+  ],
+  "observability": { "enabled": true }
+}

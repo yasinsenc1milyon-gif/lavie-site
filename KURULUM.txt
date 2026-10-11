@@ -1,7 +1,8 @@
 LAVIE · NASIL ÇALIŞIR (Cloudflare)
 ==================================
 
-Site Cloudflare Pages üzerinde çalışır; veriler Cloudflare D1 veritabanındadır.
+Site Cloudflare Worker olarak workers.dev üzerinde çalışır (pages.dev Türkiye'de engelli);
+veriler Cloudflare D1 veritabanındadır. Ayarlar: wrangler.jsonc, giriş noktası: worker.js
 GitHub'a gönderilen her değişiklik 1-2 dakikada siteye yansır (ayda 500 yayınlama ücretsiz).
 
 Klasörler
@@ -17,10 +18,10 @@ Sayfalar
 - /d?c=ornek            Örnek davetiye
 
 CLOUDFLARE AYARLARI (bir kerelik)
-  Pages projesi: GitHub'daki lavie-site deposu
-    Framework: None · Build command: boş · Build output directory: public
-  Bindings: D1 database → Variable name: DB → veritabanı: lavie
-  Variables and Secrets: ADMIN_SIFRE (Secret) = yönetim şifren
+  Worker projesi: GitHub'daki lavie-site deposu, proje adı: laviedavetiye
+    Build command: boş · Deploy command: npx wrangler deploy
+  Veritabanı bağlantısı wrangler.jsonc içinde (D1: lavie)
+  Settings → Variables and Secrets: ADMIN_SIFRE (Secret) = yönetim şifren
 
 YENİ SİPARİŞ GELİNCE
   1. Müşteri vitrinde "Siparişi oluştur"a basar; WhatsApp'tan sipariş kodu gelir.
