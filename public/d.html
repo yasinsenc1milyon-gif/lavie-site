@@ -15,25 +15,63 @@ html,body{margin:0;background:#e9e6e3}
 #kok{max-width:480px;margin:0 auto;container-type:inline-size;min-height:100vh;box-shadow:0 0 40px rgba(0,0,0,.08)}
 .durum{font-family:"Cormorant Garamond",Georgia,serif;text-align:center;padding:40vh 24px 0;color:#5a5560;font-size:1.2rem}
 
-/* Zarf açılışı */
-.zarf{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:var(--bg);transition:opacity .8s ease .9s}
-.zarf .ic{width:min(84vw,380px);display:grid;justify-items:center;gap:28px;text-align:center}
-.zarf .ust{font-family:var(--fd);letter-spacing:.32em;text-transform:uppercase;font-size:.78rem;color:var(--soft)}
-.zarf .govde{position:relative;width:100%;aspect-ratio:1.45;perspective:1200px}
-.zarf .arka,.zarf .on,.zarf .kapak{position:absolute;inset:0}
-.zarf .arka{background:var(--bg2);border:1px solid var(--line2)}
-.zarf .mektup{position:absolute;left:7%;right:7%;top:8%;bottom:8%;background:var(--bg);border:1px solid var(--line2);display:grid;place-items:center;transition:transform .9s cubic-bezier(.3,.7,.2,1) .45s;z-index:1;padding:0 8px}
-.zarf .mektup span{font-family:var(--fn);font-size:2rem;color:var(--fg);line-height:1.1}
-.zarf .on{z-index:2;border:1px solid var(--line2);background:linear-gradient(to top right,transparent calc(50% - 1px),var(--line2) 50%,transparent calc(50% + 1px)) left/50% 100% no-repeat,linear-gradient(to top left,transparent calc(50% - 1px),var(--line2) 50%,transparent calc(50% + 1px)) right/50% 100% no-repeat,var(--bg2)}
-.zarf .kapak{z-index:3;transform-origin:top;transition:transform .7s ease,z-index 0s .35s;clip-path:polygon(0 0,100% 0,50% 58%);background:var(--bg2);filter:brightness(.96)}
-.zarf .muhur{position:absolute;z-index:4;left:50%;top:58%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:var(--acc);color:var(--bg);display:grid;place-items:center;font-family:var(--fn);font-size:1.5rem;box-shadow:0 4px 12px rgba(0,0,0,.18);transition:opacity .3s}
-.zarf .ac{font-family:var(--ft);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;padding:14px 26px;border:1px solid var(--acc);color:var(--acc);background:transparent;cursor:pointer}
-.zarf.acik .kapak{transform:rotateX(180deg);z-index:0}
-.zarf.acik .muhur{opacity:0}
-.zarf.acik .mektup{transform:translateY(-62%)}
-.zarf.acik .ac{visibility:hidden}
+/* Zarf açılışı: gerçekçi kâğıt zarf, mumlu mühür, açılan kapak ve çıkan kart */
+.zarf{--zp:#efe9dc;--zp2:#e4dccb;--zl:#8a7a5c;--zs:#8c2f2f;--zk:#fbf9f3;--zki:#2b2722;
+  position:fixed;inset:0;z-index:40;display:grid;place-items:center;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 40%,color-mix(in srgb,var(--bg) 92%,#fff),var(--bg) 55%,color-mix(in srgb,var(--bg) 82%,#000));
+  transition:opacity .9s ease}
+.zarf::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .45 0 0 0 0 .4 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.t-zeytin.zarf{--zp:#ece7d6;--zp2:#ddd6c0;--zl:#5f6e45;--zs:#55653c;--zk:#fbfaf2;--zki:#34402a}
+.t-gece.zarf{--zp:#1f2849;--zp2:#172040;--zl:#c9a35f;--zs:#b48a45;--zk:#fbf6ea;--zki:#1b2340}
+.t-gul.zarf{--zp:#efdcd6;--zp2:#e4c9c2;--zl:#a8676b;--zs:#9c4f55;--zk:#fdf8f6;--zki:#7d4a4e}
+.t-mono.zarf{--zp:#1d1d1d;--zp2:#141414;--zl:#e9e9e6;--zs:#cfcfca;--zk:#fbfbfa;--zki:#141414}
+.t-ege.zarf{--zp:#f7f5ef;--zp2:#ebe7dc;--zl:#2a4c9a;--zs:#2a4c9a;--zk:#fffefa;--zki:#2a4c9a}
+.zarf .ic{position:relative;z-index:1;width:min(86vw,380px);display:grid;justify-items:center;gap:30px;text-align:center}
+.zarf .ust{font-family:var(--fd);letter-spacing:.32em;text-transform:uppercase;font-size:.78rem;color:var(--soft);transition:opacity .4s}
+.zarf .sahne{width:100%;perspective:1400px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.zarf .govde{position:relative;width:100%;aspect-ratio:1.45;transform-style:preserve-3d;transform:rotateX(8deg);
+  filter:drop-shadow(0 26px 26px rgba(0,0,0,.28)) drop-shadow(0 4px 6px rgba(0,0,0,.12));
+  animation:zSuz 4.5s ease-in-out infinite;transition:transform 1s cubic-bezier(.5,0,.2,1),opacity .7s}
+@keyframes zSuz{0%,100%{translate:0 0;rotate:-.6deg}50%{translate:0 -7px;rotate:.6deg}}
+.zarf .govde > *{position:absolute}
+/* iç taraf: astar desenli arka yüz */
+.zarf .arka{inset:0;border-radius:3px;background:
+  linear-gradient(180deg,rgba(0,0,0,.28),transparent 45%),
+  repeating-linear-gradient(45deg,color-mix(in srgb,var(--zl) 92%,#fff) 0 6px,var(--zl) 6px 12px)}
+/* kart */
+.zarf .kart{left:6%;right:6%;top:5%;height:88%;z-index:2;background:var(--zk);border-radius:2px;
+  box-shadow:0 1px 2px rgba(0,0,0,.15),0 -6px 16px -8px rgba(0,0,0,.25);display:grid;place-items:center;align-content:center;gap:6px;padding:8% 6%;
+  transition:transform 1.05s cubic-bezier(.3,.7,.15,1)}
+.zarf .kart::before{content:"";position:absolute;inset:5%;border:1px solid color-mix(in srgb,var(--zki) 22%,transparent)}
+.zarf .kart small{font-family:var(--fd);font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;color:color-mix(in srgb,var(--zki) 70%,transparent)}
+.zarf .kart span{font-family:var(--fn);font-size:clamp(1.6rem,8.4vw,2.3rem);line-height:1.05;color:var(--zki)}
+/* ön cepler (svg) */
+.zarf .cep{inset:0;z-index:3;width:100%;height:100%;overflow:visible}
+/* kapak: iki yüzlü, üstten açılır */
+.zarf .kapak{left:0;right:0;top:0;height:62%;z-index:4;transform-origin:50% 0;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.45,0,.2,1)}
+.zarf .kapak svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.zarf .kapak .ici{transform:rotateX(180deg)}
+.zarf .muhur{position:absolute;left:50%;top:84%;width:22%;aspect-ratio:1;transform:translate(-50%,-50%) translateZ(1px);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .25s}
+.zarf .muhur svg{width:100%;height:100%;filter:drop-shadow(0 3px 3px rgba(0,0,0,.35))}
+.zarf .muhur b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--fn);font-weight:400;font-size:clamp(1rem,5.2vw,1.45rem);color:color-mix(in srgb,var(--zs) 55%,#000);
+  text-shadow:0 1px 0 color-mix(in srgb,var(--zs) 60%,#fff),0 -1px 0 rgba(0,0,0,.35)}
+.zarf .ipucu{font-family:var(--ft);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--soft);display:flex;align-items:center;gap:10px;transition:opacity .4s}
+.zarf .ipucu::before,.zarf .ipucu::after{content:"";width:26px;height:1px;background:currentColor;opacity:.6}
+.zarf .ac{position:absolute;inset:0;opacity:0;border:0;background:none;cursor:pointer}
+@media (prefers-reduced-motion:no-preference){.zarf .ipucu{animation:zNabiz 2.4s ease-in-out infinite}}
+@keyframes zNabiz{50%{opacity:.45}}
+/* açılış sırası */
+.zarf.basti .muhur{transform:translate(-50%,-50%) translateZ(1px) scale(.93)}
+.zarf.acik .govde{animation:none;transform:rotateX(0)}
+.zarf.acik .ust,.zarf.acik .ipucu{opacity:0}
+.zarf.acik .kapak{transform:rotateX(178deg)}
+.zarf.acik .kapak{z-index:1;transition:transform .85s cubic-bezier(.45,0,.2,1),z-index 0s .42s}
+.zarf.acik .kart{transform:translateY(-62%);transition-delay:.7s}
+.zarf.cik .kart{transform:translateY(-62%) scale(1.06)}
+.zarf.cik .govde{transform:translateY(16%) scale(.97)}
 .zarf.bitti{opacity:0;pointer-events:none}
-@media (prefers-reduced-motion:reduce){.zarf,.zarf *{transition:none!important}}
+@media (prefers-reduced-motion:reduce){.zarf,.zarf *{transition:none!important;animation:none!important}}
 
 /* Müzik düğmesi */
 .mz{position:fixed;z-index:30;right:max(14px,calc(50vw - 240px + 14px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;border:1px solid var(--line2);background:var(--bg);color:var(--acc);display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15);padding:0}
@@ -61,6 +99,9 @@ html,body{margin:0;background:#e9e6e3}
   } catch (e) { return hata("Davetiye yüklenemedi. Lütfen sayfayı yenileyin."); }
   if (!j.ok) return hata("Bu davetiye bulunamadı.");
   const d = j.cift;
+  // Örnek davetiyede vitrinden gelen tasarım seçimi (?t=gece gibi)
+  const tSec = new URLSearchParams(location.search).get("t");
+  if (slug === "ornek" && tSec && window.Lavie.TASARIMLAR.some(t => t.id === tSec)) d.tasarim = tSec;
   document.title = `${d.gelin} & ${d.damat} · ${d.tur || "Davetiye"}`;
 
   window.Lavie.ciz(kok, d, async v => {
@@ -80,18 +121,55 @@ html,body{margin:0;background:#e9e6e3}
   // Zarf
   const bas = s => (String(s || "").trim()[0] || "").toLocaleUpperCase("tr-TR");
   const tema = `inv t-${d.tasarim || "zeytin"}`;
+  const UST = { "Düğün": "Evleniyoruz", "Nişan": "Nişanlanıyoruz", "Kına": "Kına gecesi", "Söz": "Söz töreni" };
   const zarf = document.createElement("div");
   zarf.className = `zarf ${tema}`;
   zarf.setAttribute("role", "dialog"); zarf.setAttribute("aria-label", "Davetiye zarfı");
+  // Mühür kenarı: düzensiz mum damlası
+  const blob = (() => { const n = 22, p = []; for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2, r = 46 + ((i * 37) % 7) - 3 + (i % 3 === 0 ? 2 : 0); p.push([50 + Math.cos(a) * r, 50 + Math.sin(a) * r]); }
+    return "M" + p.map(([x, y], i) => { const [nx, ny] = p[(i + 1) % n]; return `${x.toFixed(1)},${y.toFixed(1)} Q${x.toFixed(1)},${y.toFixed(1)} ${((x + nx) / 2).toFixed(1)},${((y + ny) / 2).toFixed(1)}`; }).join(" T") + "Z"; })();
   zarf.innerHTML = `<div class="ic">
       <div class="ust">Size bir davetiyemiz var</div>
-      <div class="govde">
-        <div class="arka"></div>
-        <div class="mektup"><span>${esc(d.gelin)} &amp; ${esc(d.damat)}</span></div>
-        <div class="on"></div><div class="kapak"></div>
-        <div class="muhur">${esc(bas(d.gelin))}${esc(bas(d.damat))}</div>
+      <div class="sahne">
+        <div class="govde">
+          <div class="arka"></div>
+          <div class="kart"><small>${esc(UST[d.tur] || "Davetiyemiz")}</small><span>${esc(d.gelin)} &amp; ${esc(d.damat)}</span></div>
+          <svg class="cep" viewBox="0 0 290 200" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="zSol" x1="0" x2="1"><stop offset="0" stop-color="var(--zp2)"/><stop offset="1" stop-color="var(--zp)"/></linearGradient>
+              <linearGradient id="zSag" x1="1" x2="0"><stop offset="0" stop-color="var(--zp2)"/><stop offset="1" stop-color="var(--zp)"/></linearGradient>
+              <linearGradient id="zAlt" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--zp2)"/><stop offset=".7" stop-color="var(--zp)"/><stop offset="1" stop-color="var(--zp)"/></linearGradient>
+              <filter id="zGol" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="-1.2" stdDeviation="1.6" flood-opacity=".22"/></filter>
+            </defs>
+            <path d="M0,0 L134,100 Q145,108 134,116 L0,200 Z" fill="url(#zSol)" filter="url(#zGol)"/>
+            <path d="M290,0 L156,100 Q145,108 156,116 L290,200 Z" fill="url(#zSag)" filter="url(#zGol)"/>
+            <path d="M0,200 L131,108 Q145,98 159,108 L290,200 Z" fill="url(#zAlt)" filter="url(#zGol)"/>
+          </svg>
+          <div class="kapak">
+            <svg class="dis" viewBox="0 0 290 124" preserveAspectRatio="none" aria-hidden="true">
+              <defs><linearGradient id="zKap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--zp)"/><stop offset="1" stop-color="var(--zp2)"/></linearGradient>
+              <filter id="zKg" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="2.5" stdDeviation="2.4" flood-opacity=".3"/></filter></defs>
+              <path d="M0,0 L290,0 L160,104 Q145,116 130,104 Z" fill="url(#zKap)" filter="url(#zKg)"/>
+            </svg>
+            <svg class="ici" viewBox="0 0 290 124" preserveAspectRatio="none" aria-hidden="true">
+              <defs><pattern id="zDes" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="12" height="12" fill="var(--zl)"/><rect width="6" height="12" fill="#fff" opacity=".12"/></pattern></defs>
+              <path d="M0,0 L290,0 L160,104 Q145,116 130,104 Z" fill="var(--zp2)"/>
+              <path d="M10,0 L280,0 L157,96 Q145,106 133,96 Z" fill="url(#zDes)"/>
+            </svg>
+            <div class="muhur">
+              <svg viewBox="0 0 100 100" aria-hidden="true"><defs>
+                <radialGradient id="zMum" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".35" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></radialGradient></defs>
+                <path d="${blob}" fill="var(--zs)"/><path d="${blob}" fill="url(#zMum)"/>
+                <circle cx="50" cy="50" r="31" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="2.4"/>
+                <circle cx="50" cy="50" r="31" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="1" transform="translate(-.8 -.8)"/>
+              </svg>
+              <b>${esc(bas(d.gelin))}${esc(bas(d.damat))}</b>
+            </div>
+          </div>
+        </div>
       </div>
-      <button class="ac" type="button">Davetiyeyi aç</button>
+      <div class="ipucu">Açmak için dokunun</div>
+      <button class="ac" type="button" aria-label="Davetiyeyi aç"></button>
     </div>`;
   document.body.appendChild(zarf);
   document.body.style.overflow = "hidden";
@@ -115,12 +193,19 @@ html,body{margin:0;background:#e9e6e3}
     document.body.appendChild(mz);
   }
 
-  zarf.querySelector(".ac").addEventListener("click", () => {
+  let acildi = false;
+  const ac = () => {
+    if (acildi) return; acildi = true;
     if (muzikVar) { M.baslat(d.muzik); mz.hidden = false; guncelle(); }
-    zarf.classList.add("acik");
-    setTimeout(() => zarf.classList.add("bitti"), 900);
-    setTimeout(() => { zarf.remove(); document.body.style.overflow = ""; }, 1800);
-  });
+    const az = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    zarf.classList.add("basti");
+    setTimeout(() => zarf.classList.add("acik"), az ? 0 : 160);
+    setTimeout(() => zarf.classList.add("cik"), az ? 0 : 1750);
+    setTimeout(() => zarf.classList.add("bitti"), az ? 50 : 2250);
+    setTimeout(() => { zarf.remove(); document.body.style.overflow = ""; }, az ? 400 : 3200);
+  };
+  zarf.querySelector(".ac").addEventListener("click", ac);
+  zarf.querySelector(".sahne").addEventListener("click", ac);
 })();
 </script>
 </body>

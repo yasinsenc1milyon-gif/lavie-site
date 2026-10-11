@@ -10,8 +10,7 @@ window.LAVIE_AYAR = {
 
   // Paketler ve fiyatlar
   PAKETLER: [
-    { id: "site", ad: "Davetiye sitesi", aciklama: "Size özel link, geri sayım, program, konum ve katılım formu", fiyat: 500 },
-    { id: "site-gorsel", ad: "Site + paylaşım görseli", aciklama: "Siteye ek olarak WhatsApp/Instagram için davetiye görseli", fiyat: 550 }
+    { id: "site", ad: "Davetiye sitesi", aciklama: "Size özel link, geri sayım, program, konum ve katılım formu", fiyat: 500 }
   ],
 
   // Instagram kullanıcı adın (@ olmadan)

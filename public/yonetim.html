@@ -78,7 +78,6 @@ textarea{min-height:70px;resize:vertical}
 </div>
 <div class="toast" id="toast" hidden></div>
 
-<script src="gorsel.js"></script>
 <script>
 const API = "/api/yonetim";
 const TASARIM = {zeytin:"Zeytin Dalı",gece:"Gece Mavisi",gul:"Gül Kurusu",mono:"Siyah Beyaz",ege:"Ege"};
@@ -158,7 +157,6 @@ function kart(c){
       ${c.durum==="kapali"?`<button class="b" data-a="aktif">Tekrar yayınla</button>`:""}
       ${c.durum==="aktif"&&wa?`<a class="b green" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${encodeURIComponent(mesaj(c))}">Linkleri çifte gönder</a>`:""}
       ${c.durum==="aktif"?`<a class="b" target="_blank" rel="noopener" href="${esc(c.linkler.davetiye)}">Davetiyeyi aç</a>`:""}
-      <button class="b" data-a="gorsel">Paylaşım görseli</button>
       <button class="b" data-a="kopyaD">Davetiye linki</button>
       <button class="b" data-a="kopyaP">Panel linki</button>
       <button class="b" data-a="duzenle">${ac?"Düzenlemeyi kapat":"Düzenle"}</button>
@@ -215,7 +213,6 @@ $("list").addEventListener("click", async e=>{
   }
   const b=e.target.closest("button[data-a]"); if(!b) return;
   const slug=b.closest(".card").dataset.s, c=LISTE.find(x=>x.slug===slug), a=b.dataset.a;
-  if(a==="gorsel") return window.LavieGorsel.goster(c);
   if(a==="kopyaD") return kopyala(c.linkler.davetiye);
   if(a==="kopyaP") return kopyala(c.linkler.panel);
   if(a==="duzenle"){ ACIK = ACIK===slug?null:slug; return ciz(); }

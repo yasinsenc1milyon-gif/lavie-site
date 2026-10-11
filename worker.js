@@ -8,11 +8,12 @@ import * as siparis from "./functions/api/siparis.js";
 import * as yonetim from "./functions/api/yonetim.js";
 import * as yorumlar from "./functions/api/yorumlar.js";
 import * as durum from "./functions/api/durum.js";
+import * as istatistik from "./functions/api/istatistik.js";
 import { davetiyeSayfasi } from "./lib/onizleme.js";
 
 const ROTALAR = {
   "/api/cift": cift, "/api/yanit": yanit, "/api/mesaj": mesaj, "/api/panel": panel,
-  "/api/siparis": siparis, "/api/yonetim": yonetim, "/api/yorumlar": yorumlar, "/api/durum": durum,
+  "/api/siparis": siparis, "/api/yonetim": yonetim, "/api/yorumlar": yorumlar, "/api/durum": durum, "/api/istatistik": istatistik,
   "/d": { onRequestGet: davetiyeSayfasi }, "/d.html": { onRequestGet: davetiyeSayfasi }
 };
 
