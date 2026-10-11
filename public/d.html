@@ -102,6 +102,8 @@ html,body{margin:0;background:#e9e6e3}
   // Örnek davetiyede vitrinden gelen tasarım seçimi (?t=gece gibi)
   const tSec = new URLSearchParams(location.search).get("t");
   if (slug === "ornek" && tSec && window.Lavie.TASARIMLAR.some(t => t.id === tSec)) d.tasarim = tSec;
+  const turSec = new URLSearchParams(location.search).get("tur");
+  if (slug === "ornek" && turSec && window.Lavie.TURLER.includes(turSec)) d.tur = turSec;
   document.title = `${d.gelin} & ${d.damat} · ${d.tur || "Davetiye"}`;
 
   window.Lavie.ciz(kok, d, async v => {

@@ -140,7 +140,8 @@ footer.site .logo.img img{height:56px}
 /* Davet türleri bandı */
 .band{border-block:1px solid var(--line);background:#fff}
 .band .in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
-.band .tur{padding:22px 12px;text-align:center;border-left:1px solid var(--line)}
+.band .tur{padding:22px 12px;text-align:center;border-left:1px solid var(--line);text-decoration:none;color:inherit;transition:background .15s}
+.band .tur:hover{background:var(--paper)}
 .band .tur:first-child{border-left:0}
 .band .tur b{display:block;font-family:var(--display);font-weight:400;font-size:1.5rem;line-height:1.1}
 .band .tur span{font-size:.78rem;color:var(--muted);letter-spacing:.04em}
@@ -351,7 +352,7 @@ footer.site .logo.img img{height:56px}
 
 /* Alt bilgi */
 footer.site{background:var(--deep);color:var(--deep-ink);padding-block:56px 140px}
-footer.site .in{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+footer.site .in{display:grid;grid-template-columns:1.3fr 1fr 1.2fr 1fr;gap:32px}
 @media (max-width:760px){footer.site .in{grid-template-columns:1fr 1fr}footer.site .in > div:first-child{grid-column:1/-1}}
 footer.site .logo{color:#fff}
 footer.site .logo span{color:var(--deep-mut)}
@@ -427,10 +428,10 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 
 <div class="band" aria-label="Davet türleri">
   <div class="in">
-    <div class="tur"><b>Düğün</b><span>Evleniyoruz</span></div>
-    <div class="tur"><b>Nişan</b><span>Nişanlanıyoruz</span></div>
-    <div class="tur"><b>Kına</b><span>Kına gecemize davetlisiniz</span></div>
-    <div class="tur"><b>Söz</b><span>Söz törenimize davetlisiniz</span></div>
+    <a class="tur" href="/dijital-dugun-davetiyesi"><b>Düğün</b><span>Evleniyoruz</span></a>
+    <a class="tur" href="/dijital-nisan-davetiyesi"><b>Nişan</b><span>Nişanlanıyoruz</span></a>
+    <a class="tur" href="/dijital-kina-davetiyesi"><b>Kına</b><span>Kına gecemize davetlisiniz</span></a>
+    <a class="tur" href="/dijital-soz-davetiyesi"><b>Söz</b><span>Söz törenimize davetlisiniz</span></a>
   </div>
 </div>
 
@@ -680,6 +681,15 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
       </ul>
     </div>
     <div>
+      <h4>Davetiye türleri</h4>
+      <ul>
+        <li><a href="/dijital-dugun-davetiyesi">Dijital düğün davetiyesi</a></li>
+        <li><a href="/dijital-nisan-davetiyesi">Dijital nişan davetiyesi</a></li>
+        <li><a href="/dijital-kina-davetiyesi">Dijital kına davetiyesi</a></li>
+        <li><a href="/dijital-soz-davetiyesi">Dijital söz davetiyesi</a></li>
+      </ul>
+    </div>
+    <div>
       <h4>Destek</h4>
       <ul>
         <li><a id="ftWa" target="_blank" rel="noopener">WhatsApp destek hattı</a></li>
@@ -705,6 +715,10 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 <script>
 const A = window.LAVIE_AYAR, L = window.Lavie;
 const S = { tasarim: "zeytin", tur: "Düğün", paket: A.PAKETLER[0].id, muzik: "piyano", yazi: "" };
+// Tür sayfalarından gelen ön seçimler (?tur=Kına&t=gul)
+{ const q = new URLSearchParams(location.search), tr = q.get("tur"), ts = q.get("t");
+  if (tr && L.TURLER.includes(tr)) S.tur = tr;
+  if (ts && L.TASARIMLAR.some(t => t.id === ts)) S.tasarim = ts; }
 const $ = id => document.getElementById(id);
 const ALANLAR = ["gelin","damat","tarih","saat","mekan","adres","konum","aile","not","program","katilimNotu","telefon"];
 const TIK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>`;
