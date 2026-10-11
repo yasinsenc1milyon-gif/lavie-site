@@ -127,9 +127,11 @@ h2.t{font-family:var(--display);font-weight:400;font-size:clamp(2rem,4.5vw,2.8re
 .steps p{margin:0;color:var(--muted);font-size:.93rem}
 
 /* Paketler */
-.plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:36px;max-width:820px}
-@media (max-width:700px){.plans{grid-template-columns:1fr}}
-.plan{background:var(--field);border:1px solid var(--line);border-radius:18px;padding:28px 24px;display:grid;gap:14px;align-content:start;position:relative}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:36px}
+@media (max-width:900px){.plans{grid-template-columns:1fr;max-width:520px}}
+.plan{background:var(--field);border:1px solid var(--line);border-radius:18px;padding:28px 24px;display:flex;flex-direction:column;gap:14px;position:relative}
+.plan > .btn{margin-top:auto}
+.plan ul{margin-bottom:6px!important}
 .plan.vurgu{border-color:var(--accent);box-shadow:0 18px 40px -26px rgba(91,74,107,.6)}
 .plan .rozet{position:absolute;top:-12px;left:24px;background:var(--accent);color:#fff;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
 .plan h3{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0}
@@ -139,6 +141,13 @@ h2.t{font-family:var(--display);font-weight:400;font-size:clamp(2rem,4.5vw,2.8re
 .plan li{display:flex;gap:10px;align-items:flex-start}
 .plan li svg{flex:0 0 18px;width:18px;height:18px;color:var(--accent);margin-top:3px}
 .plan li.ek{font-weight:500}
+.plan.pro{background:var(--deep);color:var(--deep-ink);border-color:var(--deep)}
+.plan.pro .fiyat small,.plan.pro .alt{color:#b9b0c0}
+.plan.pro li svg{color:var(--gold)}
+.plan.pro .rozet{background:var(--gold)}
+.plan .alt{margin:-6px 0 0;font-size:.9rem;color:var(--muted)}
+.plan .btn.altin{background:var(--gold);color:#1d1a22}
+.plan .btn.altin:hover{background:#c39c5d}
 
 /* Yorumlar */
 .yorumlar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:32px}
@@ -321,6 +330,7 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
     <h2 class="t">Aklınıza takılanlar</h2>
     <div class="sss">
       <details><summary>Davetiyem ne kadar sürede hazır olur?</summary><p>Siparişiniz ve ödemeniz onaylandıktan sonra davetiye linkiniz genellikle aynı gün açılır.</p></details>
+      <details><summary>Profesyonel Tasarım paketi nasıl işliyor?</summary><p>WhatsApp'tan düğününüzün konseptini, renklerini ve beğendiğiniz örnekleri konuşuyoruz. Size özel tasarımı hazırlayıp önizleme olarak gönderiyoruz; onaylayana kadar düzenliyor, ardından yayına alıyoruz. Fiyat, tasarımın kapsamına göre 2.000 TL'den başlar.</p></details>
       <details><summary>Misafirlerin uygulama indirmesi gerekir mi?</summary><p>Hayır. Davetiye bir link olarak WhatsApp'tan veya mesajla paylaşılır, telefonun tarayıcısında açılır.</p></details>
       <details><summary>Ödemeyi nasıl yapıyorum?</summary><p>Siparişinizi oluşturduktan sonra WhatsApp'tan size ödeme bilgilerini iletiyoruz. Ödeme tek seferliktir.</p></details>
       <details><summary>Sonradan bilgileri değiştirebilir miyim?</summary><p>Evet. Size özel panelinizden saat, mekân, program, davet notu, tasarım, yazı stili ve müzik dahil tüm bilgileri dilediğiniz zaman kendiniz değiştirebilirsiniz; davetiyeniz linki değişmeden anında güncellenir. İsterseniz WhatsApp'tan yazın, biz de yapabiliriz.</p></details>
@@ -377,6 +387,15 @@ function planCiz(){
     <ul>${ORTAK.map(x => `<li>${TIK}<span>${x}</span></li>`).join("")}${p.id === "site-gorsel" ? `<li class="ek">${TIK}<span>Hikâye ve durum boyutunda paylaşım görseli</span></li>` : ""}</ul>
     <button class="btn ${i === A.PAKETLER.length - 1 ? "pri" : "sec"}" type="button" data-p="${p.id}">Bu paketle oluştur</button>
   </div>`).join("");
+  const PRO = ["Konseptinize özel tasarım: renk paleti, yazı tipleri ve süslemeler", "Birebir tasarım görüşmesi ve onayınıza sunulan önizleme", "Onaylayana kadar düzenleme hakkı", "Premium WhatsApp desteği, öncelikli yanıt", "Paylaşım görseli dahil", "Diğer paketlerdeki tüm özellikler"];
+  $("plans").insertAdjacentHTML("beforeend", `<div class="plan pro">
+    <span class="rozet">Kişiye özel</span>
+    <h3>Profesyonel Tasarım</h3>
+    <div class="fiyat">2.000<small>TL'den başlayan</small></div>
+    <p class="alt">Hazır tasarımlar yerine, düğününüzün konseptine göre sıfırdan tasarlanan bir davetiye.</p>
+    <ul>${PRO.map(x => `<li>${TIK}<span>${x}</span></li>`).join("")}</ul>
+    <a class="btn altin" target="_blank" rel="noopener" href="https://wa.me/${A.WHATSAPP}?text=${encodeURIComponent("Merhaba Lavie, Profesyonel Tasarım paketi hakkında bilgi ve teklif almak istiyorum.")}">Teklif alın</a>
+  </div>`);
   $("plans").querySelectorAll("[data-p]").forEach(b => b.onclick = () => { S.paket = b.dataset.p; ciz(); $("olustur").scrollIntoView(); });
 }
 
