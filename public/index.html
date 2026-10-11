@@ -57,8 +57,18 @@ h2.t em{font-family:"Pinyon Script",cursive;font-style:normal;color:var(--accent
 .btn.ghost{color:var(--accent);padding-inline:6px;background:none}
 .btn.ghost:hover{text-decoration:underline}
 
+/* Üst Instagram şeridi */
+.ust-serit{display:block;background:var(--deep);color:var(--deep-ink);text-decoration:none;font-size:.82rem;letter-spacing:.02em;padding-top:env(safe-area-inset-top,0px)}
+.ust-serit .in{display:flex;align-items:center;justify-content:center;gap:10px;min-height:40px;padding-block:6px;text-align:center}
+.ust-serit svg{flex:0 0 16px;width:16px;height:16px;color:var(--gold-2)}
+.ust-serit b{font-weight:500;color:#fff}
+.ust-serit .ok{color:var(--gold-2);white-space:nowrap}
+.ust-serit:hover .ok{text-decoration:underline}
+.ust-serit .kisa{display:none}
+@media (max-width:560px){.ust-serit .uzun{display:none}.ust-serit .kisa{display:inline}.ust-serit .in{gap:8px;font-size:.8rem}}
+
 /* Menü */
-.nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color .2s;padding-top:env(safe-area-inset-top,0px)}
+.nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
 .nav.kay{border-bottom-color:var(--line)}
 .nav .in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
 .logo{font-family:var(--display);font-size:1.9rem;letter-spacing:.06em;text-decoration:none;line-height:1;white-space:nowrap}
@@ -67,8 +77,13 @@ h2.t em{font-family:"Pinyon Script",cursive;font-style:normal;color:var(--accent
 .nav nav a{text-decoration:none;color:var(--muted);transition:color .15s}
 .nav nav a:hover{color:var(--ink)}
 .nav .btn{padding:10px 18px;font-size:.86rem}
+.nav .sag{display:flex;align-items:center;gap:8px}
+.nav .igb{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:var(--ink);text-decoration:none;transition:border-color .15s,color .15s}
+.nav .igb:hover{border-color:var(--accent);color:var(--accent)}
+.nav .igb svg{width:19px;height:19px}
 @media (max-width:860px){.nav nav{display:none}}
-@media (max-width:400px){.logo{font-size:1.6rem}.nav .btn{padding:9px 13px;font-size:.8rem}}
+@media (max-width:420px){.nav .igb{display:none}}
+@media (max-width:400px){.logo{font-size:1.55rem}.nav .btn{padding:9px 13px;font-size:.8rem}}
 
 /* Açılış */
 .hero{position:relative;padding-block:48px 84px;overflow:hidden;isolation:isolate}
@@ -352,11 +367,15 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 </head>
 <body>
 
+<a class="ust-serit" id="igSerit" target="_blank" rel="noopener">
+  <div class="in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span><span class="uzun">1 yıldır davetiye tasarlıyoruz · </span>Instagram'da biz: <b>@la.viecreative</b></span><span class="ok"><span class="uzun">Tasarımlarımızı görün </span>→</span></div>
+</a>
+
 <header class="nav" id="nav">
   <div class="in">
     <a class="logo" href="#">LaVie <span>Davetiye</span></a>
     <nav aria-label="Sayfa"><a href="#tasarimlar">Tasarımlar</a><a href="#ozellikler">Özellikler</a><a href="#paketler">Paketler</a><a href="#sss">Sorular</a></nav>
-    <a class="btn pri" href="#olustur">Davetiyemi oluştur</a>
+    <div class="sag"><a class="igb" id="igNav" target="_blank" rel="noopener" aria-label="Instagram: @la.viecreative"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a class="btn pri" href="#olustur">Davetiyemi oluştur</a></div>
   </div>
 </header>
 
@@ -675,7 +694,7 @@ const ORTAK = ["Zarf açılışı ve müzik","Canlı geri sayım, program ve kon
 // Sabit metinler ve bağlantılar
 const DESTEK = "https://wa.me/" + A.WHATSAPP + "?text=" + encodeURIComponent("Merhaba LaVie, dijital davetiye hakkında bilgi almak istiyorum.");
 $("ftWa").href = DESTEK; $("destek").href = DESTEK; $("sssWa").href = DESTEK;
-const IG_URL = "https://instagram.com/" + A.INSTAGRAM; $("igKart").href = IG_URL; $("ftIg").href = IG_URL;
+const IG_URL = "https://instagram.com/" + A.INSTAGRAM; $("igKart").href = IG_URL; $("ftIg").href = IG_URL; $("igSerit").href = IG_URL; $("igNav").href = IG_URL;
 $("yil").textContent = new Date().getFullYear();
 $("fiyatPill").textContent = Math.min(...A.PAKETLER.map(p => p.fiyat)) + " TL";
 
