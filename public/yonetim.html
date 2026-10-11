@@ -98,7 +98,7 @@ async function api(method, body){
   return j;
 }
 function hataMetni(h){
-  return h==="sifre" ? "Şifre yanlış." : h==="sifre_ayarlanmamis" ? "Yönetim şifresi henüz Netlify'da ayarlanmamış." : "Bağlantı sorunu, tekrar deneyin.";
+  return h==="sifre" ? "Şifre yanlış." : h==="sifre_ayarlanmamis" ? "Yönetim şifresi henüz Cloudflare'da (ADMIN_SIFRE) ayarlanmamış." : "Bağlantı sorunu, tekrar deneyin.";
 }
 async function yukle(){
   const j = await api("GET");
