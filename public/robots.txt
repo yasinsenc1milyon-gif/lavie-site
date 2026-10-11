@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /panel
+Disallow: /yonetim
+Disallow: /api/
+
+Sitemap: https://www.laviedavetiye.workers.dev/sitemap.xml
