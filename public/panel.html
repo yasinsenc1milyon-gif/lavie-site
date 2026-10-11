@@ -46,20 +46,6 @@ td{padding:10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular
 tr:last-child td{border-bottom:0}
 .pill{font-size:.78rem;padding:3px 9px;border-radius:999px;white-space:nowrap}
 .pill.yes{background:#e3efe6;color:#2f6440}.pill.no{background:#f5e3e4;color:#8a3439}.pill.wait{background:#f8ecd6;color:#8a5a12}
-.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
-.foto{position:relative;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:#e9e4e0}
-.foto img{width:100%;height:100%;object-fit:cover;display:block}
-.foto button{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(20,18,24,.7);color:#fff;font-size:18px;line-height:1;cursor:pointer}
-.vid{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:6px;background:#2b2a33;color:#fff;text-align:center}
-.vid small{font-size:.72rem;opacity:.8}
-.foto{cursor:pointer}
-.foto .kim{position:absolute;left:0;right:0;bottom:0;padding:16px 8px 6px;font-size:.72rem;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.6));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lb{position:fixed;inset:0;z-index:60;background:rgba(10,10,12,.94);display:grid;place-items:center;padding:16px}
-.lb-ic{display:grid;gap:12px;justify-items:center;max-width:100%}
-.lb-ic img,.lb-ic video{max-width:100%;max-height:78vh;object-fit:contain;background:#000}
-.lb-x{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:28px;line-height:1;cursor:pointer}
-.yukle{display:grid;place-items:center;aspect-ratio:3/4;border:1.5px dashed var(--line);border-radius:8px;color:var(--muted);font-size:.85rem;text-align:center;padding:8px;cursor:pointer;background:var(--field)}
-.yukle input{display:none}
 .mk{background:var(--field);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:6px}
 .mk p{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:1.1rem;line-height:1.45}
 .mk div{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
@@ -96,7 +82,6 @@ a{color:var(--accent)}
   <div class="msg" id="msg">Yükleniyor...</div>
 </div>
 <div class="toast" id="toast" hidden></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="ayarlar.js"></script>
 <script src="gorsel.js"></script>
 <script src="davetiye.js"></script>
@@ -107,7 +92,7 @@ const q = new URLSearchParams(location.search), slug = q.get("c") || "", key = q
 const app = document.getElementById("app");
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let V = null, SEKME = "misafir", PUAN = 5, TASLAK = null, ALBUM = null;
+let V = null, SEKME = "misafir", PUAN = 5, TASLAK = null;
 
 function toast(m){ const t=$("toast"); t.textContent=m; t.hidden=false; clearTimeout(t._z); t._z=setTimeout(()=>t.hidden=true,2400); }
 async function yukle(){
@@ -158,7 +143,7 @@ function ciz(){
   $("sYes").textContent = gel.reduce((a,x) => a + x.kisi, 0);
   $("sNo").textContent = V.yanitlar.length - gel.length;
   $("sAll").textContent = V.yanitlar.length;
-  $("tabs").innerHTML = [["misafir","Misafirler",V.yanitlar.length],["bilgi","Davetiye bilgileri",""],["album","Anı albümü",ALBUM?ALBUM.ogeler.length:""],["defter","Hatıra defteri",V.mesajlar.length],["yorum","Bizi değerlendirin",""]]
+  $("tabs").innerHTML = [["misafir","Misafirler",V.yanitlar.length],["bilgi","Davetiye bilgileri",""],["defter","Hatıra defteri",V.mesajlar.length],["yorum","Bizi değerlendirin",""]]
     .map(([k,l,n]) => `<button class="tab" role="tab" type="button" data-s="${k}" aria-selected="${SEKME===k}">${l}${n!==""?`<b>${n}</b>`:""}</button>`).join("");
   const p = $("pane");
   if (SEKME === "misafir") {
@@ -176,7 +161,6 @@ function ciz(){
     $("yenile").onclick = async e => { e.target.textContent = "Yenileniyor..."; try { await yukle(); ciz(); } finally { e.target.textContent = "Yenile"; } };
   }
   if (SEKME === "bilgi") bilgiCiz(p);
-  if (SEKME === "album") albumCiz(p);
   if (SEKME === "defter") {
     p.innerHTML = V.mesajlar.length ? V.mesajlar.map(m => `<div class="mk"><p>${esc(m.mesaj)}</p><div><span>${esc(m.isim)} · ${new Date(m.zaman).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})}</span>${V.ornek?"":`<button type="button" data-msil="${esc(m.id)}">Kaldır</button>`}</div></div>`).join("")
       : `<p class="muted">Henüz mesaj yok. Misafirleriniz davetiyedeki Hatıra Defteri'ne yazdıkça burada görünecek.</p>`;
@@ -248,86 +232,6 @@ function bilgiCiz(p){
     try { const j = await islem({ islem: "guncelle", alanlar: TASLAK }); V.cift = j.cift; TASLAK = { ...j.cift }; iskelet(); SEKME = "bilgi"; ciz(); toast("Kaydedildi, davetiyeniz güncellendi"); }
     catch { btn.disabled = false; btn.textContent = "Kaydet ve yayınla"; toast("Kaydedilemedi, tekrar deneyin."); }
   });
-}
-
-// Anı albümü: misafirlerin yüklediği fotoğraf ve videolar
-const albumUrl = (id, i=0) => `${API}/album?islem=dosya&c=${encodeURIComponent(slug)}&k=${encodeURIComponent(key)}&id=${encodeURIComponent(id)}&i=${i}`;
-const mb = n => (n / 1048576).toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " MB";
-const uzanti = o => ({ "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "video/mp4": "mp4", "video/quicktime": "mov", "video/webm": "webm", "video/3gpp": "3gp" }[o.mime] || "bin");
-async function albumYukle(){
-  const r = await fetch(`${API}/album?islem=liste&c=${encodeURIComponent(slug)}&k=${encodeURIComponent(key)}`);
-  const j = await r.json(); if (!j.ok) throw new Error(j.hata); ALBUM = j;
-}
-async function dosyaGetir(o, ilerleme){
-  const parcalar = [];
-  for (let i = 0; i < o.parca; i++) {
-    const r = await fetch(albumUrl(o.id, i)); if (!r.ok) throw new Error("indir");
-    parcalar.push(await r.blob()); ilerleme && ilerleme((i + 1) / o.parca);
-  }
-  return new Blob(parcalar, { type: o.mime });
-}
-function indir(blob, ad){ const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = ad; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 30000); }
-const dosyaAdi = (o, n) => `${String(n).padStart(3,"0")}-${(o.isim || "misafir").replace(/[^\p{L}\p{N}]+/gu, "-")}.${uzanti(o)}`;
-
-async function albumCiz(p){
-  if (!ALBUM) {
-    p.innerHTML = `<p class="muted">Albüm yükleniyor...</p>`;
-    try { await albumYukle(); } catch { p.innerHTML = `<p class="muted">Albüm yüklenemedi. Sayfayı yenileyin.</p>`; return; }
-    if (SEKME !== "album") return; return ciz();
-  }
-  const o = ALBUM.ogeler, toplam = o.reduce((a, x) => a + x.boyut, 0);
-  p.innerHTML = `<p class="muted" style="margin:0">Misafirlerinizin davetiyedeki Anı Albümü'nden yüklediği fotoğraf ve videolar. Bunları yalnızca siz görürsünüz.</p>
-    <div class="bar"><span class="muted">${o.filter(x => x.tur === "foto").length} fotoğraf · ${o.filter(x => x.tur === "video").length} video · ${mb(toplam)}</span>
-      <button class="b" id="ayenile" type="button">Yenile</button>
-      ${o.length ? `<button class="b main" id="hepsi" type="button">Tümünü indir (ZIP)</button>` : ""}</div>
-    <div class="muted" id="adurum"></div>
-    ${o.length ? `<div class="fotos">${o.map(x => `<div class="foto" data-id="${esc(x.id)}">
-        ${x.tur === "foto" && x.parca === 1 ? `<img src="${esc(albumUrl(x.id))}" alt="" loading="lazy">` : `<div class="vid"><svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><small>${x.tur === "video" ? "Video" : "Fotoğraf"} · ${mb(x.boyut)}</small></div>`}
-        <span class="kim">${esc(x.isim || "Misafir")}</span>
-        <button type="button" data-asil="${esc(x.id)}" aria-label="Sil">×</button></div>`).join("")}</div>`
-      : `<p class="muted">Henüz yükleme yok. Düğün günü misafirlerinize davetiyedeki Anı Albümü'nü hatırlatmayı unutmayın.</p>`}`;
-  $("ayenile").onclick = async () => { ALBUM = null; ciz(); };
-  p.querySelectorAll(".foto[data-id]").forEach(el => el.addEventListener("click", e => { if (!e.target.closest("[data-asil]")) ac(o.find(x => x.id === el.dataset.id)); }));
-  p.querySelectorAll("[data-asil]").forEach(b => b.onclick = async () => {
-    if (V.ornek) return toast("Örnek panelde silinemez.");
-    if (!confirm("Bu dosya albümden kalıcı olarak silinsin mi?")) return;
-    try {
-      const r = await fetch(`${API}/album`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ islem: "sil", c: slug, k: key, id: b.dataset.asil }) });
-      if (!(await r.json()).ok) throw 0;
-      ALBUM.ogeler = ALBUM.ogeler.filter(x => x.id !== b.dataset.asil); ciz(); toast("Silindi");
-    } catch { toast("Silinemedi, tekrar deneyin."); }
-  });
-  if ($("hepsi")) $("hepsi").onclick = async e => {
-    const btn = e.target; btn.disabled = true;
-    try {
-      const zip = new JSZip();
-      for (let n = 0; n < o.length; n++) {
-        $("adurum").textContent = `Hazırlanıyor ${n + 1}/${o.length}...`;
-        zip.file(dosyaAdi(o[n], n + 1), await dosyaGetir(o[n]));
-      }
-      $("adurum").textContent = "ZIP oluşturuluyor...";
-      indir(await zip.generateAsync({ type: "blob", compression: "STORE" }), `${slug}-ani-albumu.zip`);
-      $("adurum").textContent = "İndirme başladı.";
-    } catch { $("adurum").textContent = "İndirme tamamlanamadı, tekrar deneyin."; }
-    btn.disabled = false;
-  };
-}
-async function ac(x){
-  const o = document.createElement("div");
-  o.className = "lb";
-  o.innerHTML = `<div class="lb-ic"><div class="muted" style="color:#ddd">Açılıyor...</div></div><button type="button" class="lb-x" aria-label="Kapat">×</button>`;
-  document.body.appendChild(o);
-  let url = null;
-  const kapat = () => { o.remove(); if (url) URL.revokeObjectURL(url); };
-  o.querySelector(".lb-x").onclick = kapat;
-  o.addEventListener("click", e => { if (e.target === o) kapat(); });
-  try {
-    const blob = await dosyaGetir(x, p => { const m = o.querySelector(".lb-ic .muted"); if (m) m.textContent = `Açılıyor %${Math.round(p * 100)}`; });
-    url = URL.createObjectURL(blob);
-    o.querySelector(".lb-ic").innerHTML = `${x.tur === "video" ? `<video src="${url}" controls playsinline autoplay></video>` : `<img src="${url}" alt="">`}
-      <div class="bar" style="justify-content:center"><span style="color:#ddd;font-size:.85rem">${esc(x.isim || "Misafir")}</span><button class="b" type="button" id="tekIndir">İndir</button></div>`;
-    o.querySelector("#tekIndir").onclick = () => indir(blob, dosyaAdi(x, 1));
-  } catch { o.querySelector(".lb-ic").innerHTML = `<div style="color:#ddd">Dosya açılamadı.</div>`; }
 }
 
 function csv(){

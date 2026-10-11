@@ -1,4 +1,4 @@
-// Çiftin paneli: yanıtlar, hatıra defteri, fotoğraflar ve yorum
+// Çiftin paneli: yanıtlar, hatıra defteri, bilgi düzenleme ve yorum
 import { CIFT_DUZENLER, ciftStore, temizle, ciftGetir, govde, json, mesajStore, mesajlariGetir, ornekMi, yanitlariGetir, yorumStore } from "../lib/ortak.mjs";
 
 const gecerliId = id => /^[\w-]{1,80}$/.test(String(id || ""));
