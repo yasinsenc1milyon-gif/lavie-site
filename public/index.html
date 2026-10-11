@@ -175,7 +175,11 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
 .obtn{font:inherit;font-weight:500;border:0;border-radius:999px;padding:11px 18px;cursor:pointer;text-decoration:none;display:inline-block;background:#25d366;color:#0b2b17}
 .obtn[disabled]{opacity:.6;cursor:wait}
 .obar-note{max-width:1080px;margin:8px auto 0;font-size:.82rem;color:#d9d4dd}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.obar{transition:none}}
+.destek{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:24;display:flex;align-items:center;gap:8px;background:#25d366;color:#0b2b17;text-decoration:none;font-weight:500;font-size:.9rem;padding:11px 16px 11px 13px;border-radius:999px;box-shadow:0 8px 22px -8px rgba(0,0,0,.45);transition:bottom .3s ease}
+.destek svg{width:22px;height:22px}
+body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+@media (max-width:520px){.destek span{display:none}.destek{padding:12px}body.bar-acik .destek{bottom:calc(132px + env(safe-area-inset-bottom,0px))}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.obar,.destek{transition:none}}
 </style>
 </head>
 <body>
@@ -333,13 +337,14 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
       <p>Düğün, nişan, kına ve söz için şık dijital davetiye siteleri.</p>
     </div>
     <ul>
-      <li><a id="ftWa" target="_blank" rel="noopener">WhatsApp: <span id="ftWaNo"></span></a></li>
+      <li><a id="ftWa" target="_blank" rel="noopener">WhatsApp destek hattı</a></li>
       <li><a href="d.html?c=ornek" target="_blank" rel="noopener">Örnek davetiye</a></li>
     </ul>
     <small>© <span id="yil"></span> Lavie · Müzikler: Leberch, Pixabay</small>
   </div>
 </footer>
 
+<a class="destek" id="destek" target="_blank" rel="noopener" aria-label="WhatsApp destek hattı"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 000-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 001.8-1.3 2.3 2.3 0 00.2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg><span>Destek</span></a>
 <div class="obar" id="obar"><div class="obar-in">
   <div class="sum" id="sum"></div>
   <button class="obtn" id="order" type="button">Siparişi oluştur</button>
@@ -359,8 +364,8 @@ const TIK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 const ORTAK = ["Zarf açılışı ve müzik","Canlı geri sayım, program ve konum","Katılım formu ve size özel panel","Yazı stili ve katılım notu seçimi","Hatıra defteri","5 özel tasarım, size özel link"];
 
 // Sabit metinler ve bağlantılar
-$("ftWa").href = "https://wa.me/" + A.WHATSAPP;
-$("ftWaNo").textContent = "0" + A.WHATSAPP.slice(2).replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3 $4");
+const DESTEK = "https://wa.me/" + A.WHATSAPP + "?text=" + encodeURIComponent("Merhaba Lavie, dijital davetiye hakkında bilgi almak istiyorum.");
+$("ftWa").href = DESTEK; $("destek").href = DESTEK;
 $("yil").textContent = new Date().getFullYear();
 $("trustFiyat").textContent = Math.min(...A.PAKETLER.map(p => p.fiyat)) + " TL'den başlayan fiyatlar";
 
@@ -478,8 +483,9 @@ if ("IntersectionObserver" in window) {
   new IntersectionObserver(es => es.forEach(e => {
     const altta = e.boundingClientRect.top < 0;
     obar.classList.toggle("gor", e.isIntersecting || altta);
+    document.body.classList.toggle("bar-acik", e.isIntersecting || altta);
   }), { rootMargin: "0px 0px -40% 0px" }).observe($("olustur"));
-} else obar.classList.add("gor");
+} else { obar.classList.add("gor"); document.body.classList.add("bar-acik"); }
 
 // Onaylı gerçek yorumlar
 fetch(A.API_URL + "/yorumlar").then(r => r.json()).then(j => {
