@@ -334,7 +334,6 @@ footer.site small{display:block;margin-top:24px;color:#8f879a;font-size:.8rem;wi
     </div>
     <ul>
       <li><a id="ftWa" target="_blank" rel="noopener">WhatsApp: <span id="ftWaNo"></span></a></li>
-      <li><a id="ig" target="_blank" rel="noopener">Instagram</a></li>
       <li><a href="d.html?c=ornek" target="_blank" rel="noopener">Örnek davetiye</a></li>
     </ul>
     <small>© <span id="yil"></span> Lavie · Müzikler: Leberch, Pixabay</small>
@@ -360,7 +359,6 @@ const TIK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 const ORTAK = ["Zarf açılışı ve müzik","Canlı geri sayım, program ve konum","Katılım formu ve size özel panel","Yazı stili ve katılım notu seçimi","Hatıra defteri","5 özel tasarım, size özel link"];
 
 // Sabit metinler ve bağlantılar
-$("ig").href = "https://instagram.com/" + A.INSTAGRAM;
 $("ftWa").href = "https://wa.me/" + A.WHATSAPP;
 $("ftWaNo").textContent = "0" + A.WHATSAPP.slice(2).replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3 $4");
 $("yil").textContent = new Date().getFullYear();

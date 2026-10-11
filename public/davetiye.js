@@ -78,7 +78,7 @@
         </form>
         <div class="mesajlar">${(ek.mesajlar || []).map(mesajKart).join("")}</div>
       </section>
-      <footer>${gelin} &amp; ${damat}<small>Lavie ile hazırlandı</small></footer>
+      <footer>${gelin} &amp; ${damat}<small><a href="/" target="_blank" rel="noopener" style="text-decoration:none">Lavie ile hazırlandı · Siz de davetiyenizi oluşturun</a></small></footer>
     </div>`;
   }
 
