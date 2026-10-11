@@ -14,5 +14,5 @@ window.LAVIE_AYAR = {
   ],
 
   // Instagram kullanıcı adın (@ olmadan)
-  INSTAGRAM: "lavie.davetiye"
+  INSTAGRAM: "la.viecreative"
 };
