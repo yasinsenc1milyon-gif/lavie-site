@@ -330,7 +330,7 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
     <h2 class="t">Aklınıza takılanlar</h2>
     <div class="sss">
       <details><summary>Davetiyem ne kadar sürede hazır olur?</summary><p>Siparişiniz ve ödemeniz onaylandıktan sonra davetiye linkiniz genellikle aynı gün açılır.</p></details>
-      <details><summary>Profesyonel Tasarım paketi nasıl işliyor?</summary><p>WhatsApp'tan düğününüzün konseptini, renklerini ve beğendiğiniz örnekleri konuşuyoruz. Size özel tasarımı hazırlayıp önizleme olarak gönderiyoruz; onaylayana kadar düzenliyor, ardından yayına alıyoruz. Fiyat, tasarımın kapsamına göre 2.000 TL'den başlar.</p></details>
+      <details><summary>Profesyonel Tasarım paketi nasıl işliyor?</summary><p>WhatsApp'tan düğününüzün konseptini, renklerini ve beğendiğiniz örnekleri konuşuyoruz. Size özel şablon koleksiyonumuzu gösteriyor ya da sıfırdan size özel bir tasarım hazırlıyoruz. Önizlemeyi gönderiyor, sınırsız revizyonla tam istediğiniz hale getiriyor ve onayınızdan sonra yayına alıyoruz. Fiyat, tasarımın kapsamına göre 2.000 TL'den başlar.</p></details>
       <details><summary>Misafirlerin uygulama indirmesi gerekir mi?</summary><p>Hayır. Davetiye bir link olarak WhatsApp'tan veya mesajla paylaşılır, telefonun tarayıcısında açılır.</p></details>
       <details><summary>Ödemeyi nasıl yapıyorum?</summary><p>Siparişinizi oluşturduktan sonra WhatsApp'tan size ödeme bilgilerini iletiyoruz. Ödeme tek seferliktir.</p></details>
       <details><summary>Sonradan bilgileri değiştirebilir miyim?</summary><p>Evet. Size özel panelinizden saat, mekân, program, davet notu, tasarım, yazı stili ve müzik dahil tüm bilgileri dilediğiniz zaman kendiniz değiştirebilirsiniz; davetiyeniz linki değişmeden anında güncellenir. İsterseniz WhatsApp'tan yazın, biz de yapabiliriz.</p></details>
@@ -387,12 +387,12 @@ function planCiz(){
     <ul>${ORTAK.map(x => `<li>${TIK}<span>${x}</span></li>`).join("")}${p.id === "site-gorsel" ? `<li class="ek">${TIK}<span>Hikâye ve durum boyutunda paylaşım görseli</span></li>` : ""}</ul>
     <button class="btn ${i === A.PAKETLER.length - 1 ? "pri" : "sec"}" type="button" data-p="${p.id}">Bu paketle oluştur</button>
   </div>`).join("");
-  const PRO = ["Konseptinize özel tasarım: renk paleti, yazı tipleri ve süslemeler", "Birebir tasarım görüşmesi ve onayınıza sunulan önizleme", "Onaylayana kadar düzenleme hakkı", "Premium WhatsApp desteği, öncelikli yanıt", "Paylaşım görseli dahil", "Diğer paketlerdeki tüm özellikler"];
+  const PRO = ["Özel şablon koleksiyonumuzdan seçim ya da sıfırdan kişiye özel tasarım", "Konseptinize göre renk paleti, yazı tipleri ve süslemeler", "Birebir tasarım görüşmesi ve onayınıza sunulan önizleme", "Sınırsız revizyon hakkı", "Premium WhatsApp desteği, öncelikli yanıt", "Paylaşım görseli dahil", "Diğer paketlerdeki tüm özellikler"];
   $("plans").insertAdjacentHTML("beforeend", `<div class="plan pro">
     <span class="rozet">Kişiye özel</span>
     <h3>Profesyonel Tasarım</h3>
     <div class="fiyat">2.000<small>TL'den başlayan</small></div>
-    <p class="alt">Hazır tasarımlar yerine, düğününüzün konseptine göre sıfırdan tasarlanan bir davetiye.</p>
+    <p class="alt">Özel şablon koleksiyonumuzdan seçebileceğiniz ya da düğününüzün konseptine göre sıfırdan tasarlanan bir davetiye.</p>
     <ul>${PRO.map(x => `<li>${TIK}<span>${x}</span></li>`).join("")}</ul>
     <a class="btn altin" target="_blank" rel="noopener" href="https://wa.me/${A.WHATSAPP}?text=${encodeURIComponent("Merhaba Lavie, Profesyonel Tasarım paketi hakkında bilgi ve teklif almak istiyorum.")}">Teklif alın</a>
   </div>`);
