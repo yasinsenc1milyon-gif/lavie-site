@@ -130,6 +130,8 @@ function ciz(){
   $("tabs").innerHTML = [["bekliyor","Bekleyen"],["aktif","Yayında"],["kapali","Kapalı"],["hepsi","Tümü"]]
     .concat([["yorum","Yorumlar"]])
     .map(([k,l])=>`<button class="tab" type="button" data-f="${k}" aria-pressed="${FILTRE===k}">${l}<b>${k==="yorum"?YORUMLAR.filter(y=>!y.onay).length+"/"+YORUMLAR.length:(say[k]||0)}</b></button>`).join("");
+  const ortak = {}; LISTE.filter(c=>c.ref).forEach(c=>{ const o=ortak[c.ref]||(ortak[c.ref]={t:0,a:0}); o.t++; if(c.durum==="aktif") o.a++; });
+  $("tabs").insertAdjacentHTML("beforeend", Object.keys(ortak).length ? `<div class="msg" style="width:100%;margin-top:6px">Ortaklar: ${Object.entries(ortak).map(([k,o])=>`<b>${esc(k)}</b> ${o.a}/${o.t}`).join(" · ")} <span style="opacity:.7">(ödenen/toplam)</span></div>` : "");
   if (FILTRE === "yorum") {
     $("list").innerHTML = YORUMLAR.length ? YORUMLAR.map(y => `<article class="card" data-y="${esc(y.slug)}">
       <div class="top"><h2 class="names">${esc(y.ad)}</h2><span class="pill ${y.onay?"aktif":"bekliyor"}">${y.onay?"Sitede":"Onay bekliyor"}</span></div>
@@ -157,6 +159,7 @@ function kart(c){
       <dt>Telefon</dt><dd>${c.telefon?esc(c.telefon):"–"}</dd>
       <dt>Ödeme</dt><dd>${c.odeme?`Kartla ödendi · Shopier #${esc(c.odeme.siparis)}`:(c.kartZaman?"Kartla ödeme başlatıldı":"–")}</dd>
       <dt>Kod</dt><dd>${esc(c.slug)}</dd>
+      ${c.ref?`<dt>Ortak</dt><dd><b>${esc(c.ref)}</b></dd>`:""}
       <dt>Yanıt</dt><dd>${c.yanitSayisi} misafir</dd>
       <dt>Sipariş</dt><dd>${c.olusturma?esc(new Date(c.olusturma).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})):"–"}</dd>
     </dl>

@@ -859,7 +859,7 @@ function mesaj(kod){
     `Tarih: ${L.uzunTarih(d)} ${d.saat}`,`Mekân: ${d.mekan}`,`Adres: ${d.adres}`,
     d.konum?`Konum: ${d.konum}`:null, d.aile?`Aile: ${d.aile}`:null, d.not?`Not: ${d.not}`:null,
     d.program?`Program:\n${d.program}`:null, d.katilimNotu?`Katılım notu: ${d.katilimNotu}`:null, `Yazı stili: ${(L.YAZILAR.find(y => y[0] === d.yazi) || L.YAZILAR[0])[1]}`, `Müzik: ${(window.LavieMuzik.bul(d.muzik)||{ad:"Yok"}).ad}`,
-    d.telefon?`Telefon: ${d.telefon}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`].filter(x => x !== null).join("\n");
+    d.telefon?`Telefon: ${d.telefon}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`, window.LAVIE_REF?`Referans: ${window.LAVIE_REF}`:null].filter(x => x !== null).join("\n");
 }
 function ciz(basa){
   seritCiz(); seg($("types"), L.TURLER.map(t => [t, t]), "tur"); yaziCiz(); muzikCiz(); paketCiz();
@@ -885,7 +885,7 @@ $("order").addEventListener("click", async () => {
   $("order").disabled = true; $("order").textContent = "Hazırlanıyor...";
   let j = null;
   try {
-    const r = await fetch(A.API_URL + "/siparis", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...d, paket: S.paket }) });
+    const r = await fetch(A.API_URL + "/siparis", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...d, paket: S.paket, ref: window.LAVIE_REF || "" }) });
     j = await r.json();
   } catch (_) {}
   const kod = j && j.ok ? j.slug : null;

@@ -24,3 +24,13 @@ window.LAVIE_AYAR = {
   // Instagram kullanıcı adın (@ olmadan)
   INSTAGRAM: "la.viecreative"
 };
+
+// Ortaklık kodu: ?ref=fotoahmet ile gelen ziyaretçi 60 gün boyunca bu ortağa sayılır
+(function () {
+  try {
+    const r = new URLSearchParams(location.search).get("ref");
+    if (r && /^[a-z0-9_-]{2,40}$/i.test(r)) localStorage.setItem("lavie_ref", JSON.stringify({ k: r.toLowerCase(), t: Date.now() }));
+    const v = JSON.parse(localStorage.getItem("lavie_ref") || "null");
+    window.LAVIE_REF = v && Date.now() - v.t < 60 * 864e5 ? v.k : "";
+  } catch (_) { window.LAVIE_REF = ""; }
+})();
