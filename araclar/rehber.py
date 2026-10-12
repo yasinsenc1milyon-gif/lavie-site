@@ -230,7 +230,7 @@ def yazi(y):
     return f"""<!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>{e(y['title'])}</title>
 <meta name="description" content="{e(y['desc'])}">
@@ -281,7 +281,7 @@ def rehber_ana():
     turler = "".join(f'<a href="/{s["slug"]}">{e(s["baslik"])}</a>' for s in SAYFALAR)
     url = U + "/rehber"
     return f"""<!doctype html>
-<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<html lang="tr"><head><meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Davetiye Rehberi: Sözler, LCV ve Gönderim Zamanı | LaVie</title>
 <meta name="description" content="Düğün, nişan ve kına davetiyesi sözleri, LCV'nin anlamı ve davetiyenin ne zaman gönderileceği üzerine pratik rehber yazıları.">
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">

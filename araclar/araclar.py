@@ -70,7 +70,7 @@ def kabuk(slug, title, desc, h1, giris, govde, script, ld_ekstra=(), cta_tur="D�
     return f"""<!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
@@ -391,7 +391,7 @@ def araclar_ana():
     kart = "".join(f'<a class="kart" href="/{a["slug"]}" style="text-decoration:none;display:block"><h3>{e(a["ad"])}</h3><p>{e(a["desc"])}</p></a>' for a in ARACLAR)
     url = U + "/araclar"
     return f"""<!doctype html>
-<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<html lang="tr"><head><meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ücretsiz Düğün Araçları: Davetli Listesi, Bütçe Hesaplama | LaVie</title>
 <meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi hazırlama, düğün bütçesi hesaplama ve davetiye sözü oluşturucu. Üyelik gerekmez.">
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">

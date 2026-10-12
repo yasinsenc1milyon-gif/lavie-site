@@ -156,7 +156,7 @@ def sayfa(s):
     return f"""<!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>{e(s['title'])}</title>
 <meta name="description" content="{e(s['desc'])}">
