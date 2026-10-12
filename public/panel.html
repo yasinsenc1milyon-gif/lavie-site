@@ -112,7 +112,7 @@ async function kopyala(t){ try{ await navigator.clipboard.writeText(t); toast("L
 
 function iskelet(){
   const c = V.cift;
-  app.innerHTML = `<div class="brand">Lavie</div>
+  app.innerHTML = `<div class="brand"><img src="/logo.svg" alt="LaVie Davetiye" style="height:38px;width:auto;display:block"></div>
     <h1>${esc(c.gelin)} &amp; ${esc(c.damat)}</h1>
     ${V.ornek ? `<div class="note">Bu örnek bir paneldir; burada değişiklik yapılamaz.</div>` : ""}
     <div class="linkbox">
@@ -124,6 +124,13 @@ function iskelet(){
         <a class="b" href="${esc(davetLink())}" target="_blank" rel="noopener">Davetiyeyi aç</a>
       </div>
     </div>
+    ${V.ornek ? "" : `<div class="linkbox" style="background:#f6f1f7">
+      <span class="muted">Davetiyenizi beğendiyseniz, evlenecek arkadaşlarınıza önerin</span>
+      <div class="bar">
+        <a class="b" href="https://wa.me/?text=${encodeURIComponent("Biz dijital davetiyemizi LaVie'de hazırladık, çok beğenildi! Sen de bak: " + location.origin + "/?ref=" + slug)}" target="_blank" rel="noopener">WhatsApp'ta öner</a>
+        <button class="b" type="button" id="onerKopya">Öneri linkini kopyala</button>
+      </div>
+    </div>`}
     <div class="bar"><a class="b" href="https://wa.me/${window.LAVIE_AYAR.WHATSAPP}?text=${encodeURIComponent(`Merhaba Lavie, panelim hakkında yardım istiyorum. Davetiye kodum: ${slug}`)}" target="_blank" rel="noopener" style="background:#25d366;border-color:#25d366;color:#0b2b17">WhatsApp destek hattı</a><span class="muted">Sorunuz olursa yazın, yardımcı olalım.</span></div>
     <div class="stats">
       <div class="stat yes"><b id="sYes">0</b><span>Gelecek kişi</span></div>
@@ -134,6 +141,7 @@ function iskelet(){
     <div class="pane" id="pane"></div>
     <div class="muted">Bu panel linki size özeldir, misafirlerinizle paylaşmayın.</div>`;
   $("kopya").onclick = () => kopyala(davetLink());
+  if ($("onerKopya")) $("onerKopya").onclick = () => kopyala(location.origin + "/?ref=" + slug);
   $("tabs").addEventListener("click", e => { const b = e.target.closest(".tab"); if (b) { SEKME = b.dataset.s; ciz(); } });
 }
 

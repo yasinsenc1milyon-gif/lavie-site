@@ -78,7 +78,7 @@
         </form>
         <div class="mesajlar">${(ek.mesajlar || []).map(mesajKart).join("")}</div>
       </section>
-      <footer>${gelin} &amp; ${damat}<small><a href="/" target="_blank" rel="noopener" style="text-decoration:none">LaVie Davetiye</a></small></footer>
+      <footer>${gelin} &amp; ${damat}<small><a href="/${d.slug && d.slug !== "ornek" ? "?ref=d-" + esc(d.slug) : ""}" target="_blank" rel="noopener" style="text-decoration:none">LaVie Davetiye</a></small></footer>
     </div>`;
   }
 
@@ -129,6 +129,8 @@
         await yanitGonder(veri);
         f.isim.value = "";
         ok.textContent = durum === "Katılacak" ? "Teşekkürler, sizi aramızda görmek için sabırsızlanıyoruz." : "Yanıtınız için teşekkürler.";
+        if (d.slug && d.slug !== "ornek" && !f.querySelector(".lv-oner")) f.insertAdjacentHTML("beforeend",
+          `<a class="lv-oner" href="/?ref=d-${esc(d.slug)}" target="_blank" rel="noopener" style="display:block;margin-top:5cqw;padding:4cqw;border:1px dashed var(--line2);color:var(--soft);font-size:3.4cqw;text-decoration:none;line-height:1.5">Bu davetiyeyi beğendiniz mi? Siz de kendi dijital davetiyenizi <b style="color:var(--acc)">LaVie Davetiye</b> ile oluşturun →</a>`);
       } catch (err) {
         ok.textContent = "Yanıt gönderilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.";
       } finally { btn.disabled = false; }
