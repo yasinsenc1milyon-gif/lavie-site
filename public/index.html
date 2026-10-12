@@ -895,7 +895,7 @@ $("order").addEventListener("click", async () => {
   $("note").hidden = false;
   if (kod && j.kart) {
     O = { c: kod, k: j.k, url: j.kart, d, yontem: "kart" };
-    try { localStorage.setItem("lavie_odeme", JSON.stringify({ c: O.c, k: O.k, url: O.url, d: { gelin: d.gelin, damat: d.damat, tur: d.tur, tarih: d.tarih, telefon: d.telefon } })); } catch {}
+    try { localStorage.setItem("lavie_odeme", JSON.stringify({ t: Date.now(), c: O.c, k: O.k, url: O.url, d: { gelin: d.gelin, damat: d.damat, tur: d.tur, tarih: d.tarih, telefon: d.telefon } })); } catch {}
     odemeSec();
   }
 });
@@ -913,7 +913,7 @@ function shopierAc(url){
 }
 const KILIT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>`;
 function sheet(html){ $("okutu").innerHTML = html; $("osheet").hidden = false; document.body.style.overflow = "hidden"; }
-function sheetKapat(){ $("osheet").hidden = true; document.body.style.overflow = ""; clearInterval(OZAMAN); }
+function sheetKapat(){ $("osheet").hidden = true; document.body.style.overflow = ""; clearInterval(OZAMAN); try { localStorage.removeItem("lavie_odeme"); } catch {} }
 $("osheet").addEventListener("click", e => { if (e.target.id === "osheet" || e.target.closest("[data-kapat]")) sheetKapat(); });
 const fiyat = () => (A.PAKETLER.find(x => x.id === S.paket) || A.PAKETLER[0]).fiyat;
 function odemeSec(){
@@ -951,6 +951,7 @@ function odemeBekle(){
       const r = await fetch(`${A.API_URL}/odeme?c=${encodeURIComponent(O.c)}&k=${encodeURIComponent(O.k)}`);
       const j = await r.json();
       if (j.ok && j.durum === "aktif" && j.linkler) { clearInterval(OZAMAN); try { localStorage.removeItem("lavie_odeme"); } catch {} odemeTamam(j.linkler); }
+      else if (!j.ok && j.hata === "bulunamadi") sheetKapat();
     } catch (_) {}
   };
   OZAMAN = setInterval(kontrol, 5000); kontrol();
@@ -971,7 +972,9 @@ function odemeTamam(l){
   $("okutu").querySelectorAll("[data-kop]").forEach(b => b.onclick = async () => { try { await navigator.clipboard.writeText(b.dataset.kop); b.textContent = "Kopyalandı"; } catch { b.textContent = "Kopyalanamadı"; } setTimeout(() => b.textContent = "Kopyala", 1800); });
 }
 // Sayfa yenilenirse yarım kalan kart ödemesine devam et
-try { const k = JSON.parse(localStorage.getItem("lavie_odeme") || "null"); if (k && k.c && k.k && k.url) { O = { ...k, yontem: "kart" }; odemeBekle(); } } catch {}
+try { const k = JSON.parse(localStorage.getItem("lavie_odeme") || "null");
+  if (k && k.c && k.k && k.url && k.t && Date.now() - k.t < 2 * 3600e3) { O = { ...k, yontem: "kart" }; odemeBekle(); }
+  else localStorage.removeItem("lavie_odeme"); } catch {}
 ALANLAR.forEach(k => $(k).addEventListener("input", () => ciz()));
 $("f").addEventListener("submit", e => e.preventDefault());
 $("fullBtn").addEventListener("click", () => { const f = $("stage").classList.toggle("full"); $("fullBtn").textContent = f ? "Kapat" : "Tam ekran"; });
