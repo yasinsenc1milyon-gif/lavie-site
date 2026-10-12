@@ -58,6 +58,19 @@ ARAC_CSS = """
 .kars b{display:block;font-family:var(--display);font-weight:400;font-size:1.8rem;line-height:1.1}
 .kars span{font-size:.8rem;color:var(--muted)}
 .tasarruf{margin-top:10px;font-size:.95rem}
+.durum.orta{background:#f7efdf;color:#7a5a22}
+.lejant{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:16px;font-size:.8rem;color:var(--muted)}
+.lejant span{display:flex;align-items:center;gap:6px}.lejant i.g{width:14px;height:14px;border-radius:4px;display:inline-block}
+.aylar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 16px;margin-top:16px}
+@media(max-width:700px){.aylar{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 10px}}
+.ay b{font-family:var(--display);font-weight:400;font-size:1.25rem;display:block;margin-bottom:6px}
+.hg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.hg i{font-style:normal;font-size:.62rem;color:var(--muted);text-align:center}
+.hg button{font:inherit;font-size:.74rem;aspect-ratio:1;border:0;border-radius:5px;cursor:pointer;padding:0;font-variant-numeric:tabular-nums;color:var(--ink)}
+.g.uygun{background:#e6f2e9}.g.uzun{background:#8fc29f;color:#16301f}.g.yogun{background:#f2dfb5}.g.ikiBayram{background:#efe2cf}
+.g.ramazan{background:#e3d6ea}.g.bayram{background:#c98f8f;color:#fff}.g.tatil{background:#b9cde3}.g.kandil{background:#e3d6ea}
+.hg button.sol{background:transparent;color:#c5bdc2}
+.hg button.sec{outline:2px solid var(--ink);outline-offset:1px;font-weight:500}
 """
 
 def kabuk(slug, title, desc, h1, giris, govde, script, ld_ekstra=(), cta_tur="Düğün"):
@@ -372,6 +385,109 @@ $("yeni").onclick = () => { KARIS = (KARIS + 4) % KALIP[S.tarz].length; ciz(); }
 ciz();
 """
 
+# ---------------- 2027 düğün takvimi ----------------
+TK_SSS = [("2027'de Ramazan Bayramı ve Kurban Bayramı ne zaman?", "Diyanet takvimine göre 2027 Ramazan Bayramı 9-11 Mart (arefe 8 Mart Pazartesi), Kurban Bayramı 16-19 Mayıs (arefe 15 Mayıs Cumartesi) tarihlerindedir. Ramazan ayı 8 Şubat Pazartesi günü başlar."),
+          ("İki bayram arası düğün yapılır mı?", "Halk arasında Ramazan Bayramı ile Kurban Bayramı arasında düğün yapılmaması geleneği vardır. Dinî bir yasak değildir ve pek çok çift bu dönemde evlenir; ancak aileleriniz bu geleneğe önem veriyorsa 2027'de 12 Mart ile 15 Mayıs arası bu döneme denk gelir."),
+          ("2027'de düğün için en uygun tarihler hangileri?", "Uzaktan gelecek misafirleriniz varsa resmî tatille birleşen hafta sonları avantajlıdır: 2-3 Ocak, 24-25 Nisan, 28-29 Ağustos ve 30-31 Ekim 2027. Haziran-Eylül cumartesileri en yoğun dönemdir; salonlar bu tarihler için aylar önceden dolar."),
+          ("Düğün tarihini ne kadar önceden belirlemeliyiz?", "Yaz sezonu ve cumartesi günleri için salon rezervasyonunu 8-12 ay önceden yapmak gerekir. Tarih kesinleşince misafirlere 'tarihi kaydedin' mesajı, düğünden 4-6 hafta önce de davetiye gönderilir."),
+          ("Düğün için hafta içi mi hafta sonu mu daha uygun?", "Cumartesi en çok tercih edilen ve en pahalı gündür. Cuma ve pazar akşamları salonlarda genellikle daha uygun fiyat bulunur; hafta içi düğünler en ekonomik seçenektir ancak çalışan misafirler için katılımı zorlaştırabilir.")]
+TK_GOVDE = """
+<div class="arac">
+  <div class="iki tek" style="align-items:end">
+    <label class="alan"><span>Düşündüğünüz tarih</span><input id="tarih" type="date" min="2027-01-01" max="2027-12-31" value="2027-06-19"></label>
+    <div class="seg" id="filtre"></div>
+  </div>
+  <div class="durum" id="sonuc" aria-live="polite"></div>
+  <div class="lejant" id="lejant"></div>
+  <div class="aylar" id="aylar"></div>
+  <p class="not">Dinî gün tarihleri Diyanet İşleri Başkanlığı'nın 2027 takvimine dayanır. Bayram öncesi veya sonrası verilebilecek ek idari izin günleri henüz açıklanmadığı için takvimde yer almaz.</p>
+</div>
+<h2 style="font-size:1.6rem;margin-top:44px">2027 resmî tatiller ve dinî bayramlar</h2>
+<div class="satirlar">
+  <div class="satir"><div><b>1 Ocak, Cuma</b><small>Yılbaşı · 2-3 Ocak uzun hafta sonu</small></div></div>
+  <div class="satir"><div><b>22 Ocak, Cuma</b><small>Berat Kandili</small></div></div>
+  <div class="satir"><div><b>8 Şubat - 8 Mart</b><small>Ramazan ayı (Kadir Gecesi 5 Mart Cuma)</small></div></div>
+  <div class="satir"><div><b>9-11 Mart, Salı-Perşembe</b><small>Ramazan Bayramı · arefe 8 Mart Pazartesi</small></div></div>
+  <div class="satir"><div><b>23 Nisan, Cuma</b><small>Ulusal Egemenlik ve Çocuk Bayramı · 24-25 Nisan uzun hafta sonu</small></div></div>
+  <div class="satir"><div><b>1 Mayıs, Cumartesi</b><small>Emek ve Dayanışma Günü</small></div></div>
+  <div class="satir"><div><b>16-19 Mayıs, Pazar-Çarşamba</b><small>Kurban Bayramı · arefe 15 Mayıs Cumartesi · 19 Mayıs aynı gün</small></div></div>
+  <div class="satir"><div><b>15 Temmuz, Perşembe</b><small>Demokrasi ve Millî Birlik Günü</small></div></div>
+  <div class="satir"><div><b>30 Ağustos, Pazartesi</b><small>Zafer Bayramı · 28-29 Ağustos uzun hafta sonu</small></div></div>
+  <div class="satir"><div><b>28 Ekim yarım gün, 29 Ekim Cuma</b><small>Cumhuriyet Bayramı · 30-31 Ekim uzun hafta sonu</small></div></div>
+</div>
+<h2 style="font-size:1.6rem;margin-top:44px">Tarih seçerken dikkat edilecekler</h2>
+<div class="makale">
+<p><b>Ramazan ayı (8 Şubat - 8 Mart 2027):</b> Oruç tutan misafirler nedeniyle düğün ve kına genellikle yapılmaz. Nişan ve söz törenleri iftar sonrasına alınabilir.</p>
+<p><b>İki bayram arası (12 Mart - 15 Mayıs 2027):</b> Bazı aileler bu dönemde düğün yapmamayı tercih eder. Dinî bir yasak değildir; aile büyüklerinize danışmanız yeterli.</p>
+<p><b>Uzun hafta sonları:</b> Şehir dışından gelecek misafirleriniz çoksa resmî tatille birleşen hafta sonları katılımı artırır.</p>
+<p><b>Yaz cumartesileri (Haziran-Eylül):</b> En yoğun ve en pahalı dönemdir. Salon ve fotoğrafçıyı erken ayırtın, davetiyeyi düğünden 4-6 hafta önce gönderin.</p>
+<p><b>Özel tarih:</b> 07.07.2027 Çarşamba gününe denk gelir; akılda kalan tarih isteyen çiftler için hafta içi bir seçenek.</p>
+</div>
+<div class="cta-kutu"><b>Tarihiniz belli mi?</b><p>Dijital davetiyenizi hemen hazırlayın: geri sayım, konum ve katılım formu tek linkte. Misafirleriniz WhatsApp'tan tek dokunuşla açar.</p><a class="btn pri" href="/?tur=Düğün#olustur">Davetiyemi oluştur</a></div>
+""" + sss_html(TK_SSS)
+TK_JS = r"""
+const AY = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const GUN = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+const T = {
+  "2027-01-01":["tatil","Yılbaşı"], "2027-01-22":["kandil","Berat Kandili"],
+  "2027-03-05":["ramazan","Kadir Gecesi"], "2027-03-08":["bayram","Ramazan Bayramı arefesi"],
+  "2027-03-09":["bayram","Ramazan Bayramı 1. gün"], "2027-03-10":["bayram","Ramazan Bayramı 2. gün"], "2027-03-11":["bayram","Ramazan Bayramı 3. gün"],
+  "2027-04-23":["tatil","23 Nisan Ulusal Egemenlik ve Çocuk Bayramı"], "2027-05-01":["tatil","1 Mayıs Emek ve Dayanışma Günü"],
+  "2027-05-15":["bayram","Kurban Bayramı arefesi"], "2027-05-16":["bayram","Kurban Bayramı 1. gün"], "2027-05-17":["bayram","Kurban Bayramı 2. gün"],
+  "2027-05-18":["bayram","Kurban Bayramı 3. gün"], "2027-05-19":["bayram","Kurban Bayramı 4. gün · 19 Mayıs"],
+  "2027-07-15":["tatil","15 Temmuz Demokrasi ve Millî Birlik Günü"], "2027-08-30":["tatil","30 Ağustos Zafer Bayramı"],
+  "2027-10-28":["tatil","Cumhuriyet Bayramı arefesi (yarım gün)"], "2027-10-29":["tatil","29 Ekim Cumhuriyet Bayramı"]
+};
+const UZUN = {"2027-01-02":"Yılbaşı","2027-01-03":"Yılbaşı","2027-04-24":"23 Nisan","2027-04-25":"23 Nisan","2027-08-28":"30 Ağustos","2027-08-29":"30 Ağustos","2027-10-30":"29 Ekim","2027-10-31":"29 Ekim"};
+const ACIK = {
+  bayram:["Bayram","Aileler bayramda ziyaretlerde ve memlekette olur; düğün yapılmaz."],
+  ramazan:["Ramazan · kandil","Oruç nedeniyle düğün ve kına genellikle yapılmaz."],
+  ikiBayram:["İki bayram arası","Bazı aileler bu dönemde düğün yapmamayı tercih eder (gelenek, dinî yasak değil)."],
+  tatil:["Resmî tatil","Misafirler izinli; tatile çıkanlar olabilir."],
+  kandil:["Kandil","Bazı aileler kandil gecelerinde düğün yapmamayı tercih eder."],
+  uzun:["Uzun hafta sonu","Şehir dışından gelecek misafirler için ideal."],
+  yogun:["Yoğun sezon","Yaz cumartesisi: salonlar aylar önceden dolar, erken ayırtın."],
+  uygun:["Uygun","Bilinen bir engel yok."]
+};
+const iso = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+function tur(s){
+  if (T[s]) return T[s][0];
+  if (s >= "2027-02-08" && s <= "2027-03-07") return "ramazan";
+  if (UZUN[s]) return "uzun";
+  if (s >= "2027-03-12" && s <= "2027-05-14") return "ikiBayram";
+  const d = new Date(s+"T12:00"); if (d.getDay()===6 && d.getMonth()>=5 && d.getMonth()<=8) return "yogun";
+  return "uygun";
+}
+let F = oku("lavie_tk", "Hafta sonu");
+function seg(){ $("filtre").innerHTML = ["Hafta sonu","Tüm günler"].map(k=>`<button type="button" aria-pressed="${k===F}">${k}</button>`).join("");
+  $("filtre").querySelectorAll("button").forEach(b=>b.onclick=()=>{F=b.textContent;yaz("lavie_tk",F);seg();takvim();}); }
+function takvim(){
+  $("lejant").innerHTML = ["uygun","uzun","yogun","ikiBayram","ramazan","bayram","tatil"].map(k=>`<span><i class="g ${k}"></i>${ACIK[k][0]}</span>`).join("");
+  let h = "";
+  for (let m=0;m<12;m++){
+    const ilk = new Date(2027,m,1), bos = (ilk.getDay()+6)%7, son = new Date(2027,m+1,0).getDate();
+    h += `<div class="ay"><b>${AY[m]}</b><div class="hg">${"PSÇPCCP".split("").map(x=>`<i>${x}</i>`).join("")}${"<span></span>".repeat(bos)}`;
+    for (let g=1; g<=son; g++){ const d=new Date(2027,m,g), s=iso(d), t=tur(s), hs=d.getDay()===0||d.getDay()===6;
+      const sol = F==="Hafta sonu" && !hs && !T[s] ? " sol" : "";
+      h += `<button type="button" class="g ${t}${sol}${s===$("tarih").value?" sec":""}" data-s="${s}" aria-label="${g} ${AY[m]} ${GUN[d.getDay()]}: ${ACIK[t][0]}">${g}</button>`; }
+    h += `</div></div>`;
+  }
+  $("aylar").innerHTML = h;
+  $("aylar").querySelectorAll("button").forEach(b=>b.onclick=()=>{$("tarih").value=b.dataset.s;sonuc();takvim();});
+}
+function sonuc(){
+  const s = $("tarih").value; if (!s) { $("sonuc").hidden = true; return; }
+  const d = new Date(s+"T12:00"), t = tur(s), [ad, ac] = ACIK[t];
+  const ek = T[s] ? T[s][1] + ". " : UZUN[s] ? UZUN[s] + " tatiliyle birleşen hafta sonu. " : "";
+  const kalan = Math.round((d - new Date(new Date().toDateString())) / 864e5);
+  $("sonuc").hidden = false;
+  $("sonuc").className = "durum " + (["bayram","ramazan"].includes(t) ? "asim" : ["ikiBayram","kandil","tatil","yogun"].includes(t) ? "orta" : "iyi");
+  $("sonuc").innerHTML = `<b>${d.getDate()} ${AY[d.getMonth()]} 2027, ${GUN[d.getDay()]}</b> · ${ad}<br>${esc(ek + ac)}${kalan>0?`<br><small>Bugünden ${kalan.toLocaleString("tr-TR")} gün sonra.</small>`:""}`;
+}
+$("tarih").addEventListener("change", ()=>{sonuc();takvim();});
+seg(); takvim(); sonuc();
+"""
+
 ARACLAR = [
  dict(slug="davetli-listesi", ad="Davetli listesi", title="Ücretsiz Düğün Davetli Listesi Hazırlama Aracı (Excel'e Aktar) | LaVie",
       desc="Düğün, nişan ve kına davetli listenizi ücretsiz hazırlayın: gelin ve damat tarafı, gruplar, kişi sayısı, toplamlar ve Excel'e aktarma. Üyelik gerekmez.",
@@ -385,6 +501,10 @@ ARACLAR = [
       desc="Ücretsiz davetiye sözü oluşturucu: davet türünü ve tarzı seçin, isimleri yazın; size özel düğün, nişan, kına ve söz davetiyesi sözleri anında hazır.",
       h1=("Davetiye sözü", "oluşturucu"), giris="Davet türünü ve tarzını seçin, isimleri yazın; size özel davetiye sözleri anında hazırlansın. Beğendiğinizi kopyalayın ya da doğrudan davetiyenize aktarın.",
       govde=SZ_GOVDE, js=SZ_JS, sss=SZ_SSS),
+ dict(slug="2027-dugun-takvimi", ad="2027 düğün takvimi", title="2027 Düğün Takvimi: Bayramlar, Ramazan, Uzun Hafta Sonları ve Uygun Tarihler | LaVie",
+      desc="2027 düğün takvimi: Ramazan ve Kurban Bayramı, Ramazan ayı, iki bayram arası, resmî tatiller ve uzun hafta sonları tek takvimde. Düğün tarihinizin uygun olup olmadığını hemen görün.",
+      h1=("2027 düğün", "takvimi"), giris="Düğün, nişan ya da kına için düşündüğünüz tarihi seçin; bayram, Ramazan, iki bayram arası, resmî tatil ve yoğun sezon bilgisini anında görün. Uzaktan gelecek misafirler için uzun hafta sonlarını da işaretledik.",
+      govde=TK_GOVDE, js=TK_JS, sss=TK_SSS),
 ]
 
 def araclar_ana():
