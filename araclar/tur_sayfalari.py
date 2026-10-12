@@ -237,11 +237,15 @@ document.querySelectorAll("[data-m]").forEach(b => b.onclick = async () => {{
 </html>
 """
 
-for s in SAYFALAR:
-    open(os.path.join(KOK, s["slug"] + ".html"), "w", encoding="utf8").write(sayfa(s))
-sm = ['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-      f'  <url><loc>{U}/</loc><lastmod>2026-10-11</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>']
-sm += [f'  <url><loc>{U}/{s["slug"]}</loc><lastmod>2026-10-11</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>' for s in SAYFALAR]
-sm.append("</urlset>")
-open(os.path.join(KOK, "sitemap.xml"), "w").write("\n".join(sm) + "\n")
-print("ok", [s["slug"] for s in SAYFALAR])
+def site_haritasi(ekler=()):
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+          f'  <url><loc>{U}/</loc><lastmod>2026-10-12</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>']
+    sm += [f'  <url><loc>{U}/{s["slug"]}</loc><lastmod>2026-10-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>' for s in SAYFALAR]
+    sm += [f'  <url><loc>{U}/{x}</loc><lastmod>2026-10-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>' for x in ekler]
+    sm.append("</urlset>")
+    open(os.path.join(KOK, "sitemap.xml"), "w").write("\n".join(sm) + "\n")
+
+if __name__ == "__main__":
+    for s in SAYFALAR:
+        open(os.path.join(KOK, s["slug"] + ".html"), "w", encoding="utf8").write(sayfa(s))
+    print("ok", [s["slug"] for s in SAYFALAR])
