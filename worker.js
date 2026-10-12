@@ -27,6 +27,16 @@ export default {
   async fetch(request, env, ctx) {
     const yol = new URL(request.url).pathname.replace(/\/+$/, "") || "/";
     if (yol === "/" + GOOGLE_DOGRULAMA) return new Response("google-site-verification: " + GOOGLE_DOGRULAMA, { headers: { "content-type": "text/html; charset=utf-8" } });
+    // Kısa örnek linki: /o/Ferhat-ve-Yasin → isimlerle örnek davetiye
+    if (yol.startsWith("/o/")) {
+      let ad = ""; try { ad = decodeURIComponent(yol.slice(3)); } catch {}
+      const [g, d] = ad.replace(/_/g, " ").split("-ve-");
+      const q = new URLSearchParams({ c: "ornek" });
+      if (g && d) { q.set("gelin", g.trim().slice(0, 20)); q.set("damat", d.trim().slice(0, 20)); }
+      const gelen = new URL(request.url).searchParams;
+      for (const k of ["t", "tur", "ref"]) if (gelen.get(k)) q.set(k, gelen.get(k));
+      return Response.redirect(new URL("/d?" + q.toString(), request.url).toString(), 302);
+    }
     const mod = ROTALAR[yol];
     if (!mod) return env.ASSETS.fetch(request);
     const yontem = request.method.charAt(0) + request.method.slice(1).toLowerCase();
