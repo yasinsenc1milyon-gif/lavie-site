@@ -303,5 +303,5 @@ if __name__ == "__main__":
     for y in YAZILAR:
         open(os.path.join(KOK, y["slug"] + ".html"), "w", encoding="utf8").write(yazi(y))
     open(os.path.join(KOK, "rehber.html"), "w", encoding="utf8").write(rehber_ana())
-    site_haritasi(["rehber"] + [y["slug"] for y in YAZILAR])
+    import araclar; araclar.yaz_hepsi()  # site haritası araçlarla birlikte yazılır
     print("ok", len(YAZILAR), "yazı")
