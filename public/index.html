@@ -117,6 +117,16 @@ footer.site .logo.img img{height:56px}
 .guven svg{flex:0 0 20px;width:20px;height:20px;color:var(--gold)}
 .guven b{display:block;color:var(--ink);font-weight:500;font-size:.9rem}
 .showcase{justify-self:center;position:relative;width:100%;max-width:320px;margin:0}
+.dene{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:18px;box-shadow:0 18px 40px -30px rgba(33,31,39,.45)}
+.dene-b{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:8px;text-align:center}
+.dene-s{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto;gap:8px;align-items:center}
+.dene-s span{font-family:"Pinyon Script",cursive;font-size:1.5rem;color:var(--gold);line-height:1}
+.dene-s input{font:inherit;font-size:16px;width:100%;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink)}
+.dene-s input:focus{outline:none;border-color:var(--accent);background:#fff}
+.dene-s .btn{padding:10px 16px}
+@media (max-width:420px){.dene-s{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}.dene-s .btn{grid-column:1/-1}}
+.dene-son{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.dene-son .btn{flex:1 1 160px;justify-content:center}
 .device{position:relative;width:100%;aspect-ratio:9/18.5;max-height:650px;border-radius:44px;border:10px solid #18161c;background:#18161c;overflow:hidden;box-shadow:0 40px 80px -36px rgba(33,31,39,.7),0 0 0 1px rgba(0,0,0,.05)}
 .device::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:84px;height:22px;border-radius:999px;background:#18161c;z-index:2}
 .device iframe{width:100%;height:100%;border:0;border-radius:34px;display:block;background:#f1f1e8}
@@ -449,7 +459,20 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
       </ul>
     </div>
     <figure class="showcase">
-      <div class="device"><iframe src="/d?c=ornek" title="Örnek davetiye" loading="lazy"></iframe></div>
+      <form class="dene" id="deneForm" autocomplete="off">
+        <div class="dene-b">Kendi isimlerinizle deneyin</div>
+        <div class="dene-s">
+          <input id="deneGelin" maxlength="20" placeholder="Gelin" aria-label="Gelinin adı" enterkeyhint="next">
+          <span aria-hidden="true">&amp;</span>
+          <input id="deneDamat" maxlength="20" placeholder="Damat" aria-label="Damadın adı" enterkeyhint="go">
+          <button class="btn pri" type="submit">Göster</button>
+        </div>
+      </form>
+      <div class="device"><iframe id="demoIframe" src="/d?c=ornek" title="Örnek davetiye" loading="lazy"></iframe></div>
+      <div class="dene-son" id="deneSon" hidden>
+        <a class="btn pri" id="deneOlustur" href="#olustur">Bu isimlerle oluştur</a>
+        <a class="btn sec" id="deneWa" target="_blank" rel="noopener">Eşinize gönderin</a>
+      </div>
       <div class="chip c1" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12l5 5L20 7"/></svg></i><span>Yeni katılım<small>2 kişi geliyor</small></span></div>
       <div class="chip c2" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></i><span>Zarf açıldı<small>Müzik çalıyor</small></span></div>
       <figcaption>Canlı örnek · zarfa dokunun</figcaption>
@@ -1036,6 +1059,25 @@ $("knHazir").addEventListener("click", e => { const b = e.target.closest("button
 planCiz();
 galeriCiz();
 ciz(true);
+</script>
+<script>
+(function(){
+  const f=document.getElementById("deneForm"); if(!f) return;
+  const g=document.getElementById("deneGelin"), d=document.getElementById("deneDamat"), fr=document.getElementById("demoIframe");
+  const bas=v=>v?v.charAt(0).toLocaleUpperCase("tr")+v.slice(1):v;
+  f.addEventListener("submit", e=>{
+    e.preventDefault();
+    const G=bas(g.value.replace(/\s+/g," ").trim()), D=bas(d.value.replace(/\s+/g," ").trim());
+    if(!G||!D){ (G?d:g).focus(); return; }
+    const q=new URLSearchParams({c:"ornek",gelin:G,damat:D}).toString();
+    fr.src="/d?"+q;
+    document.querySelectorAll('a[href="/d?c=ornek"]').forEach(a=>a.href="/d?"+q);
+    document.getElementById("deneOlustur").href="/?"+new URLSearchParams({gelin:G,damat:D}).toString()+"#olustur";
+    document.getElementById("deneWa").href="https://wa.me/?text="+encodeURIComponent(`Bak bizim davetiyemiz böyle olabilir 💌 ${location.origin}/d?${q}`);
+    document.getElementById("deneSon").hidden=false;
+    if(window.innerWidth<900) fr.scrollIntoView({behavior:"smooth",block:"center"});
+  });
+})();
 </script>
 </body>
 </html>

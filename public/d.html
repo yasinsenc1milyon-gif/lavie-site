@@ -105,6 +105,12 @@ html,body{margin:0;background:#e9e6e3}
   if (slug === "ornek" && tSec && window.Lavie.TASARIMLAR.some(t => t.id === tSec)) d.tasarim = tSec;
   const turSec = new URLSearchParams(location.search).get("tur");
   if (slug === "ornek" && turSec && window.Lavie.TURLER.includes(turSec)) d.tur = turSec;
+  // Vitrinde "kendi isimlerinizle deneyin" için (?gelin=Elif&damat=Burak)
+  if (slug === "ornek") {
+    const q = new URLSearchParams(location.search), temiz = v => (v || "").replace(/\s+/g, " ").trim().slice(0, 20);
+    if (temiz(q.get("gelin"))) d.gelin = temiz(q.get("gelin"));
+    if (temiz(q.get("damat"))) d.damat = temiz(q.get("damat"));
+  }
   document.title = `${d.gelin} & ${d.damat} · ${d.tur || "Davetiye"}`;
 
   window.Lavie.ciz(kok, d, async v => {
