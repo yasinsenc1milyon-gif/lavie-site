@@ -18,5 +18,6 @@
   "d1_databases": [
     { "binding": "DB", "database_name": "lavie", "database_id": "acf23174-0488-4cda-86fa-ba5a77231265" }
   ],
+  "triggers": { "crons": ["0 6 * * 1"] },
   "observability": { "enabled": true }
 }

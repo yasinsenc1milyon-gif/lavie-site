@@ -12,6 +12,7 @@ import * as istatistik from "./functions/api/istatistik.js";
 import * as odeme from "./functions/api/odeme.js";
 import * as odemeBildirim from "./functions/api/odeme-bildirim.js";
 import { davetiyeSayfasi } from "./lib/onizleme.js";
+import { indexNowGonder } from "./lib/indexnow.js";
 
 const ROTALAR = {
   "/api/cift": cift, "/api/yanit": yanit, "/api/mesaj": mesaj, "/api/panel": panel,
@@ -32,5 +33,9 @@ export default {
     const h = mod["onRequest" + yontem] || mod.onRequest;
     if (!h) return new Response(JSON.stringify({ ok: false, hata: "yontem" }), { status: 405, headers: { "content-type": "application/json; charset=utf-8" } });
     return h({ request, env, params: {}, waitUntil: p => ctx.waitUntil(p), next: () => env.ASSETS.fetch(request) });
+  },
+  // Haftalık: arama motorlarına güncel sayfaları bildir
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(indexNowGonder(env, env.SITE_ADRESI || "https://www.laviedavetiye.workers.dev").then(r => console.log("indexnow", JSON.stringify(r))));
   }
 };

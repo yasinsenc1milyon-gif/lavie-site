@@ -1,5 +1,6 @@
 // Yönetim sayfası: siparişleri listele, onayla, düzenle, sil; çift yorumlarını onayla
 import { shopierTest } from "../../lib/shopier.js";
+import { indexNowGonder } from "../../lib/indexnow.js";
 import { bildirimBagla, odemeAra, odemeAcik, urunId } from "../../lib/odeme.js";
 import { ALANLAR, DURUMLAR, ciftGetir, ciftKaydet, ciftVerisiniSil, govde, json, linkler, temizle, uc, yorumSatiri } from "../../lib/ortak.js";
 
@@ -28,6 +29,7 @@ export const onRequest = uc(async ({ request, env, db }) => {
     const t = await db.prepare("SELECT 1 AS v FROM ayarlar WHERE anahtar = 'webhook_token'").first();
     return json({ ok: true, sonuc: { ...(await shopierTest(env)), urun: env.SHOPIER_URUN_URL || null, urunId: urunId(env), kartAcik: odemeAcik(env), bildirimBagli: !!t } });
   }
+  if (d && d.islem === "indexnow") return json({ ok: true, sonuc: await indexNowGonder(env, new URL(request.url).origin) });
   if (d && d.islem === "shopier-bagla") return json({ ok: true, sonuc: await bildirimBagla(env, db, new URL(request.url).origin) });
   if (!d || !d.slug) return json({ ok: false, hata: "veri" }, 400);
   const slug = String(d.slug);

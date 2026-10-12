@@ -73,7 +73,7 @@ textarea{min-height:70px;resize:vertical}
   </form>
 
   <div id="app" hidden>
-    <div class="card" style="margin-bottom:12px"><div class="top"><h2 class="names" style="font-size:1.3rem">Shopier bağlantısı</h2><div style="display:flex;gap:6px"><button class="b" id="spBagla" type="button">Bildirimleri bağla</button><button class="b" id="spTest" type="button">Test et</button></div></div>
+    <div class="card" style="margin-bottom:12px"><div class="top"><h2 class="names" style="font-size:1.3rem">Shopier bağlantısı</h2><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="b" id="ixGonder" type="button">Arama motorlarına bildir</button><button class="b" id="spBagla" type="button">Bildirimleri bağla</button><button class="b" id="spTest" type="button">Test et</button></div></div>
       <pre id="spSonuc" hidden style="white-space:pre-wrap;font-size:.8rem;margin:10px 0 0;background:#f6f3f1;padding:10px;border-radius:8px"></pre></div>
     <div class="tabs" id="tabs" role="group" aria-label="Filtre"></div>
     <div class="list" id="list" style="margin-top:12px"></div>
@@ -251,6 +251,9 @@ $("list").addEventListener("submit", async e=>{
 
 if (SIFRE) { $("sifre").value=SIFRE; giris(); }
 $("spTest").onclick=shopierTestEt;
+$("ixGonder").onclick=async()=>{ const el=$("spSonuc"); el.hidden=false; el.textContent="Bing ve Yandex'e bildiriliyor...";
+  try{ const r=(await api("POST",{islem:"indexnow"})).sonuc; el.textContent=r.ok?`✓ ${r.adet} sayfa Bing, Yandex ve diğer arama motorlarına bildirildi. (Her pazartesi kendiliğinden tekrarlanır.)`:`✗ Bildirilemedi: ${r.durum||""} ${r.hata||""}`; }
+  catch(e){ el.textContent="Bildirilemedi: "+e.message; } };
 $("spBagla").onclick=async()=>{ const el=$("spSonuc"); el.hidden=false; el.textContent="Bağlanıyor...";
   try{ const j=await api("POST",{islem:"shopier-bagla"}); const r=j.sonuc; el.textContent=r.ok?"✓ Bildirimler bağlandı. Shopier'de her yeni siparişte site otomatik kontrol edecek.":"✗ Bağlanamadı: "+(r.durum||"")+" "+(r.hata||""); }
   catch(e){ el.textContent="Bağlanamadı: "+e.message; } };
