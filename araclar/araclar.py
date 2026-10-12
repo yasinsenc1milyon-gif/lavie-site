@@ -275,6 +275,103 @@ $("dagit").onclick = () => { if (!+S.butce) { $("butce").focus(); return; } dagi
 ciz();
 """
 
+
+# ---------------- Davetiye sözü oluşturucu ----------------
+SZ_SSS = [("Davetiye sözü oluşturucu nasıl çalışır?", "Davet türünü ve istediğiniz tarzı seçip isimleri yazdığınızda, araç hazır söz kalıplarını sizin bilgilerinizle birleştirerek öneriler sunar. 'Yeni öneriler' ile farklı seçenekleri görebilir, beğendiğinizi kopyalayabilirsiniz."),
+          ("Önerilen sözleri değiştirebilir miyim?", "Elbette. Sözü kopyalayıp dilediğiniz gibi düzenleyebilir ya da 'Bu sözle davetiye oluştur' ile doğrudan davetiye oluşturucuya aktarıp orada değiştirebilirsiniz."),
+          ("Ücretli mi?", "Hayır, araç tamamen ücretsizdir ve üyelik gerektirmez.")]
+SZ_GOVDE = """
+<div class="arac">
+  <div class="izgara">
+    <div class="alan"><span>Davet türü</span><div class="seg" id="turSec"></div></div>
+    <div class="alan"><span>Tarz</span><div class="seg" id="tarzSec"></div></div>
+    <div class="iki">
+      <label class="alan"><span>Gelin</span><input id="gelin" placeholder="Elif" maxlength="40"></label>
+      <label class="alan"><span>Damat</span><input id="damat" placeholder="Burak" maxlength="40"></label>
+    </div>
+    <label class="alan"><span>Aile isimleri (isteğe bağlı)</span><input id="aile" placeholder="Yılmaz ve Demir aileleri" maxlength="80"></label>
+  </div>
+  <div class="dugmeler"><button class="btn pri kucuk" type="button" id="yeni">Yeni öneriler</button></div>
+  <div class="metinler" id="oneriler" style="margin-top:16px"></div>
+</div>
+<div class="cta-kutu"><b>Sözünüz davetiyenizde</b><p>Beğendiğiniz sözün altındaki "Bu sözle davetiye oluştur"a dokunun; isimleriniz ve sözünüz hazır şekilde zarfı açılan dijital davetiyenizin önizlemesi açılsın.</p><a class="btn pri" href="/#olustur">Davetiyemi oluştur</a></div>
+<section class="makale">
+<h2>İyi bir davetiye sözü nasıl olmalı?</h2>
+<ol>
+<li><b>Kısa olsun.</b> Bir ya da iki cümle yeterli; tarih, saat ve mekân zaten davetiyede ayrıca yer alır.</li>
+<li><b>Misafirinize uygun olsun.</b> Aile büyüklerinin ağırlıkta olduğu davetlerde klasik, arkadaş ağırlıklı davetlerde daha samimi bir dil seçin.</li>
+<li><b>Size benzesin.</b> Önerileri başlangıç olarak kullanıp kendi hikâyenizden bir kelime eklemek sözü unutulmaz yapar.</li>
+</ol>
+<p>Daha fazla örnek için <a href="/dugun-davetiyesi-sozleri">düğün</a>, <a href="/kina-davetiyesi-sozleri">kına</a> ve <a href="/nisan-davetiyesi-sozleri">nişan</a> davetiyesi sözleri yazılarımıza göz atın.</p>
+<h2>Sıkça sorulanlar</h2>
+""" + sss_html(SZ_SSS) + "</section>"
+SZ_JS = r"""
+const TURLER = { "Düğün": { olay: "düğünümüze", olayAd: "düğün", gun: "en güzel günümüzde", fiil: "evleniyoruz", yer: "düğün törenimize" },
+  "Nişan": { olay: "nişan törenimize", olayAd: "nişan", gun: "bu özel günümüzde", fiil: "nişanlanıyoruz", yer: "nişan törenimize" },
+  "Kına": { olay: "kına gecemize", olayAd: "kına gecesi", gun: "bu anlamlı gecede", fiil: "kınamızı yakıyoruz", yer: "kına gecemize" },
+  "Söz": { olay: "söz törenimize", olayAd: "söz", gun: "bu güzel günümüzde", fiil: "söz kesiyoruz", yer: "söz törenimize" } };
+const KALIP = {
+  "Klasik": [
+    "Ailelerimizin hayır dualarıyla {fiil}. {GUN} sizleri de aramızda görmekten onur duyarız.",
+    "{GUN} mutluluğumuzu sizlerle paylaşmak istiyoruz. {YER} teşriflerinizi rica ederiz.",
+    "Bir ömür boyu sürecek yolculuğumuzun ilk adımında dualarınız ve varlığınızla yanımızda olmanızı dileriz.",
+    "Sevgi ve saygıyla attığımız bu adımda sizleri de {olay} bekliyoruz.",
+    "{GUN} varlığınız bizi onurlandıracaktır. {YER} davetlisiniz.",
+    "Mutluluğumuzu paylaşmak üzere {yer} sizleri de davet etmekten onur duyarız."],
+  "Romantik": [
+    "{gelin} ve {damat} olarak iki ayrı hikâyeyi tek bir masalda birleştiriyoruz. Masalımızın bu sayfasında sizi de görmek istiyoruz.",
+    "Birlikte gülmeye, birlikte yaşlanmaya karar verdik. Bu kararı {olay} gelerek bizimle kutlayın.",
+    "Kalplerimizin aynı ritimde attığı {gun} sevdiklerimizi yanımızda istiyoruz.",
+    "Yıllar önce başlayan hikâyemizin en güzel bölümünü sizinle paylaşmak istiyoruz.",
+    "Sevgimizi bir ömre taşıdığımız {gun} yanımızda olun.",
+    "Aşkımızın en güzel kutlamasında sizi de aramızda görmek istiyoruz."],
+  "Kısa": [
+    "{GUN} yanımızda olun.",
+    "Mutluluğumuza ortak olun; {olay} davetlisiniz.",
+    "Biz {fiil}! {gelin} & {damat} olarak sizi de bekleriz.",
+    "Sevincimizi sizinle paylaşmak istiyoruz.",
+    "İki gönül, tek yol. {YER} bekliyoruz.",
+    "Bu mutlu günde sizi de aramızda görmek isteriz."],
+  "Aile ağzından": [
+    "{AILE} olarak evlatlarımız {gelin} ile {damat} için en mutlu günümüzü yaşıyoruz. Sevincimize ortak olmanızı dileriz.",
+    "Evlatlarımızın {gun} sevincimizi sizlerle paylaşmak istiyoruz. {YER} teşriflerinizi rica ederiz.",
+    "{gelin} ile {damat} hayırlı bir yuvaya ilk adımını atıyor; dualarınızla yanımızda olun.",
+    "Gözümüzün nuru evlatlarımızın {gun} aramızda olmanızı rica ederiz.",
+    "{AILE} olarak çocuklarımızın {yer} sizleri de davet ediyoruz.",
+    "İki ailenin tek bir aile olduğu {gun} varlığınız bizi mutlu edecek."],
+  "Eğlenceli": [
+    "Sonunda {fiil}! Sorularınıza son veriyoruz, {olay} bekleriz.",
+    "Pasta bizden, dans sizden. Görüşmek üzere!",
+    "{gelin} ve {damat} büyük bir karar verdi. Bu cesaretı kutlamaya bekleriz!",
+    "Halay başı aranıyor! Başvurular {olayAd} günü kabul edilecektir.",
+    "Biz {fiil}, siz eğleniyorsunuz. Bence adil bir anlaşma.",
+    "Takvimlerinize not alın: bu sefer gerçekten oluyor!"]
+};
+const TARZLAR = Object.keys(KALIP);
+let S = oku("lavie_soz", { tur: "Düğün", tarz: "Klasik" }), KARIS = 0;
+const q = new URLSearchParams(location.search); if (TURLER[q.get("tur")]) S.tur = q.get("tur");
+const buyuk = s => s ? s.charAt(0).toLocaleUpperCase("tr") + s.slice(1) : s;
+function doldur(k){
+  const t = TURLER[S.tur], g = $("gelin").value.trim() || "Elif", d = $("damat").value.trim() || "Burak", a = $("aile").value.trim() || "Yılmaz ve Demir aileleri";
+  return k.replace(/\{gun\}/g, t.gun).replace(/\{GUN\}/g, buyuk(t.gun)).replace(/\{olay\}/g, t.olay).replace(/\{olayAd\}/g, t.olayAd)
+    .replace(/\{fiil\}/g, t.fiil).replace(/\{yer\}/g, t.yer).replace(/\{YER\}/g, buyuk(t.yer)).replace(/\{gelin\}/g, g).replace(/\{damat\}/g, d)
+    .replace(/\{AILE\}/g, buyuk(a)).replace(/cesaretı/g, "cesareti");
+}
+function seg(el, ogeler, secili, fn){ el.innerHTML = ogeler.map(k => `<button type="button" data-k="${k}" aria-pressed="${k===secili}">${k}</button>`).join(""); el.querySelectorAll("button").forEach(b => b.onclick = () => fn(b.dataset.k)); }
+function ciz(){
+  seg($("turSec"), Object.keys(TURLER), S.tur, k => { S.tur = k; yaz("lavie_soz", S); ciz(); });
+  seg($("tarzSec"), TARZLAR, S.tarz, k => { S.tarz = k; KARIS = 0; yaz("lavie_soz", S); ciz(); });
+  const liste = KALIP[S.tarz], n = liste.length, sec = [0,1,2,3].map(i => liste[(i + KARIS) % n]);
+  $("oneriler").innerHTML = sec.map(k => { const m = doldur(k);
+    const link = "/?" + new URLSearchParams({ tur: S.tur, gelin: $("gelin").value.trim(), damat: $("damat").value.trim(), aile: $("aile").value.trim(), not: m }).toString() + "#olustur";
+    return `<div class="metin" style="grid-template-columns:1fr"><p>“${esc(m)}”</p><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" data-m="${esc(m)}">Kopyala</button><a class="btn pri" style="padding:8px 14px;font-size:.8rem" href="${esc(link)}">Bu sözle davetiye oluştur</a></div></div>`; }).join("");
+  $("oneriler").querySelectorAll("[data-m]").forEach(b => b.onclick = async () => { try { await navigator.clipboard.writeText(b.dataset.m); b.textContent = "Kopyalandı"; } catch { b.textContent = "Kopyalanamadı"; } setTimeout(() => b.textContent = "Kopyala", 1800); });
+}
+["gelin","damat","aile"].forEach(k => $(k).addEventListener("input", ciz));
+$("yeni").onclick = () => { KARIS = (KARIS + 4) % KALIP[S.tarz].length; ciz(); };
+ciz();
+"""
+
 ARACLAR = [
  dict(slug="davetli-listesi", ad="Davetli listesi", title="Ücretsiz Düğün Davetli Listesi Hazırlama Aracı (Excel'e Aktar) | LaVie",
       desc="Düğün, nişan ve kına davetli listenizi ücretsiz hazırlayın: gelin ve damat tarafı, gruplar, kişi sayısı, toplamlar ve Excel'e aktarma. Üyelik gerekmez.",
@@ -284,6 +381,10 @@ ARACLAR = [
       desc="Ücretsiz düğün bütçesi hesaplayıcı: toplam bütçenizi salon, kıyafet, fotoğraf, takı gibi kalemlere dağıtın, kişi başı maliyeti ve kâğıt-dijital davetiye farkını görün.",
       h1=("Düğün bütçesi", "hesaplama"), giris="Toplam bütçenizi ve davetli sayınızı girin; kalem kalem planlayın, kişi başı maliyetinizi ve kalan bütçenizi anında görün. Ücretsiz, üyelik gerekmez.",
       govde=BT_GOVDE, js=BT_JS, sss=BT_SSS),
+ dict(slug="davetiye-sozu-olusturucu", ad="Davetiye sözü oluşturucu", title="Davetiye Sözü Oluşturucu: İsimlerinize Özel Düğün, Nişan, Kına Sözleri | LaVie",
+      desc="Ücretsiz davetiye sözü oluşturucu: davet türünü ve tarzı seçin, isimleri yazın; size özel düğün, nişan, kına ve söz davetiyesi sözleri anında hazır.",
+      h1=("Davetiye sözü", "oluşturucu"), giris="Davet türünü ve tarzını seçin, isimleri yazın; size özel davetiye sözleri anında hazırlansın. Beğendiğinizi kopyalayın ya da doğrudan davetiyenize aktarın.",
+      govde=SZ_GOVDE, js=SZ_JS, sss=SZ_SSS),
 ]
 
 def araclar_ana():

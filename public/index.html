@@ -1023,6 +1023,9 @@ fetch(A.API_URL + "/yorumlar").then(r => r.json()).then(j => {
 
 $("knHazir").innerHTML = L.KATILIM_NOTLARI.map(t => `<button type="button">${L.esc(t)}</button>`).join("");
 $("knHazir").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; $("katilimNotu").value = b.textContent; ciz(); });
+// Söz oluşturucudan gelen ön bilgiler (?gelin=..&damat=..&not=..)
+{ const q = new URLSearchParams(location.search);
+  ["gelin","damat","not","aile"].forEach(k => { const v = q.get(k); if (v) $(k).value = v.slice(0, k === "not" ? 600 : 200); }); }
 planCiz();
 galeriCiz();
 ciz(true);
