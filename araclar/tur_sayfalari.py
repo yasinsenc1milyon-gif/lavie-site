@@ -2,13 +2,13 @@
 import json, html, os
 U = "https://www.laviedavetiye.workers.dev"
 KOK = os.path.join(os.path.dirname(__file__), "..", "public")
-TASARIM_AD = {"zeytin": "Zeytin Dalı", "gece": "Gece Mavisi", "gul": "Gül Kurusu", "mono": "Siyah Beyaz", "ege": "Ege"}
+TASARIM_AD = {"zeytin": "Zeytin Gölgesi", "pamuk": "Pamuk Şeker", "papatya": "Papatya Sabahı", "gece": "Yıldızlı Gece", "seftali": "Şeftali Çiçeği", "lavanta": "Lavanta Rüzgârı", "gul": "Pudra Gülü", "nane": "Nane Şekeri", "ege": "Ege Çinisi", "mono": "Siyah İnci"}
 
 SAYFALAR = [
  dict(slug="dijital-dugun-davetiyesi", tur="Düğün", kisa="düğün", baslik="Dijital Düğün Davetiyesi",
   title="Dijital Düğün Davetiyesi · Online Düğün Davetiyesi Sitesi | LaVie",
   desc="Zarfı açılan, müzikli ve geri sayımlı dijital düğün davetiyesi. Katılım (LCV) takibi, konum ve program dahil, WhatsApp'tan tek linkle gönderin. 500 TL, tek seferlik ödeme.",
-  tasarim="zeytin", oneri=["zeytin","gece","mono"],
+  tasarim="zeytin", oneri=["zeytin","papatya","gece","mono"],
   lead="Düğününüz için size özel bir davetiye sitesi: misafirleriniz zarfı açar, müziğinizi dinler, nikâh saatini ve yol tarifini tek dokunuşla bulur. Kimin geleceğini de siz panelinizden canlı takip edersiniz.",
   neden=[("Masa düzenini kolaylaştırır","Kaç kişinin geleceği panelinizde anlık görünür; salona ve catering firmasına net sayı verirsiniz."),
          ("Baskı ve dağıtım derdi yok","Yüzlerce kişiye adres adres davetiye götürmek yerine tek bir linki WhatsApp'tan gönderirsiniz."),
@@ -26,7 +26,7 @@ SAYFALAR = [
  dict(slug="dijital-nisan-davetiyesi", tur="Nişan", kisa="nişan", baslik="Dijital Nişan Davetiyesi",
   title="Dijital Nişan Davetiyesi · Online Nişan Davetiyesi | LaVie",
   desc="Şık ve müzikli dijital nişan davetiyesi. Zarf açılışı, geri sayım, konum ve katılım takibi dahil; WhatsApp'tan tek linkle paylaşın. 500 TL, tek seferlik ödeme.",
-  tasarim="gul", oneri=["gul","zeytin","ege"],
+  tasarim="gul", oneri=["gul","seftali","pamuk","zeytin"],
   lead="Nişanınızı sevdiklerinize zarif bir dijital davetiyeyle duyurun. Zarfı açılan, müzikli davetiyeniz WhatsApp'tan tek mesajla herkese ulaşır; kimlerin geleceğini panelinizden takip edersiniz.",
   neden=[("Kısa sürede hazırlanır","Nişan çoğu zaman düğünden daha kısa sürede planlanır. Dijital davetiyeniz siparişle aynı gün hazır olur, baskı beklemezsiniz."),
          ("Aile davetine yakışan şıklık","Aile isimleri, davet notu ve size uygun yazı stiliyle resmi ama sıcak bir davetiye."),
@@ -44,7 +44,7 @@ SAYFALAR = [
  dict(slug="dijital-kina-davetiyesi", tur="Kına", kisa="kına", baslik="Dijital Kına Davetiyesi",
   title="Dijital Kına Davetiyesi · Online Kına Gecesi Davetiyesi | LaVie",
   desc="Müzikli ve zarfı açılan dijital kına gecesi davetiyesi. Konum, program ve katılım takibi dahil; WhatsApp'tan tek linkle gönderin. 500 TL, tek seferlik ödeme.",
-  tasarim="gul", oneri=["gul","gece","zeytin"],
+  tasarim="gul", oneri=["gul","lavanta","gece","seftali"],
   lead="Kına geceniz için zarfı açılan, müzikli bir davetiye. Misafirleriniz programı, adresi ve yol tarifini tek linkte bulur; siz de kimlerin geleceğini panelinizden anında görürsünüz.",
   neden=[("Kalabalık aileye tek linkle ulaşın","Kına gecesi davetlileri genellikle geniş aile ve komşulardan oluşur. Tek bir linki aile gruplarına göndermeniz yeterli."),
          ("Program akışı hazır","Karşılama, kına yakılması, eğlence saatleri; misafirleriniz akşamın planını önceden bilir."),
@@ -62,7 +62,7 @@ SAYFALAR = [
  dict(slug="dijital-soz-davetiyesi", tur="Söz", kisa="söz", baslik="Dijital Söz Davetiyesi",
   title="Dijital Söz Davetiyesi · Online Söz Töreni Davetiyesi | LaVie",
   desc="Zarif ve müzikli dijital söz töreni davetiyesi. Konum, geri sayım ve katılım takibi dahil; WhatsApp'tan tek linkle gönderin. 500 TL, tek seferlik ödeme.",
-  tasarim="ege", oneri=["ege","zeytin","gul"],
+  tasarim="ege", oneri=["ege","nane","papatya","pamuk"],
   lead="Söz töreniniz için sade ve zarif bir dijital davetiye. Aile büyüklerinize ve yakınlarınıza tek linkle ulaşır, kimlerin geleceğini panelinizden takip edersiniz.",
   neden=[("Samimi davetlere uygun","Söz genellikle yakın aile arasında yapılır. Kısa bir davet notu ve sade bir tasarımla içten bir davetiye hazırlarsınız."),
          ("Hızlı ve zahmetsiz","Söz kısa sürede planlanabilir; davetiyeniz aynı gün hazır olur, baskı beklemezsiniz."),
@@ -75,7 +75,7 @@ SAYFALAR = [
             "İki ailenin bir araya geldiği bu güzel günde sizleri de bekliyoruz."],
   sss=[("Söz töreni için davetiye gerekli mi?","Söz genellikle yakın çevreyle yapıldığı için davetiye şart değildir. Ancak dijital davetiye tarih, saat ve adresi herkese aynı anda ve eksiksiz iletmenin en kolay yoludur."),
        ("Söz davetiyesinde neler yazılır?","Çiftin ve ailelerin isimleri, tarih, saat, adres ve kısa bir davet notu yeterlidir."),
-       ("Söz, nişan ve düğün için aynı tasarımı kullanabilir miyim?","Evet. Beş tasarımdan birini seçip tüm davetlerinizde kullanabilirsiniz; her davet türü için başlık otomatik değişir."),
+       ("Söz, nişan ve düğün için aynı tasarımı kullanabilir miyim?","Evet. On tasarımdan birini seçip tüm davetlerinizde kullanabilirsiniz; her davet türü için başlık otomatik değişir."),
        ("Davetiyeyi sonradan değiştirebilir miyim?","Evet. Size özel panelden saat, adres ve davet notu dahil tüm bilgileri dilediğiniz zaman güncelleyebilirsiniz.")]),
 ]
 
@@ -121,7 +121,7 @@ h2{font-size:clamp(2rem,4.6vw,2.8rem);margin:10px 0 14px}
 .metin p{margin:0;font-family:var(--serif);font-style:italic;font-size:1.18rem;line-height:1.5}
 .metin button{font:inherit;font-size:.8rem;font-weight:500;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
 @media(max-width:560px){.metin{grid-template-columns:1fr}.metin button{justify-self:start}}
-.tas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:30px}@media(max-width:700px){.tas{grid-template-columns:1fr}}
+.tas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:30px}@media(max-width:700px){.tas{grid-template-columns:1fr}}
 .tas a{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;text-decoration:none}
 .tas b{font-family:var(--display);font-weight:400;font-size:1.4rem}.tas span{font-size:.82rem;color:var(--accent);font-weight:500}
 .fiyat{background:var(--deep);color:var(--deep-ink);border-radius:26px;padding:40px 28px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
@@ -203,7 +203,7 @@ def sayfa(s):
 <section class="blk"><div class="in">
   <div class="eyebrow">Tasarımlar</div>
   <h2>{e(turq)} için önerdiğimiz tasarımlar</h2>
-  <p class="lead">Beş tasarımın hepsi her davet türüne uyar; başlık davet türünüze göre kendiliğinden değişir.</p>
+  <p class="lead">On tasarımın hepsi her davet türüne uyar; başlık davet türünüze göre kendiliğinden değişir.</p>
   <div class="tas">{tas}</div>
 </div></section>
 

@@ -1,4 +1,4 @@
-/* Lavie davetiye sitesi: 5 tasarımın ortak iskeleti ve temaları */
+/* LaVie davetiye sitesi: 10 tasarımın ortak iskeleti ve temaları */
 .inv{--bg:#fff;--bg2:#f4f4f4;--fg:#222;--soft:#666;--acc:#999;--line2:rgba(0,0,0,.15);--fn:serif;--fd:serif;--ft:serif;
   background:var(--bg);color:var(--fg);font-family:var(--ft);min-height:100%;text-align:center}
 .inv *{box-sizing:border-box}
@@ -63,6 +63,45 @@
 .t-ege .tile.top{top:0}
 .t-ege .tile.bot{bottom:0;transform:scaleY(-1)}
 
+/* 6 · Pamuk Şeker */
+.t-pamuk{--bg:#fff5f7;--bg2:#fde6ec;--fg:#7a3450;--soft:#b06b86;--acc:#d9668a;--line2:rgba(217,102,138,.2);--fn:"Parisienne",cursive;--fd:"Cormorant Garamond",serif;--ft:"Cormorant Garamond",serif}
+.t-pamuk .hero{background:radial-gradient(90% 60% at 50% 45%,#fff,#fde3ea 75%)}
+.t-pamuk .names{font-size:15cqw}
+.t-pamuk .kalp{transform:rotate(var(--r));opacity:.9}
+@media (prefers-reduced-motion:no-preference){.t-pamuk .kalp{animation:kalpUc 6s ease-in-out infinite}}
+@keyframes kalpUc{0%,100%{transform:translateY(0) rotate(var(--r))}50%{transform:translateY(-2.4cqw) rotate(calc(var(--r) * -1))}}
+/* 7 · Papatya Sabahı */
+.t-papatya{--bg:#fbf8ec;--bg2:#f3eed8;--fg:#4d5a2e;--soft:#7c8660;--acc:#c79a2a;--line2:rgba(77,90,46,.16);--fn:"Great Vibes",cursive;--fd:"Cormorant Garamond",serif;--ft:"Cormorant Garamond",serif}
+.t-papatya .hero{background:radial-gradient(80% 55% at 50% 48%,#fffef8,#f6f0d8 80%)}
+.t-papatya .names{font-size:15cqw}
+.t-papatya .dz{filter:drop-shadow(0 .6cqw .8cqw rgba(120,100,40,.18))}
+/* 8 · Şeftali Çiçeği */
+.t-seftali{--bg:#fff6f1;--bg2:#fde9df;--fg:#7c3f2e;--soft:#b07462;--acc:#e0866a;--line2:rgba(224,134,106,.22);--fn:"Great Vibes",cursive;--fd:"Cormorant Garamond",serif;--ft:"Cormorant Garamond",serif}
+.t-seftali .names{font-size:15cqw}
+.t-seftali .lek{width:80cqw;height:80cqw;border-radius:50%;filter:blur(6cqw);opacity:.55}
+.t-seftali .lek.a{left:-30cqw;top:-26cqw;background:radial-gradient(circle,#f9b9a2,#fcd9c9 60%,transparent 70%)}
+.t-seftali .lek.b{right:-30cqw;bottom:-26cqw;background:radial-gradient(circle,#f7c4b0,#fde2d5 60%,transparent 70%)}
+.t-seftali .dal{width:66cqw;transform-origin:50% 50%}
+.t-seftali .dal svg{width:100%;display:block}
+.t-seftali .dal i{position:absolute;display:block;filter:drop-shadow(0 .4cqw .6cqw rgba(160,80,50,.18))}
+/* 9 · Lavanta Rüzgârı */
+.t-lavanta{--bg:#f6f3fb;--bg2:#ece6f6;--fg:#4a3c73;--soft:#7d70a3;--acc:#8670b8;--line2:rgba(134,112,184,.2);--fn:"Pinyon Script",cursive;--fd:"Cormorant Garamond",serif;--ft:"Cormorant Garamond",serif}
+.t-lavanta .hero{background:linear-gradient(170deg,#f8f5fd,#ebe3f7)}
+.t-lavanta .lv{width:28cqw;height:62cqw;transform-origin:50% 100%}
+.t-lavanta .lv>div{position:absolute;inset:0;transform-origin:50% 100%}
+.t-lavanta .lv svg{width:100%;height:100%}
+.t-lavanta .kurdele{position:absolute;left:50%;bottom:18%;width:12cqw;height:4cqw;margin-left:-6cqw;background:#d8c8ef;border-radius:2cqw;box-shadow:0 0 0 .5cqw #fff inset}
+/* 10 · Nane Şekeri */
+.t-nane{--bg:#f1faf6;--bg2:#e0f2ea;--fg:#2f6656;--soft:#5f8f80;--acc:#4f9d84;--line2:rgba(79,157,132,.22);--fn:"Parisienne",cursive;--fd:"Marcellus",serif;--ft:"Cormorant Garamond",serif}
+.t-nane .names{font-size:15cqw}
+.t-nane .serit{left:0;right:0;height:12cqw;background:repeating-linear-gradient(-45deg,#fff 0 3cqw,#a9dcc8 3cqw 6cqw)}
+.t-nane .serit::after{content:"";position:absolute;left:0;right:0;height:4cqw;background:radial-gradient(circle at 50% 0,var(--bg) 2cqw,transparent 2.1cqw) 0 0/4cqw 4cqw repeat-x}
+.t-nane .serit.ust{top:0}.t-nane .serit.ust::after{bottom:-2cqw;transform:rotate(180deg)}
+.t-nane .serit.alt{bottom:0}.t-nane .serit.alt::after{top:-2cqw}
+.t-nane .hero .serit.alt::after{background-image:radial-gradient(circle at 50% 100%,var(--bg) 2cqw,transparent 2.1cqw);transform:none;top:-2cqw}
+.t-nane .fiyonk{left:50%;top:15cqw;width:9cqw;margin-left:-4.5cqw;filter:drop-shadow(0 .6cqw 1cqw rgba(47,102,86,.25))}
+.t-nane .fiyonk path{fill:#7cc4a8}
+
 /* Hatıra defteri */
 .inv textarea{font:inherit;font-size:4cqw;padding:3cqw;border:1px solid var(--line2);background:var(--bg2);color:var(--fg);width:100%;border-radius:0;resize:vertical}
 .inv .mesajlar{display:grid;gap:3cqw;margin-top:6cqw;text-align:left}
@@ -73,6 +112,7 @@
 /* Yazı stili seçimi (isimler) */
 .inv[class*=" y-"] .names{font-style:normal}
 .inv.y-el{--fn:"Great Vibes",cursive}
+.inv[class*=" y-"] .names{font-size:14cqw}
 .inv.y-zarif{--fn:"Pinyon Script",cursive}
 .inv.y-klasik{--fn:"Cormorant Garamond",serif}
 .inv.y-modern{--fn:"Italiana",serif}
