@@ -11,12 +11,15 @@ import * as durum from "./functions/api/durum.js";
 import * as istatistik from "./functions/api/istatistik.js";
 import * as odeme from "./functions/api/odeme.js";
 import * as odemeBildirim from "./functions/api/odeme-bildirim.js";
+import * as ziyaret from "./functions/api/ziyaret.js";
+import { gunAnahtari } from "./functions/api/ziyaret.js";
+import { veritabani } from "./lib/ortak.js";
 import { davetiyeSayfasi } from "./lib/onizleme.js";
 import { indexNowGonder } from "./lib/indexnow.js";
 
 const ROTALAR = {
   "/api/cift": cift, "/api/yanit": yanit, "/api/mesaj": mesaj, "/api/panel": panel,
-  "/api/siparis": siparis, "/api/yonetim": yonetim, "/api/yorumlar": yorumlar, "/api/durum": durum, "/api/istatistik": istatistik, "/api/odeme": odeme, "/api/odeme/bildirim": odemeBildirim,
+  "/api/siparis": siparis, "/api/yonetim": yonetim, "/api/yorumlar": yorumlar, "/api/durum": durum, "/api/istatistik": istatistik, "/api/odeme": odeme, "/api/odeme/bildirim": odemeBildirim, "/api/ziyaret": ziyaret,
   "/d": { onRequestGet: davetiyeSayfasi }, "/d.html": { onRequestGet: davetiyeSayfasi }
 };
 
@@ -46,6 +49,8 @@ export default {
   },
   // Haftalık: arama motorlarına güncel sayfaları bildir
   async scheduled(event, env, ctx) {
+    // 400 günden eski ziyaret sayılarını temizle
+    ctx.waitUntil(veritabani(env).then(db => db.prepare("DELETE FROM ziyaretler WHERE gun < ?").bind(gunAnahtari(Date.now() - 400 * 864e5)).run()).catch(e => console.error("temizlik", e && e.message)));
     ctx.waitUntil(indexNowGonder(env, env.SITE_ADRESI || "https://www.laviedavetiye.workers.dev").then(r => console.log("indexnow", JSON.stringify(r))));
   }
 };

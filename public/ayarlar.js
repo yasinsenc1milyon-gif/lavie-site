@@ -34,3 +34,33 @@ window.LAVIE_AYAR = {
     window.LAVIE_REF = v && Date.now() - v.t < 60 * 864e5 ? v.k : "";
   } catch (_) { window.LAVIE_REF = ""; }
 })();
+
+// Ziyaret sayacı: çerez yok, kişisel veri yok; yalnızca sayfa, kaynak (Google, Instagram...) ve cihaz türü sayılır
+(function () {
+  window.lavieOlay = function () {};
+  try {
+    if (navigator.webdriver || window.top !== window || !navigator.sendBeacon) return;
+    let yol = location.pathname.replace(/\.html$/, "").replace(/\/+$/, "") || "/";
+    if (/^\/(yonetim|panel)/.test(yol)) return;
+    const q = new URLSearchParams(location.search);
+    if (yol === "/d") yol = q.get("c") === "ornek" ? "/ornek" : "/d";
+    let k = sessionStorage.getItem("lavie_k");
+    if (!k) {
+      const r = (q.get("ref") || "").toLowerCase(), u = (q.get("utm_source") || "").toLowerCase();
+      let h = ""; try { h = new URL(document.referrer).hostname; } catch (_) {}
+      if (h === location.hostname) h = "";
+      const x = u + " " + h;
+      k = /^d-/.test(r) ? "davetiye" : r ? "ortak" : /instagram/.test(x) ? "instagram" : /google/.test(x) ? "google" : /bing/.test(x) ? "bing"
+        : /yandex/.test(x) ? "yandex" : /facebook|fb\./.test(x) ? "facebook" : /tiktok/.test(x) ? "tiktok" : /pinterest/.test(x) ? "pinterest"
+        : /whatsapp|wa\.me/.test(x) ? "whatsapp" : h ? "diger" : yol === "/d" ? "davetiye" : "dogrudan";
+      sessionStorage.setItem("lavie_k", k);
+    }
+    const bugun = new Date().toDateString(); let n = 0;
+    try { if (localStorage.getItem("lavie_g") !== bugun) { localStorage.setItem("lavie_g", bugun); n = 1; } } catch (_) {}
+    const m = /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 1 : 0;
+    const gonder = (o, yeni) => { try { navigator.sendBeacon("/api/ziyaret", JSON.stringify({ y: yol, k, o, n: yeni ? 1 : 0, m })); } catch (_) {} };
+    const bir = {};
+    window.lavieOlay = o => { try { if (bir[o] || sessionStorage.getItem("lavie_o_" + o)) return; bir[o] = 1; sessionStorage.setItem("lavie_o_" + o, "1"); } catch (_) {} gonder(o, 0); };
+    gonder("g", n);
+  } catch (_) {}
+})();

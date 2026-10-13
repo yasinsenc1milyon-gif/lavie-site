@@ -526,7 +526,7 @@ def araclar_ana():
 <div class="kartlar">{kart}</div>
 <h2 style="font-size:1.6rem;margin-top:48px">Davetiye rehberi</h2><div class="diger">{"".join(f'<a href="/{y["slug"]}">{e(y["kisa"])}</a>' for y in YAZILAR)}</div></main>
 <footer><div class="in"><a href="/" aria-label="LaVie Davetiye"><img src="/logo-acik.svg" alt="La Vie Creative Studio" width="630" height="165"></a><span>© 2026 LaVie Davetiye</span></div></footer>
-</body></html>
+<script src="/ayarlar.js"></script></body></html>
 """
 
 def yaz_hepsi():

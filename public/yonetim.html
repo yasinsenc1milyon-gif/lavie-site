@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Lavie Yönetim</title>
+<title>LaVie Yönetim</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Great+Vibes&family=Parisienne&family=Jost:wght@400;500&display=swap">
@@ -52,6 +52,32 @@ textarea{min-height:70px;resize:vertical}
 .f{display:grid;gap:3px;min-width:0}
 .f span{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .empty{color:var(--muted);text-align:center;padding:30px 0}
+.tr-ust{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.seg{display:flex;gap:4px;background:#f1ece8;border-radius:999px;padding:3px}
+.seg button{font:inherit;font-size:.82rem;border:0;background:transparent;padding:5px 12px;border-radius:999px;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--field);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media (max-width:560px){.kpi{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi div{background:#faf8f6;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi b{display:block;font-family:"Italiana",Georgia,serif;font-size:1.9rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.78rem;color:var(--muted)}
+.grafik{display:flex;align-items:flex-end;gap:3px;height:110px;padding-top:8px;border-bottom:1px solid var(--line)}
+.grafik i{flex:1;min-width:0;background:#cbbfd6;border-radius:3px 3px 0 0;position:relative}
+.grafik i.bu{background:var(--accent)}
+.grafik i:hover::after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:.72rem;padding:3px 7px;border-radius:6px;white-space:nowrap;margin-bottom:4px;z-index:2}
+.eksen{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-top:4px}
+.iki{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.iki{grid-template-columns:1fr}}
+.liste h3{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 6px}
+.sat{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:.88rem;padding:5px 0;border-top:1px solid #efe9e4;position:relative}
+.sat:first-of-type{border-top:0}
+.sat .c{position:absolute;left:0;bottom:0;height:2px;background:#d9cfe2;border-radius:2px}
+.sat b{font-weight:500;font-variant-numeric:tabular-nums}
+.huni{display:grid;gap:6px}
+.huni div{display:grid;grid-template-columns:150px 1fr 60px;gap:8px;align-items:center;font-size:.86rem}
+@media (max-width:420px){.huni div{grid-template-columns:110px 1fr 46px}}
+.huni em{font-style:normal;height:14px;border-radius:4px;background:var(--accent);display:block;min-width:2px}
+.huni b{text-align:right;font-weight:500;font-variant-numeric:tabular-nums}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;font-size:.88rem;z-index:5}
 </style>
 </head>
@@ -73,6 +99,11 @@ textarea{min-height:70px;resize:vertical}
   </form>
 
   <div id="app" hidden>
+    <div class="card" id="trafik" style="margin-bottom:12px">
+      <div class="tr-ust"><h2 class="names" style="font-size:1.3rem">Site trafiği</h2>
+        <div class="seg" id="trSeg"><button type="button" data-g="1">Bugün</button><button type="button" data-g="7" aria-pressed="true">7 gün</button><button type="button" data-g="30">30 gün</button></div></div>
+      <div id="trIc"><div class="msg">Yükleniyor...</div></div>
+    </div>
     <div class="card" style="margin-bottom:12px"><div class="top"><h2 class="names" style="font-size:1.3rem">Shopier bağlantısı</h2><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="b" id="ixGonder" type="button">Arama motorlarına bildir</button><button class="b" id="spBagla" type="button">Bildirimleri bağla</button><button class="b" id="spTest" type="button">Test et</button></div></div>
       <pre id="spSonuc" hidden style="white-space:pre-wrap;font-size:.8rem;margin:10px 0 0;background:#f6f3f1;padding:10px;border-radius:8px"></pre></div>
     <div class="tabs" id="tabs" role="group" aria-label="Filtre"></div>
@@ -112,7 +143,51 @@ async function shopierTestEt(){
 async function yukle(){
   const j = await api("GET");
   LISTE = j.ciftler; YORUMLAR = j.yorumlar || []; ciz();
+  trafikYukle();
 }
+let TR_GUN = 7;
+const KAYNAK_AD = {google:"Google",bing:"Bing",yandex:"Yandex",instagram:"Instagram",facebook:"Facebook",tiktok:"TikTok",pinterest:"Pinterest",whatsapp:"WhatsApp",davetiye:"Bir davetiyeden",ortak:"Ortak linki",diger:"Diğer siteler",dogrudan:"Doğrudan / WhatsApp"};
+const SAYFA_AD = {"/":"Ana sayfa","/ornek":"Örnek davetiye","/d":"Müşteri davetiyeleri (misafirler)","/araclar":"Ücretsiz araçlar","/rehber":"Rehber","/2027-dugun-takvimi":"2027 düğün takvimi","/lcv-nedir":"LCV nedir?","/dugun-davetiyesi-sozleri":"Düğün davetiyesi sözleri","/kina-davetiyesi-sozleri":"Kına davetiyesi sözleri","/nisan-davetiyesi-sozleri":"Nişan davetiyesi sözleri","/davetiye-ne-zaman-gonderilir":"Davetiye ne zaman gönderilir?","/dijital-dugun-davetiyesi":"Dijital düğün davetiyesi","/dijital-nisan-davetiyesi":"Dijital nişan davetiyesi","/dijital-kina-davetiyesi":"Dijital kına davetiyesi","/dijital-soz-davetiyesi":"Dijital söz davetiyesi","/davetli-listesi":"Davetli listesi","/dugun-butcesi-hesaplama":"Düğün bütçesi hesaplama","/davetiye-sozu-olusturucu":"Davetiye sözü oluşturucu"};
+const sayfaAd = y => SAYFA_AD[y] || y.slice(1).split("-").map((w,i)=>i?w:w.charAt(0).toLocaleUpperCase("tr")+w.slice(1)).join(" ");
+const sayi = n => (Number(n)||0).toLocaleString("tr-TR");
+async function trafikYukle(){
+  document.querySelectorAll("#trSeg button").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.g===TR_GUN)));
+  try { const r = (await api("POST",{islem:"trafik",gun:TR_GUN})).sonuc; trafikCiz(r); }
+  catch(e){ $("trIc").innerHTML = `<div class="msg err">Trafik yüklenemedi: ${esc(e.message)}</div>`; }
+}
+function trafikCiz(r){
+  const gunler=[]; for(let i=29;i>=0;i--){ gunler.push(new Date(Date.parse(r.bugun+"T12:00:00Z")-i*864e5).toISOString().slice(0,10)); }
+  const m = Object.fromEntries(r.gunluk.map(x=>[x.gun,x]));
+  const aralik = gunler.slice(-r.gun);
+  const top = k => aralik.reduce((a,g)=>a+((m[g]||{})[k]||0),0);
+  const vitrin = top("v"), tum = top("z"), gor = top("g");
+  const davetiye = r.sayfalar.filter(s=>s.yol==="/d").reduce((a,s)=>a+s.g,0);
+  const sip = Object.values(r.siparis).reduce((a,b)=>a+b,0), odenen = r.siparis.aktif||0;
+  const max = Math.max(1,...gunler.map(g=>(m[g]||{}).v||0));
+  const bar = gunler.map(g=>{ const v=(m[g]||{}).v||0; const d=new Date(g+"T12:00"); return `<i class="${aralik.includes(g)?"bu":""}" style="height:${Math.max(2,v/max*100)}%" data-t="${d.toLocaleDateString("tr-TR",{day:"numeric",month:"short"})}: ${v} ziyaretçi"></i>`; }).join("");
+  const ks = r.kaynaklar, kmax = Math.max(1,...ks.map(k=>k.z));
+  const sy = r.sayfalar.filter(s=>s.yol!=="/d"), smax = Math.max(1,...sy.map(s=>s.g));
+  const mob = r.mobil.mobil||0, mas = r.mobil.masaustu||0;
+  const huni = [["Siteye gelen",vitrin],["İsimle denedi",r.olaylar.dene||0],["Sipariş formunu gördü",r.olaylar.olustur||0],["Sipariş verdi",sip],["Ödedi",odenen]];
+  const hmax = Math.max(1,...huni.map(h=>h[1]));
+  const bos = !tum && !gor;
+  $("trIc").innerHTML = `
+    <div class="kpi">
+      <div><b>${sayi(vitrin)}</b><span>Ziyaretçi (vitrin)</span></div>
+      <div><b>${sayi(gor - davetiye)}</b><span>Sayfa görüntüleme</span></div>
+      <div><b>${sayi(davetiye)}</b><span>Davetiye açılışı</span></div>
+      <div><b>${sayi(sip)}</b><span>Sipariş${odenen?` · ${odenen} ödendi`:""}</span></div>
+    </div>
+    ${bos?`<div class="msg">Henüz kayıt yok. Sayaç bugün açıldı; ziyaretçiler geldikçe burada görünecek.</div>`:""}
+    <div><div class="liste"><h3>Son 30 gün · günlük ziyaretçi</h3></div><div class="grafik">${bar}</div><div class="eksen"><span>${new Date(gunler[0]+"T12:00").toLocaleDateString("tr-TR",{day:"numeric",month:"short"})}</span><span>Bugün</span></div></div>
+    <div class="iki">
+      <div class="liste"><h3>Nereden geldiler</h3>${ks.length?ks.map(k=>`<div class="sat"><span>${esc(KAYNAK_AD[k.kaynak]||k.kaynak)}</span><b>${sayi(k.z)}</b><i class="c" style="width:${k.z/kmax*100}%"></i></div>`).join(""):`<div class="msg">Veri yok</div>`}
+        ${mob+mas?`<div class="msg" style="margin-top:6px">Telefon %${Math.round(mob/(mob+mas)*100)} · Bilgisayar %${Math.round(mas/(mob+mas)*100)}</div>`:""}</div>
+      <div class="liste"><h3>En çok bakılan sayfalar</h3>${sy.length?sy.map(s=>`<div class="sat"><span>${esc(sayfaAd(s.yol))}</span><b>${sayi(s.g)}</b><i class="c" style="width:${s.g/smax*100}%"></i></div>`).join(""):`<div class="msg">Veri yok</div>`}</div>
+    </div>
+    <div class="liste"><h3>Müşteriye dönüşme</h3><div class="huni">${huni.map(([a,n])=>`<div><span>${a}</span><em style="width:${n/hmax*100}%"></em><b>${sayi(n)}</b></div>`).join("")}</div></div>`;
+}
+document.addEventListener("click", e=>{ const b=e.target.closest("#trSeg button"); if(!b) return; TR_GUN=+b.dataset.g; trafikYukle(); });
 async function giris(){
   $("lmsg").className="msg"; $("lmsg").textContent="Kontrol ediliyor...";
   try { await yukle(); try{localStorage.setItem("lavie_sifre",SIFRE);}catch{}

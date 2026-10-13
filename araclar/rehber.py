@@ -296,7 +296,7 @@ def rehber_ana():
 <div class="kartlar">{kartlar}</div>
 <h2 style="font-size:1.6rem;margin-top:48px">Davetiye türleri</h2><div class="diger">{turler}</div></main>
 <footer><div class="in"><a href="/" aria-label="LaVie Davetiye"><img src="/logo-acik.svg" alt="La Vie Creative Studio" width="630" height="165"></a><span>© 2026 LaVie Davetiye</span></div></footer>
-</body></html>
+<script src="/ayarlar.js"></script></body></html>
 """
 
 if __name__ == "__main__":
