@@ -1,0 +1,15 @@
+{
+  "name": "LaVie Davetiye",
+  "short_name": "LaVie",
+  "description": "Zarfı açılan, müzikli dijital düğün, nişan, kına ve söz davetiyesi.",
+  "lang": "tr",
+  "start_url": "/?utm_source=uygulama",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f3f1",
+  "theme_color": "#f6f3f1",
+  "icons": [
+    { "src": "/favicon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

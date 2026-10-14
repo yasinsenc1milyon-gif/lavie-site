@@ -2,6 +2,10 @@
 import json, html, os
 U = "https://www.laviedavetiye.workers.dev"
 KOK = os.path.join(os.path.dirname(__file__), "..", "public")
+def og_gorsel(slug):
+    """Sayfaya özel paylaşım görseli varsa onu, yoksa genel LaVie görselini döndürür."""
+    return f"{U}/og/{slug}.jpg" if os.path.exists(os.path.join(KOK, "og", slug + ".jpg")) else f"{U}/og/lavie.jpg"
+
 TASARIM_AD = {"zeytin": "Zeytin Gölgesi", "pamuk": "Pamuk Şeker", "papatya": "Papatya Sabahı", "gece": "Yıldızlı Gece", "seftali": "Şeftali Çiçeği", "lavanta": "Lavanta Rüzgârı", "gul": "Pudra Gülü", "nane": "Nane Şekeri", "ege": "Ege Çinisi", "mono": "Siyah İnci"}
 
 SAYFALAR = [

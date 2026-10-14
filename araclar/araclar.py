@@ -1,7 +1,7 @@
 # Ücretsiz araç sayfaları: python3 araclar/araclar.py  (public/ içine yazar, site haritasını günceller)
 import json, html, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from tur_sayfalari import U, KOK, CSS, IG, WA, site_haritasi
+from tur_sayfalari import U, KOK, CSS, IG, WA, site_haritasi, og_gorsel
 from rehber import YAZILAR
 
 e = html.escape
@@ -91,7 +91,7 @@ def kabuk(slug, title, desc, h1, giris, govde, script, ld_ekstra=(), cta_tur="D�
 <meta name="theme-color" content="#f6f3f1">
 <meta property="og:type" content="website"><meta property="og:locale" content="tr_TR"><meta property="og:site_name" content="LaVie Davetiye">
 <meta property="og:title" content="{e(title.split(' | ')[0])}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{url}">
-<meta property="og:image" content="{U}/og/lavie.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="{og_gorsel(slug)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
 {ld}
@@ -515,7 +515,7 @@ def araclar_ana():
 <title>Ücretsiz Düğün Araçları: Davetli Listesi, Bütçe Hesaplama | LaVie</title>
 <meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi hazırlama, düğün bütçesi hesaplama ve davetiye sözü oluşturucu. Üyelik gerekmez.">
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">
-<meta property="og:type" content="website"><meta property="og:title" content="Ücretsiz düğün araçları · LaVie"><meta property="og:url" content="{url}"><meta property="og:image" content="{U}/og/lavie.jpg">
+<meta property="og:type" content="website"><meta property="og:title" content="Ücretsiz düğün araçları · LaVie"><meta property="og:url" content="{url}"><meta property="og:image" content="{og_gorsel('araclar')}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
 <style>{CSS}</style></head><body>
 <a class="ust-serit" href="https://instagram.com/la.viecreative" target="_blank" rel="noopener"><div class="in">{IG}<span>Instagram'da biz: <b>@la.viecreative</b></span></div></a>

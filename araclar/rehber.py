@@ -1,7 +1,7 @@
 # Rehber yazılarını üretir: python3 araclar/rehber.py  (public/ içine yazar, site haritasını günceller)
 import json, html, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from tur_sayfalari import U, KOK, CSS, IG, WA, SAYFALAR, site_haritasi
+from tur_sayfalari import U, KOK, CSS, IG, WA, SAYFALAR, site_haritasi, og_gorsel
 
 e = html.escape
 TARIH = "2026-10-12"
@@ -262,7 +262,7 @@ def yazi(y):
     tur_sayfa = next((s for s in SAYFALAR if s["tur"] == turq), SAYFALAR[0])
     art = {"@context":"https://schema.org","@type":"Article","headline":y["title"].split(" | ")[0],"description":y["desc"],"datePublished":TARIH,"dateModified":TARIH,
            "author":{"@type":"Organization","name":"LaVie Davetiye","url":U+"/"},"publisher":{"@type":"Organization","name":"LaVie Davetiye","logo":{"@type":"ImageObject","url":U+"/logo.svg"}},
-           "mainEntityOfPage":url,"image":U+"/og/lavie.jpg","inLanguage":"tr-TR"}
+           "mainEntityOfPage":url,"image":og_gorsel(y["slug"]),"inLanguage":"tr-TR"}
     bc = {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana sayfa","item":U+"/"},{"@type":"ListItem","position":2,"name":"Rehber","item":U+"/rehber"},{"@type":"ListItem","position":3,"name":y["kisa"],"item":url}]}
     faq = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in y["sss"]]}
     ld = "\n".join(f'<script type="application/ld+json">{json.dumps(x,ensure_ascii=False)}</script>' for x in (art,bc,faq))
@@ -287,7 +287,7 @@ def yazi(y):
 <meta name="theme-color" content="#f6f3f1">
 <meta property="og:type" content="article"><meta property="og:locale" content="tr_TR"><meta property="og:site_name" content="LaVie Davetiye">
 <meta property="og:title" content="{e(y['title'].split(' | ')[0])}"><meta property="og:description" content="{e(y['desc'])}"><meta property="og:url" content="{url}">
-<meta property="og:image" content="{U}/og/lavie.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="{og_gorsel(y['slug'])}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
 {ld}
@@ -334,7 +334,7 @@ def rehber_ana():
 <title>Davetiye Rehberi: Sözler, LCV ve Gönderim Zamanı | LaVie</title>
 <meta name="description" content="Düğün, nişan ve kına davetiyesi sözleri, LCV'nin anlamı ve davetiyenin ne zaman gönderileceği üzerine pratik rehber yazıları.">
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">
-<meta property="og:type" content="website"><meta property="og:title" content="LaVie Davetiye Rehberi"><meta property="og:url" content="{url}"><meta property="og:image" content="{U}/og/lavie.jpg">
+<meta property="og:type" content="website"><meta property="og:title" content="LaVie Davetiye Rehberi"><meta property="og:url" content="{url}"><meta property="og:image" content="{og_gorsel('rehber')}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
 <style>{CSS}</style></head><body>
 <a class="ust-serit" href="https://instagram.com/la.viecreative" target="_blank" rel="noopener"><div class="in">{IG}<span>Instagram'da biz: <b>@la.viecreative</b></span></div></a>
