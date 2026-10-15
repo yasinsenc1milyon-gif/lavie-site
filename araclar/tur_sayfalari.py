@@ -81,6 +81,11 @@ SAYFALAR = [
  dict(slug="dijital-soz-davetiyesi", tur="Söz", kisa="söz", baslik="Dijital Söz Davetiyesi",
   title="Dijital Söz Davetiyesi · Online Söz Töreni Davetiyesi | LaVie",
   desc="Zarif ve müzikli dijital söz töreni davetiyesi. Konum, geri sayım ve katılım takibi dahil; WhatsApp'tan tek linkle gönderin. 500 TL, tek seferlik ödeme.",
+  rehber_baslik="Söz töreni hazırlığınız için ücretsiz rehber ve araçlar",
+  rehberler=[("soz-davetiyesi-sozleri","Söz davetiyesi sözleri","Kısa, geleneksel, romantik ve aile ağzından 27 söz davetiyesi sözü; söz ile nişan arasındaki fark."),
+             ("davetiye-sozu-olusturucu","Davetiye sözü oluşturucu","Söz türünü seçip isimlerinizi yazın, size özel davet cümleleri hazırlansın."),
+             ("dugun-hashtag-olusturucu","Hashtag oluşturucu","Söz töreni fotoğraflarınız için isimlerinize özel Instagram etiketi önerileri."),
+             ("davetiye-ne-zaman-gonderilir","Davetiye ne zaman gönderilir?","Söz, nişan ve düğün davetiyelerini kaç hafta önce göndermeniz gerektiği.")],
   tasarim="ege", oneri=["ege","nane","papatya","pamuk"],
   lead="Söz töreniniz için sade ve zarif bir dijital davetiye. Aile büyüklerinize ve yakınlarınıza tek linkle ulaşır, kimlerin geleceğini panelinizden takip edersiniz.",
   neden=[("Samimi davetlere uygun","Söz genellikle yakın aile arasında yapılır. Kısa bir davet notu ve sade bir tasarımla içten bir davetiye hazırlarsınız."),
@@ -155,6 +160,39 @@ h2{font-size:clamp(2rem,4.6vw,2.8rem);margin:10px 0 14px}
 footer{background:var(--deep);color:var(--deep-mut);padding-block:40px 110px;font-size:.88rem}footer .in{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}footer img{height:50px;width:auto}footer a{color:#fff;text-decoration:none}
 .destek{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:24;display:flex;align-items:center;gap:8px;background:#25d366;color:#0b2b17;text-decoration:none;font-weight:500;font-size:.9rem;padding:12px;border-radius:999px;box-shadow:0 8px 22px -8px rgba(0,0,0,.45)}.destek svg{width:22px;height:22px}
 """
+
+# "Yeni eklenenler" bölümü (/rehber ve /araclar en üstünde). İlk sıradaki sezona uygun içeriktir.
+YENILER = [
+ dict(slug="2027-dugun-takvimi", ad="2027 düğün takvimi", tip="Araç", tarih="13 Ekim 2026", sezon="Sezonun içeriği",
+      ozet="Gelecek yılın düğün tarihini seçme zamanı: bayramlar, Ramazan, iki bayram arası ve uzun hafta sonları tek takvimde."),
+ dict(slug="dugun-hashtag-olusturucu", ad="Düğün hashtag oluşturucu", tip="Araç", tarih="15 Ekim 2026",
+      ozet="Gelin ve damadın adından düğün, nişan, kına ve söz için Instagram etiketi önerileri."),
+ dict(slug="soz-davetiyesi-sozleri", ad="Söz davetiyesi sözleri", tip="Rehber", tarih="14 Ekim 2026",
+      ozet="Kısa, geleneksel, romantik ve aile ağzından 27 söz davetiyesi sözü."),
+ dict(slug="davetiye-sozu-olusturucu", ad="Davetiye sözü oluşturucu", tip="Araç", tarih="12 Ekim 2026",
+      ozet="Davet türünü ve tarzı seçin, isimlerinizi yazın; size özel davetiye sözleri hazırlansın."),
+]
+YENI_CSS = """
+.yeni{margin-top:26px}.yeni h2{font-size:1.5rem;margin:0 0 4px}
+.yeni .kartlar{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
+.yeni .kart{padding:18px}.yeni .kart p{margin:0;font-size:.9rem;color:var(--muted)}
+.yeni small{display:block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:6px}
+.yeni .kart.sezon{border-color:#dcd0e2;background:var(--soft)}
+"""
+def yeni_eklenenler():
+    for y in YENILER:
+        assert os.path.exists(os.path.join(KOK, y["slug"] + ".html")), y["slug"]
+    k = "".join(f'<a class="kart{" sezon" if y.get("sezon") else ""}" href="/{y["slug"]}" style="text-decoration:none;display:block"><small>{e(y.get("sezon") or y["tip"])} · {e(y["tarih"])}</small><h3>{e(y["ad"])}</h3><p>{e(y["ozet"])}</p></a>' for y in YENILER)
+    return f'<section class="yeni" aria-labelledby="yeni-b"><h2 id="yeni-b">Yeni eklenenler</h2><div class="kartlar">{k}</div></section>'
+
+def hub_ld(slug, ad, aciklama, ogeler):
+    """Rehber/araçlar ana sayfaları için CollectionPage + BreadcrumbList JSON-LD. ogeler: [(slug, ad), ...]"""
+    url = f"{U}/{slug}"
+    col = {"@context":"https://schema.org","@type":"CollectionPage","name":ad,"description":aciklama,"url":url,"inLanguage":"tr-TR",
+           "publisher":{"@type":"Organization","name":"LaVie Davetiye","url":U+"/"},
+           "mainEntity":{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"url":f"{U}/{x}"} for i,(x,n) in enumerate(ogeler)]}}
+    bc = {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana sayfa","item":U+"/"},{"@type":"ListItem","position":2,"name":ad,"item":url}]}
+    return "\n".join(f'<script type="application/ld+json">{json.dumps(x,ensure_ascii=False)}</script>' for x in (col,bc))
 
 def sayfa(s):
     turq = s["tur"]

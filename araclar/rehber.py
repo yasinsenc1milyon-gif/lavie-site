@@ -1,7 +1,7 @@
 # Rehber yazılarını üretir: python3 araclar/rehber.py  (public/ içine yazar, site haritasını günceller)
 import json, html, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from tur_sayfalari import U, KOK, CSS, IG, WA, SAYFALAR, site_haritasi, og_gorsel
+from tur_sayfalari import U, KOK, CSS, IG, WA, SAYFALAR, site_haritasi, og_gorsel, yeni_eklenenler, YENI_CSS, hub_ld
 
 e = html.escape
 TARIH = "2026-10-12"
@@ -336,12 +336,14 @@ def rehber_ana():
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">
 <meta property="og:type" content="website"><meta property="og:title" content="LaVie Davetiye Rehberi"><meta property="og:url" content="{url}"><meta property="og:image" content="{og_gorsel('rehber')}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
-<style>{CSS}</style></head><body>
+{hub_ld("rehber", "Davetiye rehberi", "Düğün, nişan ve kına davetiyesi sözleri, LCV'nin anlamı ve davetiyenin ne zaman gönderileceği üzerine pratik rehber yazıları.", [(y["slug"], y["kisa"]) for y in YAZILAR])}
+<style>{CSS}{YENI_CSS}</style></head><body>
 <a class="ust-serit" href="https://instagram.com/la.viecreative" target="_blank" rel="noopener"><div class="in">{IG}<span>Instagram'da biz: <b>@la.viecreative</b></span></div></a>
 <header class="nav"><div class="in"><a href="/" aria-label="LaVie Davetiye ana sayfa"><img src="/logo.svg" alt="La Vie Creative Studio" width="630" height="165"></a><a class="btn pri" href="/#olustur">Davetiyemi oluştur</a></div></header>
 <main class="in" style="padding-bottom:60px"><div class="yol"><a href="/">Ana sayfa</a> › Rehber</div>
 <div class="eyebrow" style="margin-top:26px">LaVie Rehber</div><h1>Davetiye <em>rehberi</em></h1>
 <p class="lead">Davetiye sözlerinden LCV'ye, gönderim zamanından dijital davetiyenin inceliklerine kadar ihtiyacınız olan her şey.</p>
+{yeni_eklenenler()}
 <div class="kartlar">{kartlar}</div>
 <h2 style="font-size:1.6rem;margin-top:48px">Davetiye türleri</h2><div class="diger">{turler}</div></main>
 <footer><div class="in"><a href="/" aria-label="LaVie Davetiye"><img src="/logo-acik.svg" alt="La Vie Creative Studio" width="630" height="165"></a><span>© 2026 LaVie Davetiye</span></div></footer>

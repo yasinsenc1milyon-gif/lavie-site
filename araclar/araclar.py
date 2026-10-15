@@ -1,7 +1,7 @@
 # Ücretsiz araç sayfaları: python3 araclar/araclar.py  (public/ içine yazar, site haritasını günceller)
 import json, html, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from tur_sayfalari import U, KOK, CSS, IG, WA, site_haritasi, og_gorsel
+from tur_sayfalari import U, KOK, CSS, IG, WA, site_haritasi, og_gorsel, yeni_eklenenler, YENI_CSS, hub_ld
 from rehber import YAZILAR
 
 e = html.escape
@@ -644,12 +644,14 @@ def araclar_ana():
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">
 <meta property="og:type" content="website"><meta property="og:title" content="Ücretsiz düğün araçları · LaVie"><meta property="og:url" content="{url}"><meta property="og:image" content="{og_gorsel('araclar')}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
-<style>{CSS}</style></head><body>
+{hub_ld("araclar", "Ücretsiz düğün araçları", "Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, 2027 düğün takvimi.", [(a["slug"], a["ad"]) for a in ARACLAR])}
+<style>{CSS}{YENI_CSS}</style></head><body>
 <a class="ust-serit" href="https://instagram.com/la.viecreative" target="_blank" rel="noopener"><div class="in">{IG}<span>Instagram'da biz: <b>@la.viecreative</b></span></div></a>
 <header class="nav"><div class="in"><a href="/" aria-label="LaVie Davetiye ana sayfa"><img src="/logo.svg" alt="La Vie Creative Studio" width="630" height="165"></a><a class="btn pri" href="/#olustur">Davetiyemi oluştur</a></div></header>
 <main class="in" style="padding-bottom:60px"><div class="yol"><a href="/">Ana sayfa</a> › Ücretsiz araçlar</div>
 <div class="eyebrow" style="margin-top:26px">Ücretsiz</div><h1>Düğün <em>araçları</em></h1>
 <p class="lead">Düğün hazırlığını kolaylaştıran ücretsiz araçlar. Üyelik gerekmez, bilgileriniz yalnızca kendi cihazınızda saklanır.</p>
+{yeni_eklenenler()}
 <div class="kartlar">{kart}</div>
 <h2 style="font-size:1.6rem;margin-top:48px">Davetiye rehberi</h2><div class="diger">{"".join(f'<a href="/{y["slug"]}">{e(y["kisa"])}</a>' for y in YAZILAR)}</div></main>
 <footer><div class="in"><a href="/" aria-label="LaVie Davetiye"><img src="/logo-acik.svg" alt="La Vie Creative Studio" width="630" height="165"></a><span>© 2026 LaVie Davetiye</span></div></footer>
