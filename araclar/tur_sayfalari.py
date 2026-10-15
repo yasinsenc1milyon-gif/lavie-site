@@ -10,8 +10,20 @@ TASARIM_AD = {"zeytin": "Zeytin Gölgesi", "pamuk": "Pamuk Şeker", "papatya": "
 
 SAYFALAR = [
  dict(slug="dijital-dugun-davetiyesi", tur="Düğün", kisa="düğün", baslik="Dijital Düğün Davetiyesi",
-  title="Dijital Düğün Davetiyesi · Online Düğün Davetiyesi Sitesi | LaVie",
-  desc="Zarfı açılan, müzikli ve geri sayımlı dijital düğün davetiyesi. Katılım (LCV) takibi, konum ve program dahil, WhatsApp'tan tek linkle gönderin. 500 TL, tek seferlik ödeme.",
+  title="Dijital Düğün Davetiyesi Hazırla · Online, LCV Takipli | LaVie",
+  desc="Dijital düğün davetiyesi: zarfı açılan, müzikli, geri sayımlı davetiye sitesi. LCV takibi, konum ve program dahil; WhatsApp'tan tek link. 500 TL tek sefer.",
+  cta_baslik="Düğün davetiyenizi bugün hazırlayın",
+  cta_metin="Tasarımınızı seçin, nikâh ve düğün bilgilerinizi girin, canlı önizlemede görün. Beğenirseniz 500 TL tek seferlik ödemeyle linkiniz genellikle aynı gün açılır; katılım listeniz panelinizde birikmeye başlar.",
+  cta_dugme="Düğün davetiyemi oluştur",
+  rehber_baslik="Düğün hazırlığınız için ücretsiz rehber ve araçlar",
+  rehberler=[("dugun-davetiyesi-sozleri","Düğün davetiyesi sözleri","Resmi, samimi, kısa ve dini örneklerle kopyalayıp kullanabileceğiniz davet metinleri."),
+             ("davetiye-sozu-olusturucu","Davetiye sözü oluşturucu","İsimlerinizi ve tarihinizi yazın, size özel düğün davetiyesi sözü hazırlansın."),
+             ("davetiye-ne-zaman-gonderilir","Davetiye ne zaman gönderilir?","Düğün davetiyesini kaç hafta önce göndermeniz gerektiğini ve hatırlatma zamanlamasını öğrenin."),
+             ("lcv-nedir","LCV nedir?","Davetiyedeki LCV ifadesinin anlamı ve katılım yanıtlarını toplamanın kolay yolu."),
+             ("davetli-listesi","Davetli listesi aracı","Misafirlerinizi gruplara ayırın, kişi sayısını hesaplayın, listeyi Excel'e aktarın."),
+             ("dugun-butcesi-hesaplama","Düğün bütçesi hesaplama","Salon, yemek, kıyafet ve diğer kalemleri tek ekranda planlayın."),
+             ("2027-dugun-takvimi","2027 düğün takvimi","Bayramlar, Ramazan ve uzun hafta sonlarıyla düğün tarihi seçerken nelere dikkat etmeli."),
+             ("dugun-hashtag-olusturucu","Düğün hashtag oluşturucu","Misafirlerinizin fotoğraf paylaşırken kullanacağı size özel Instagram etiketi.")],
   tasarim="zeytin", oneri=["zeytin","papatya","gece","mono"],
   lead="Düğününüz için size özel bir davetiye sitesi: misafirleriniz zarfı açar, müziğinizi dinler, nikâh saatini ve yol tarifini tek dokunuşla bulur. Kimin geleceğini de siz panelinizden canlı takip edersiniz.",
   neden=[("Masa düzenini kolaylaştırır","Kaç kişinin geleceği panelinizde anlık görünür; salona ve catering firmasına net sayı verirsiniz."),
@@ -26,7 +38,10 @@ SAYFALAR = [
   sss=[("Dijital düğün davetiyesi kâğıt davetiyenin yerini tutar mı?","Evet. Tasarım, aile isimleri, tarih, saat ve mekân gibi kâğıt davetiyedeki her bilgi dijital davetiyede de yer alır. Üstüne konum, program akışı, müzik ve katılım formu eklenir. İsterseniz yaşlı büyükleriniz için birkaç kâğıt davetiye bastırıp diğer herkese linki gönderebilirsiniz."),
        ("Nikâh ve düğün aynı gün değilse ne yapmalıyım?","Program bölümüne her etkinliği saatiyle ayrı satır olarak yazabilirsiniz. Nikâh başka bir gün ya da yerdeyse bunu davet notunda belirtebilir ya da her biri için ayrı bir davetiye sipariş edebilirsiniz."),
        ("Kaç kişinin geleceğini nasıl görürüm?","Misafirleriniz davetiyedeki katılım formundan geleceğini ve kaç kişi olacağını bildirir. Size özel panelde gelecek ve gelemeyecek kişi sayıları ile isim listesi anlık görünür; listeyi Excel'e aktarabilirsiniz."),
-       ("Düğün davetiyesi ne zaman gönderilmeli?","Genellikle düğünden 4-6 hafta önce gönderilir. Dijital davetiye anında ulaştığı için daha geç de gönderebilirsiniz; ancak katılım sayısını erken öğrenmek için erken göndermek işinizi kolaylaştırır.")]),
+       ("Düğün davetiyesi ne zaman gönderilmeli?","Genellikle düğünden 4-6 hafta önce gönderilir. Dijital davetiye anında ulaştığı için daha geç de gönderebilirsiniz; ancak katılım sayısını erken öğrenmek için erken göndermek işinizi kolaylaştırır."),
+       ("Dijital düğün davetiyesini kaç kişiye gönderebilirim?","Sınır yok. Aynı linki aile ve arkadaş WhatsApp gruplarına, SMS ile ya da sosyal medyadan dilediğiniz kadar kişiye gönderebilirsiniz. Davetli sayınız artsa da ücret değişmez."),
+       ("Ödemeyi ne zaman yapıyorum, davetiyem ne zaman hazır olur?","Önce davetiyenizi sitemizde canlı önizlemede görürsünüz. Beğenirseniz siparişinizi oluşturup 500 TL'yi tek seferde kartla (Shopier güvencesiyle) ya da IBAN ile havaleyle ödersiniz. Kartla ödemede davetiyeniz otomatik açılır; linkiniz genellikle aynı gün hazır olur. Abonelik yoktur."),
+       ("Düğünümüze özel bir tasarım yaptırabilir miyim?","Evet. Profesyonel Tasarım paketinde WhatsApp'tan düğününüzün konseptini ve renklerini konuşuyor, size özel bir tasarım hazırlıyor ve onayınıza kadar revize ediyoruz. Fiyat, tasarımın kapsamına göre 2.000 TL'den başlar.")]),
  dict(slug="dijital-nisan-davetiyesi", tur="Nişan", kisa="nişan", baslik="Dijital Nişan Davetiyesi",
   title="Dijital Nişan Davetiyesi · Online Nişan Davetiyesi | LaVie",
   desc="Şık ve müzikli dijital nişan davetiyesi. Zarf açılışı, geri sayım, konum ve katılım takibi dahil; WhatsApp'tan tek linkle paylaşın. 500 TL, tek seferlik ödeme.",
@@ -157,6 +172,20 @@ def sayfa(s):
     tas = "".join(f'<a href="/d?c=ornek&amp;tur={turq}&amp;t={t}" target="_blank" rel="noopener"><b>{TASARIM_AD[t]}</b><span>Canlı önizle →</span></a>' for t in s["oneri"])
     sss = "".join(f"<details><summary>{e(q)}</summary><p>{e(a)}</p></details>" for q,a in s["sss"])
     diger = "".join(f'<a href="/{x["slug"]}">{x["baslik"]}</a>' for x in SAYFALAR if x is not s)
+    rehber = ""
+    if s.get("rehberler"):
+        for x,_,_ in s["rehberler"]:
+            assert os.path.exists(os.path.join(KOK, x + ".html")), x
+        kart = "".join(f'<a class="kart" href="/{x}" style="text-decoration:none;display:block"><h3>{e(a)}</h3><p>{e(b)}</p></a>' for x,a,b in s["rehberler"])
+        rehber = f'''<section class="blk gri"><div class="in">
+  <div class="eyebrow">Ücretsiz kaynaklar</div>
+  <h2>{e(s["rehber_baslik"])}</h2>
+  <div class="kartlar">{kart}</div>
+</div></section>
+'''
+    cta_b = s.get("cta_baslik", "Tüm özellikler tek pakette")
+    cta_m = s.get("cta_metin", "Davetiye siteniz, katılım takibi ve size özel paneliniz. Abonelik yok, ödemeyi davetiyenizi beğendikten sonra yaparsınız.")
+    cta_d = s.get("cta_dugme", "Hemen oluştur")
     return f"""<!doctype html>
 <html lang="tr">
 <head>
@@ -213,12 +242,12 @@ def sayfa(s):
 
 <section class="blk" style="padding-top:0"><div class="in">
   <div class="fiyat">
-    <div><h2>Tüm özellikler tek pakette</h2><p>Davetiye siteniz, katılım takibi ve size özel paneliniz. Abonelik yok, ödemeyi davetiyenizi beğendikten sonra yaparsınız.</p></div>
-    <div><div class="tl">500<small>TL</small></div><a class="btn pri" href="{olustur}">Hemen oluştur</a></div>
+    <div><h2>{e(cta_b)}</h2><p>{e(cta_m)}</p></div>
+    <div><div class="tl">500<small>TL</small></div><a class="btn pri" href="{olustur}">{e(cta_d)}</a></div>
   </div>
 </div></section>
-
-<section class="blk" style="padding-top:0"><div class="in">
+{rehber}
+<section class="blk"{"" if rehber else ' style="padding-top:0"'}><div class="in">
   <div class="eyebrow">Sıkça sorulanlar</div>
   <h2>{e(turq)} davetiyesi hakkında</h2>
   <div class="sss">{sss}</div>
