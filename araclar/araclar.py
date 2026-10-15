@@ -71,6 +71,13 @@ ARAC_CSS = """
 .g.ramazan{background:#e3d6ea}.g.bayram{background:#c98f8f;color:#fff}.g.tatil{background:#b9cde3}.g.kandil{background:#e3d6ea}
 .hg button.sol{background:transparent;color:#c5bdc2}
 .hg button.sec{outline:2px solid var(--ink);outline-offset:1px;font-weight:500}
+.arac input[type=date]{min-width:0;max-width:100%;min-height:46px;-webkit-appearance:none;appearance:none}
+.etiketler{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-top:18px}
+.etiket{display:grid;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
+.etiket b{font-weight:500;font-size:1.02rem;overflow-wrap:anywhere;color:var(--accent)}
+.etiket-d{display:flex;gap:6px;flex-wrap:wrap}
+.etiket-d button,.etiket-d a{font:inherit;font-size:.8rem;font-weight:500;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 13px;cursor:pointer;text-decoration:none;line-height:1.2}
+.etiket-d a:hover,.etiket-d button:hover{border-color:var(--accent)}
 """
 
 def kabuk(slug, title, desc, h1, giris, govde, script, ld_ekstra=(), cta_tur="Düğün"):
@@ -488,6 +495,122 @@ $("tarih").addEventListener("change", ()=>{sonuc();takvim();});
 seg(); takvim(); sonuc();
 """
 
+# ---------------- Düğün hashtag oluşturucu ----------------
+HS_SSS = [("Düğün hashtag'i ne işe yarar?", "Misafirlerin düğün, nişan ya da kına gecesinde çektiği fotoğrafları Instagram'da aynı etiketle paylaşmasını sağlar. Böylece etikete dokunarak herkesin paylaştığı kareleri tek yerde görürsünüz."),
+          ("Hashtag'de Türkçe karakter kullanılır mı?", "Instagram Türkçe harfleri kabul eder; ancak #düğün ile #dugun iki ayrı etikettir. Misafirlerin bir kısmı ş, ğ, ı harflerini, bir kısmı s, g, i harflerini yazarsa fotoğraflar iki etikete dağılır. Bu yüzden araç varsayılan olarak Türkçe karaktersiz öneriler üretir; isterseniz Türkçe karakterli hâle geçebilirsiniz."),
+          ("Büyük harf kullanmak fark eder mi?", "Hayır. Instagram etiketlerinde büyük-küçük harf ayrımı yoktur; #ElifIleBurak ile #elifileburak aynı etikettir. Kelimelerin baş harflerini büyük yazmak yalnızca okumayı kolaylaştırır."),
+          ("Seçtiğim hashtag'i başkası kullanmış mı, nasıl anlarım?", "Beğendiğiniz etiketi Instagram'ın arama bölümünde aratın. Hiç gönderi çıkmıyorsa ya da çok az ve ilgisiz gönderi varsa sizin için uygundur. Kalabalık bir etiketse soyadınızı ya da tarihinizi ekleyen bir seçeneği tercih edin."),
+          ("Hashtag'i misafirlere nasıl duyururum?", "Dijital davetiyenizin not bölümüne, masa kartlarına, karşılama panosuna ve fotoğraf köşesine yazabilirsiniz. Düğünden önce WhatsApp'ta paylaşacağınız hatırlatma mesajına eklemek de işe yarar."),
+          ("Girdiğim isimler kaydediliyor mu?", "Hayır, araç tamamen tarayıcınızda çalışır; yazdığınız isimler bize gönderilmez. Son girdiğiniz bilgiler yalnızca bu cihazda hatırlanır.")]
+HS_GOVDE = """
+<div class="arac">
+  <div class="izgara">
+    <div class="alan"><span>Davet türü</span><div class="seg" id="turSec"></div></div>
+    <div class="iki">
+      <label class="alan"><span>Gelin</span><input id="gelin" placeholder="Elif" maxlength="30" autocomplete="off"></label>
+      <label class="alan"><span>Damat</span><input id="damat" placeholder="Burak" maxlength="30" autocomplete="off"></label>
+    </div>
+    <div class="iki">
+      <label class="alan"><span>Soyad</span><input id="soyad" placeholder="İsteğe bağlı, örn. Kaya" maxlength="30" autocomplete="off"></label>
+      <label class="alan"><span>Tarih</span><input id="tarih" type="date" aria-label="Tarih (isteğe bağlı)"></label>
+    </div>
+    <div class="iki tek">
+      <div class="alan"><span>Harfler</span><div class="seg" id="harfSec"></div></div>
+      <div class="alan"><span>Yazım</span><div class="seg" id="yazimSec"></div></div>
+    </div>
+  </div>
+  <div class="etiketler" id="etiketler" aria-live="polite"></div>
+  <div class="dugmeler"><button class="btn pri kucuk" type="button" id="hepsi">Tümünü kopyala</button></div>
+  <p class="not">Beğendiğiniz etiketi seçmeden önce Instagram'da aratın; daha önce kullanılmamış olması fotoğraflarınızın karışmamasını sağlar.</p>
+</div>
+<div class="cta-kutu"><b>Hashtag'inizi davetiyenize ekleyin</b><p>Bir etiketin altındaki "Davetiyeye ekle"ye dokunun; isimleriniz ve "Fotoğraflarınızı #etiket ile paylaşın" notu hazır şekilde zarfı açılan dijital davetiyenizin önizlemesi açılsın.</p><a class="btn pri" id="ctaLink" href="/?tur=Düğün#olustur">Davetiyemi oluştur</a></div>
+<section class="makale">
+<h2>İyi bir düğün hashtag'i nasıl seçilir?</h2>
+<ol>
+<li><b>Kısa ve kolay yazılsın.</b> Misafirler etiketi telefonda ezbere yazacak; uzun ve karmaşık etiketler yanlış yazılır.</li>
+<li><b>Size özel olsun.</b> Yalnızca isimlerden oluşan etiketler başkaları tarafından kullanılmış olabilir; soyad, tarih ya da yıl eklemek etiketi benzersiz yapar.</li>
+<li><b>Türkçe karakterde tek yol seçin.</b> ş, ğ, ı gibi harfler farklı yazıldığında ayrı etiket oluşur. Karaktersiz yazım en güvenli seçenektir.</li>
+<li><b>Önceden aratın.</b> Seçtiğiniz etiketi Instagram'da aratıp boş olduğundan emin olun.</li>
+<li><b>Her yerde aynısını kullanın.</b> Davetiye, masa kartı, karşılama panosu ve fotoğraf köşesinde aynı etiketi yazın.</li>
+</ol>
+<p>Davetiyenize yazacağınız metin için <a href="/davetiye-sozu-olusturucu">davetiye sözü oluşturucu</a>, tarih seçimi için <a href="/2027-dugun-takvimi">2027 düğün takvimi</a> aracımıza göz atabilirsiniz.</p>
+<h2>Sıkça sorulanlar</h2>
+""" + sss_html(HS_SSS) + "</section>"
+HS_JS = r"""
+const TURLER = {
+  "Düğün": { ad: "Düğün", ek: ["Düğünü"], fiil: "Evleniyor", gece: "Düğün" },
+  "Nişan": { ad: "Nişan", ek: ["Nişanı"], fiil: "Nişanlanıyor", gece: "Nişan" },
+  "Kına": { ad: "Kına", ek: ["Kınası"], fiil: "Kına Gecesi", gece: "Kına Gecesi" },
+  "Söz": { ad: "Söz", ek: ["Sözü"], fiil: "Sözlendi", gece: "Söz" } };
+const AY = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+let S = Object.assign({ tur: "Düğün", harf: "karaktersiz", yazim: "buyuk", gelin: "", damat: "", soyad: "", tarih: "" }, oku("lavie_hashtag", {}));
+{ const q = new URLSearchParams(location.search);
+  if (TURLER[q.get("tur")]) S.tur = q.get("tur");
+  ["gelin","damat","soyad"].forEach(k => { if (q.get(k)) S[k] = q.get(k).slice(0, 30); }); }
+["gelin","damat","soyad","tarih"].forEach(k => $(k).value = S[k] || "");
+const TR = { "ç":"c","ğ":"g","ı":"i","ö":"o","ş":"s","ü":"u","Ç":"C","Ğ":"G","İ":"I","Ö":"O","Ş":"S","Ü":"U","â":"a","î":"i","û":"u","Â":"A","Î":"I","Û":"U" };
+// Kelimeyi tek parçaya çevirir: Türkçe kurallarıyla büyük/küçük harf, sonra istenirse karaktersiz yazım
+function kelime(w){
+  w = String(w).replace(/[^\p{L}\p{N}]/gu, "");
+  if (!w) return "";
+  w = S.yazim === "buyuk" ? w.charAt(0).toLocaleUpperCase("tr") + w.slice(1).toLocaleLowerCase("tr") : w.toLocaleLowerCase("tr");
+  return harfDuzelt(w);
+}
+function harfDuzelt(w){ return S.harf === "karaktersiz" ? w.replace(/[çğıöşüÇĞİÖŞÜâîûÂÎÛ]/g, c => TR[c]) : w; }
+const parca = s => String(s || "").trim().split(/[\s\-']+/).filter(Boolean);
+const etiket = (...ps) => "#" + ps.flatMap(p => parca(p)).map(kelime).join("");
+// İyelik eki (Elif'in, Burak'ın, Ayşe'nin, Onur'un, Gül'ün) ünlü uyumuna göre
+function iyelik(ad){
+  const k = ad.toLocaleLowerCase("tr"), unluler = k.match(/[aeıioöuü]/g);
+  if (!unluler) return ad + "in";
+  const son = unluler[unluler.length - 1], e = { a:"ın", ı:"ın", e:"in", i:"in", o:"un", u:"un", ö:"ün", ü:"ün" }[son];
+  return ad + (/[aeıioöuü]$/.test(k) ? "n" : "") + e;
+}
+const bas = s => parca(s).map(w => w.charAt(0).toLocaleUpperCase("tr")).join("");
+function oneriler(){
+  const g = S.gelin.trim() || "Elif", d = S.damat.trim() || "Burak", s = S.soyad.trim(), t = TURLER[S.tur];
+  const L = [
+    etiket(g, "ve", d), etiket(g, "ile", d), etiket(d, "ve", g), etiket(g, d, t.ad),
+    S.tur === "Kına" ? etiket(iyelik(g), "Kınası") : etiket(g, "ve", d, t.fiil),
+    etiket("Sonunda", g, "ve", d), S.tur === "Kına" ? etiket(g, d, "Kına Gecesi") : etiket(g, "ile", iyelik(d), t.ek[0]), etiket("Bir Ömür", g, d),
+    "#" + harfDuzelt(S.yazim === "buyuk" ? bas(g) + bas(d) : (bas(g) + bas(d)).toLocaleLowerCase("tr")) + etiket(t.ad).slice(1), etiket(g, "ve", d, "Hikayesi"), etiket(g, d, "İçin Geri Sayım")
+  ];
+  if (S.tarih) {
+    const [y, a, gun] = S.tarih.split("-");
+    if (y && a && gun) {
+      L.push(etiket(g, d, y), etiket(g, "ve", d, y), etiket(g, d, gun + a + y.slice(2)), etiket(+gun + "", AY[+a - 1], g, d));
+    }
+  }
+  if (s) {
+    L.push(etiket(g, s, "Oluyor"), etiket(s, t.ek[0]), etiket(s, "Çifti"), etiket("Mr And Mrs", s), etiket("Yeni", s, "Ailesi"));
+    if (S.tarih) L.push(etiket(s, S.tarih.slice(0, 4)));
+  }
+  return [...new Set(L.filter(x => x.length > 2 && !/^#\d+$/.test(x)))];
+}
+function seg(el, ogeler, secili, fn){ el.innerHTML = ogeler.map(([k,v]) => `<button type="button" data-k="${k}" aria-pressed="${k===secili}">${v}</button>`).join(""); el.querySelectorAll("button").forEach(b => b.onclick = () => fn(b.dataset.k)); }
+async function kopyala(metin, b, eski){
+  try { await navigator.clipboard.writeText(metin); b.textContent = "Kopyalandı"; }
+  catch { const t = document.createElement("textarea"); t.value = metin; document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand("copy"); } catch {} t.remove(); b.textContent = ok ? "Kopyalandı" : "Kopyalanamadı"; }
+  setTimeout(() => b.textContent = eski, 1600);
+}
+function davetLink(h){
+  return "/?" + new URLSearchParams({ tur: S.tur, gelin: S.gelin.trim(), damat: S.damat.trim(), not: `Bu özel günde çektiğiniz fotoğrafları ${h} etiketiyle paylaşmayı unutmayın!` }).toString() + "#olustur";
+}
+function ciz(){
+  yaz("lavie_hashtag", S);
+  seg($("turSec"), Object.keys(TURLER).map(k => [k, k]), S.tur, k => { S.tur = k; ciz(); });
+  seg($("harfSec"), [["karaktersiz","Türkçe karaktersiz"],["turkce","Türkçe karakterli"]], S.harf, k => { S.harf = k; ciz(); });
+  seg($("yazimSec"), [["buyuk","BaşHarfBüyük"],["kucuk","hepsiküçük"]], S.yazim, k => { S.yazim = k; ciz(); });
+  const L = oneriler();
+  $("etiketler").innerHTML = L.map(h => `<div class="etiket"><b>${esc(h)}</b><div class="etiket-d"><button type="button" data-h="${esc(h)}">Kopyala</button><a href="${esc(davetLink(h))}">Davetiyeye ekle</a></div></div>`).join("");
+  $("etiketler").querySelectorAll("button[data-h]").forEach(b => b.onclick = () => kopyala(b.dataset.h, b, "Kopyala"));
+  $("ctaLink").href = davetLink(L[0]);
+  $("hepsi").onclick = () => kopyala(L.join(" "), $("hepsi"), "Tümünü kopyala");
+}
+["gelin","damat","soyad","tarih"].forEach(k => $(k).addEventListener("input", () => { S[k] = $(k).value; ciz(); }));
+ciz();
+"""
+
 ARACLAR = [
  dict(slug="davetli-listesi", ad="Davetli listesi", title="Ücretsiz Düğün Davetli Listesi Hazırlama Aracı (Excel'e Aktar) | LaVie",
       desc="Düğün, nişan ve kına davetli listenizi ücretsiz hazırlayın: gelin ve damat tarafı, gruplar, kişi sayısı, toplamlar ve Excel'e aktarma. Üyelik gerekmez.",
@@ -505,6 +628,10 @@ ARACLAR = [
       desc="2027 düğün takvimi: Ramazan ve Kurban Bayramı, Ramazan ayı, iki bayram arası, resmî tatiller ve uzun hafta sonları tek takvimde. Düğün tarihinizin uygun olup olmadığını hemen görün.",
       h1=("2027 düğün", "takvimi"), giris="Düğün, nişan ya da kına için düşündüğünüz tarihi seçin; bayram, Ramazan, iki bayram arası, resmî tatil ve yoğun sezon bilgisini anında görün. Uzaktan gelecek misafirler için uzun hafta sonlarını da işaretledik.",
       govde=TK_GOVDE, js=TK_JS, sss=TK_SSS),
+ dict(slug="dugun-hashtag-olusturucu", ad="Düğün hashtag oluşturucu", title="Düğün Hashtag Oluşturucu: İsimlerinize Özel Instagram Etiketi | LaVie",
+      desc="Ücretsiz düğün hashtag oluşturucu: gelin ve damat adlarını yazın, düğün, nişan, kına ve söz için size özel Instagram etiketi önerileri alın. Türkçe karakter dönüşümü, tek dokunuşla kopyala.",
+      h1=("Düğün hashtag", "oluşturucu"), giris="Gelin ve damadın adını yazın; düğün, nişan, kına ya da söz için size özel hashtag önerileri anında hazırlansın. Türkçe karakterleri doğru dönüştürür, beğendiğinizi tek dokunuşla kopyalarsınız.",
+      govde=HS_GOVDE, js=HS_JS, sss=HS_SSS),
 ]
 
 def araclar_ana():
@@ -513,7 +640,7 @@ def araclar_ana():
     return f"""<!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ücretsiz Düğün Araçları: Davetli Listesi, Bütçe Hesaplama | LaVie</title>
-<meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi hazırlama, düğün bütçesi hesaplama ve davetiye sözü oluşturucu. Üyelik gerekmez.">
+<meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, 2027 düğün takvimi. Üyelik gerekmez.">
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">
 <meta property="og:type" content="website"><meta property="og:title" content="Ücretsiz düğün araçları · LaVie"><meta property="og:url" content="{url}"><meta property="og:image" content="{og_gorsel('araclar')}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
