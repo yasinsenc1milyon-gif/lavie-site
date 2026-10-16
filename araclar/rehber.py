@@ -239,6 +239,7 @@ YAZILAR = [
        ("Bu sözleri dijital davetiyede kullanabilir miyim?", "Evet. LaVie'de söz türünü seçip beğendiğiniz cümleyi 'Davet notu' alanına yapıştırmanız yeterli; telefondaki önizlemede anında görünür ve sonradan panelinizden değiştirebilirsiniz.")]),
 
  dict(slug="dijital-davetiye-nasil-yapilir", kisa="Dijital davetiye nasıl yapılır?", tur="Düğün",
+  ilgili=[("davetiye-sozu-olusturucu","Davetiye sözü oluşturucu"),("davetli-listesi","Davetli listesi aracı"),("dugun-hashtag-olusturucu","Düğün hashtag oluşturucu")],
   title="Dijital Davetiye Nasıl Yapılır? Adım Adım Rehber | LaVie",
   desc="Dijital davetiye nasıl yapılır? Hazırlamanız gereken bilgiler, tasarım ve davet sözü seçimi, konum ve program ekleme, paylaşım ve LCV takibi: adım adım anlatım.",
   h1=("Dijital Davetiye", "Nasıl Yapılır?"),
@@ -317,6 +318,9 @@ def yazi(y):
         if i == 1: govde += f'<div class="cta-kutu"><b>Bu sözü davetiyenizde görün</b><p>Zarfı açılan, müzikli ve katılım formlu dijital {e(turq.lower())} davetiyenizi oluşturun; yazdığınız söz anında önizlemede belirir. 500 TL, tek seferlik.</p><a class="btn pri" href="{olustur}">Davetiyemi oluştur</a></div>'
     sss = "".join(f"<details><summary>{e(q)}</summary><p>{e(a)}</p></details>" for q,a in y["sss"])
     diger = "".join(f'<a href="/{x["slug"]}">{e(x["kisa"])}</a>' for x in YAZILAR if x is not y)
+    ilgili = ""
+    if y.get("ilgili"):
+        ilgili = '<h2 style="font-size:1.5rem">İlgili ücretsiz araçlar</h2><div class="diger">' + "".join(f'<a href="/{x}">{e(a)}</a>' for x,a in y["ilgili"]) + "</div>"
     ilk, son = y["h1"]
     return f"""<!doctype html>
 <html lang="tr">
@@ -349,7 +353,7 @@ def yazi(y):
 <h2>Sıkça sorulanlar</h2>
 <div class="sss">{sss}</div>
 <div class="cta-kutu"><b>Dijital {e(turq.lower())} davetiyesi</b><p>Tasarımları, canlı örneği ve özellikleri görmek için tanıtım sayfamıza göz atın.</p><a class="btn sec" href="/{tur_sayfa['slug']}">{e(tur_sayfa['baslik'])}</a></div>
-<h2 style="font-size:1.5rem">Diğer rehber yazıları</h2>
+{ilgili}<h2 style="font-size:1.5rem">Diğer rehber yazıları</h2>
 <div class="diger">{diger}<a href="/rehber">Tüm rehber</a></div>
 </main>
 <footer><div class="in"><a href="/" aria-label="LaVie Davetiye"><img src="/logo-acik.svg" alt="La Vie Creative Studio" width="630" height="165"></a><span>© <span id="yil">2026</span> LaVie Davetiye · <a href="https://instagram.com/la.viecreative" target="_blank" rel="noopener">@la.viecreative</a></span></div></footer>

@@ -18,6 +18,7 @@ SAYFALAR = [
   rehber_baslik="Düğün hazırlığınız için ücretsiz rehber ve araçlar",
   rehberler=[("dugun-davetiyesi-sozleri","Düğün davetiyesi sözleri","Resmi, samimi, kısa ve dini örneklerle kopyalayıp kullanabileceğiniz davet metinleri."),
              ("davetiye-sozu-olusturucu","Davetiye sözü oluşturucu","İsimlerinizi ve tarihinizi yazın, size özel düğün davetiyesi sözü hazırlansın."),
+             ("dijital-davetiye-nasil-yapilir","Dijital davetiye nasıl yapılır?","Bilgileri hazırlamaktan WhatsApp'ta paylaşıma ve LCV takibine kadar adım adım anlatım."),
              ("davetiye-ne-zaman-gonderilir","Davetiye ne zaman gönderilir?","Düğün davetiyesini kaç hafta önce göndermeniz gerektiğini ve hatırlatma zamanlamasını öğrenin."),
              ("lcv-nedir","LCV nedir?","Davetiyedeki LCV ifadesinin anlamı ve katılım yanıtlarını toplamanın kolay yolu."),
              ("davetli-listesi","Davetli listesi aracı","Misafirlerinizi gruplara ayırın, kişi sayısını hesaplayın, listeyi Excel'e aktarın."),
@@ -179,12 +180,12 @@ footer{background:var(--deep);color:var(--deep-mut);padding-block:40px 110px;fon
 YENILER = [
  dict(slug="2027-dugun-takvimi", ad="2027 düğün takvimi", tip="Araç", tarih="13 Ekim 2026", sezon="Sezonun içeriği",
       ozet="Gelecek yılın düğün tarihini seçme zamanı: bayramlar, Ramazan, iki bayram arası ve uzun hafta sonları tek takvimde."),
+ dict(slug="dijital-davetiye-nasil-yapilir", ad="Dijital davetiye nasıl yapılır?", tip="Rehber", tarih="16 Ekim 2026",
+      ozet="Hazırlamanız gereken bilgilerden paylaşıma ve katılım takibine kadar adım adım dijital davetiye."),
  dict(slug="dugun-hashtag-olusturucu", ad="Düğün hashtag oluşturucu", tip="Araç", tarih="15 Ekim 2026",
       ozet="Gelin ve damadın adından düğün, nişan, kına ve söz için Instagram etiketi önerileri."),
  dict(slug="soz-davetiyesi-sozleri", ad="Söz davetiyesi sözleri", tip="Rehber", tarih="14 Ekim 2026",
       ozet="Kısa, geleneksel, romantik ve aile ağzından 27 söz davetiyesi sözü."),
- dict(slug="davetiye-sozu-olusturucu", ad="Davetiye sözü oluşturucu", tip="Araç", tarih="12 Ekim 2026",
-      ozet="Davet türünü ve tarzı seçin, isimlerinizi yazın; size özel davetiye sözleri hazırlansın."),
 ]
 YENI_CSS = """
 .yeni{margin-top:26px}.yeni h2{font-size:1.5rem;margin:0 0 4px}
