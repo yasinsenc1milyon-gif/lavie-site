@@ -24,7 +24,8 @@ SAYFALAR = [
              ("davetli-listesi","Davetli listesi aracı","Misafirlerinizi gruplara ayırın, kişi sayısını hesaplayın, listeyi Excel'e aktarın."),
              ("dugun-butcesi-hesaplama","Düğün bütçesi hesaplama","Salon, yemek, kıyafet ve diğer kalemleri tek ekranda planlayın."),
              ("2027-dugun-takvimi","2027 düğün takvimi","Bayramlar, Ramazan ve uzun hafta sonlarıyla düğün tarihi seçerken nelere dikkat etmeli."),
-             ("dugun-hashtag-olusturucu","Düğün hashtag oluşturucu","Misafirlerinizin fotoğraf paylaşırken kullanacağı size özel Instagram etiketi.")],
+             ("dugun-hashtag-olusturucu","Düğün hashtag oluşturucu","Misafirlerinizin fotoğraf paylaşırken kullanacağı size özel Instagram etiketi."),
+             ("dugun-geri-sayim","Düğün geri sayım","Düğününüze kaç gün kaldığını canlı görün, paylaşılabilir geri sayım linkinizi oluşturun.")],
   tasarim="zeytin", oneri=["zeytin","papatya","gece","mono"],
   lead="Düğününüz için size özel bir davetiye sitesi: misafirleriniz zarfı açar, müziğinizi dinler, nikâh saatini ve yol tarifini tek dokunuşla bulur. Kimin geleceğini de siz panelinizden canlı takip edersiniz.",
   neden=[("Masa düzenini kolaylaştırır","Kaç kişinin geleceği panelinizde anlık görünür; salona ve catering firmasına net sayı verirsiniz."),
@@ -195,10 +196,10 @@ footer{background:var(--deep);color:var(--deep-mut);padding-block:40px 110px;fon
 
 # "Yeni eklenenler" bölümü (/rehber ve /araclar en üstünde). İlk sıradaki sezona uygun içeriktir.
 YENILER = [
- dict(slug="dugun-geri-sayim", ad="Düğün geri sayım", tip="Araç", tarih="17 Ekim 2026",
-      ozet="Düğününüze kaç gün kaldığını canlı görün; paylaşılabilir link, takvime ekleme ve hazırlık takvimi."),
  dict(slug="2027-dugun-takvimi", ad="2027 düğün takvimi", tip="Araç", tarih="13 Ekim 2026", sezon="Sezonun içeriği",
       ozet="Gelecek yılın düğün tarihini seçme zamanı: bayramlar, Ramazan, iki bayram arası ve uzun hafta sonları tek takvimde."),
+ dict(slug="dugun-geri-sayim", ad="Düğün geri sayım", tip="Araç", tarih="17 Ekim 2026",
+      ozet="Düğününüze kaç gün kaldığını canlı görün; paylaşılabilir link, takvime ekleme ve hazırlık takvimi."),
  dict(slug="dijital-davetiye-nasil-yapilir", ad="Dijital davetiye nasıl yapılır?", tip="Rehber", tarih="16 Ekim 2026",
       ozet="Hazırlamanız gereken bilgilerden paylaşıma ve katılım takibine kadar adım adım dijital davetiye."),
  dict(slug="dugun-hashtag-olusturucu", ad="Düğün hashtag oluşturucu", tip="Araç", tarih="15 Ekim 2026",

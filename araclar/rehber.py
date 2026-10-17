@@ -172,6 +172,7 @@ YAZILAR = [
        ("Dijital davetiyede LCV nasıl toplanır?", "Davetiyenin içindeki katılım formuyla. Misafir formu doldurur, yanıt davet sahibinin paneline anında düşer; telefonla tek tek aramaya gerek kalmaz.")]),
 
  dict(slug="davetiye-ne-zaman-gonderilir", kisa="Davetiye ne zaman gönderilir?", tur="Düğün",
+  ilgili=[("dugun-geri-sayim","Düğün geri sayım"),("2027-dugun-takvimi","2027 düğün takvimi")],
   title="Düğün Davetiyesi Ne Zaman Gönderilir? Gün Gün Plan | LaVie",
   desc="Düğün, nişan ve kına davetiyesi ne zaman gönderilmeli? Kâğıt ve dijital davetiye için önerilen zamanlar, LCV son tarihi ve hatırlatma planı.",
   h1=("Davetiye ne zaman", "gönderilir?"),
