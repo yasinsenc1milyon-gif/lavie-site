@@ -78,6 +78,16 @@ ARAC_CSS = """
 .etiket-d{display:flex;gap:6px;flex-wrap:wrap}
 .etiket-d button,.etiket-d a{font:inherit;font-size:.8rem;font-weight:500;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 13px;cursor:pointer;text-decoration:none;line-height:1.2}
 .etiket-d a:hover,.etiket-d button:hover{border-color:var(--accent)}
+.sayac-kutu{margin-top:18px;background:var(--soft);border:1px solid #dcd0e2;border-radius:18px;padding:18px 14px;text-align:center}
+.sayac-baslik{margin:0;font-size:1.05rem}.sayac-baslik b{font-family:var(--display);font-weight:400;font-size:1.5rem;overflow-wrap:anywhere}
+.sayac-alt{margin:10px 0 0;color:var(--muted);font-size:.9rem}
+.ozet.sayac{margin-top:12px}.ozet.sayac div{background:#fff;text-align:center;padding:14px 6px}
+.ozet.sayac b{font-size:clamp(1.9rem,8vw,2.8rem)}
+.ozet.sayac .tam{grid-column:1/-1}.ozet.sayac .tam b{font-size:1.8rem;margin-bottom:6px}
+@media(max-width:560px){.ozet.sayac{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.ozet.sayac div{padding:12px 2px}}
+.satir.adim{grid-template-columns:1fr auto}.satir.adim span:empty{display:none}
+.rozet-k{font-size:.76rem;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.satir.gecti b,.satir.gecti small{color:#a39ca5}.satir.gecti b{text-decoration:line-through}
 """
 
 def kabuk(slug, title, desc, h1, giris, govde, script, ld_ekstra=(), cta_tur="Düğün"):
@@ -611,6 +621,161 @@ function ciz(){
 ciz();
 """
 
+# ---------------- Düğün geri sayım ----------------
+GS_SSS = [("Geri sayım linkini nasıl paylaşırım?", "Tarihi, saati ve isimleri girdikten sonra 'Linki kopyala' ya da 'WhatsApp'ta paylaş' düğmesine dokunun. Oluşan link bilgilerinizi içerir; linki açan herkes aynı geri sayımı canlı olarak görür. Linki aile grubunuza, sevgilinize ya da arkadaşlarınıza gönderebilirsiniz."),
+          ("Geri sayım hangi saat dilimine göre hesaplanıyor?", "Girdiğiniz saat Türkiye saati olarak kabul edilir. Böylece linki yurt dışındaki bir yakınınız açsa bile geri sayım, düğününüzün Türkiye'deki başlangıç anına göre doğru işler."),
+          ("Girdiğim bilgiler kaydediliyor mu?", "Hayır, araç tamamen tarayıcınızda çalışır; isimler ve tarih bize gönderilmez. Son girdiğiniz bilgiler yalnızca bu cihazda hatırlanır. Paylaştığınız linkte isimler ve tarih yer aldığı için linki yalnızca görmesini istediğiniz kişilere gönderin."),
+          ("Düğünü takvimime nasıl eklerim?", "'Takvime ekle' düğmesi bir takvim dosyası (.ics) indirir. Bu dosyayı açtığınızda iPhone Takvim, Google Takvim ya da Outlook düğününüzü etkinlik olarak ekler."),
+          ("Düğün davetiyesi kaç gün kala gönderilmeli?", "Düğün davetiyeleri genellikle düğünden 4-6 hafta önce gönderilir; şehir dışından gelecek misafirler varsa 8 hafta öncesi daha rahattır. Nişan, kına ve söz için 2-4 hafta önce yeterlidir. Araçtaki hazırlık takvimi bu tarihleri sizin düğün gününüze göre hesaplar."),
+          ("Dijital davetiyede de geri sayım var mı?", "Evet. LaVie dijital davetiyelerinde misafirleriniz davetiyeyi açtığında canlı geri sayımı, programı, konumu ve katılım formunu görür.")]
+GS_GOVDE = """
+<div class="arac">
+  <div class="izgara">
+    <div class="alan"><span>Davet türü</span><div class="seg" id="turSec"></div></div>
+    <div class="iki">
+      <label class="alan"><span>Gelin</span><input id="gelin" placeholder="Elif" maxlength="30" autocomplete="off"></label>
+      <label class="alan"><span>Damat</span><input id="damat" placeholder="Burak" maxlength="30" autocomplete="off"></label>
+    </div>
+    <div class="iki">
+      <label class="alan"><span>Tarih</span><input id="tarih" type="date"></label>
+      <label class="alan"><span>Saat</span><input id="saat" type="time" value="19:00"></label>
+    </div>
+  </div>
+  <div class="sayac-kutu" aria-live="polite">
+    <p class="sayac-baslik" id="baslik"></p>
+    <div class="ozet sayac" id="sayac"></div>
+    <p class="sayac-alt" id="altYazi"></p>
+  </div>
+  <div class="dugmeler">
+    <button class="btn pri kucuk" type="button" id="kopyala">Linki kopyala</button>
+    <a class="btn sec kucuk" id="wa" target="_blank" rel="noopener">WhatsApp'ta paylaş</a>
+    <button class="btn sec kucuk" type="button" id="ics">Takvime ekle</button>
+  </div>
+  <p class="not">Saat, Türkiye saatine göre hesaplanır. Paylaşılan linki açan herkes aynı geri sayımı görür.</p>
+</div>
+<h2 style="font-size:1.5rem;margin-top:38px">Hazırlık takviminiz</h2>
+<p style="color:var(--muted);margin-top:4px" id="takvimAciklama">Seçtiğiniz tarihe göre davetiye ve katılım (LCV) için önerilen günler:</p>
+<div class="satirlar" id="adimlar"></div>
+<div class="cta-kutu"><b>Geri sayım davetiyenizde de olsun</b><p>Dijital davetiyenizi açan misafirleriniz canlı geri sayımı, programı ve konumu görür; katılım durumunu tek dokunuşla bildirir. İsimleriniz hazır olarak aktarılır.</p><a class="btn pri" id="ctaLink" href="/?tur=Düğün#olustur">Bu bilgilerle davetiye oluştur</a></div>
+<section class="makale">
+<h2>Düğün geri sayımı nasıl kullanılır?</h2>
+<ol>
+<li><b>Tarihi ve saati girin.</b> Nikâh ya da düğünün başlayacağı saati yazın; geri sayım gün, saat, dakika ve saniye olarak hemen başlar.</li>
+<li><b>Linki paylaşın.</b> Oluşan link bilgilerinizi içerir; WhatsApp'ta aile grubuna ya da arkadaşlarınıza gönderebilirsiniz.</li>
+<li><b>Takviminize ekleyin.</b> Takvim dosyasıyla düğün günü telefonunuzda etkinlik olarak görünür.</li>
+<li><b>Hazırlık takvimini izleyin.</b> Davetiyeyi ne zaman göndereceğinizi, LCV'yi ne zaman kapatacağınızı tarihleriyle görün.</li>
+</ol>
+<p>Davetiyeyi göndermenin doğru zamanı için <a href="/davetiye-ne-zaman-gonderilir">davetiye ne zaman gönderilir</a> rehberimize, tarih seçmeden önce <a href="/2027-dugun-takvimi">2027 düğün takvimi</a> aracımıza, davetlilerinizi toplamak için <a href="/davetli-listesi">davetli listesi</a> aracımıza göz atabilirsiniz.</p>
+<h2>Sıkça sorulanlar</h2>
+""" + sss_html(GS_SSS) + "</section>"
+GS_JS = r"""
+const TURLER = { "Düğün": "düğününe", "Nişan": "nişanına", "Kına": "kına gecesine", "Söz": "söz törenine" };
+const AY = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const GUN = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+const ADIMLAR = {
+  "Düğün": [[56,"Davetli listesini netleştirin, telefon numaralarını toplayın"],[42,"Davetiyeyi hazırlayıp gönderin"],[21,"Yanıt vermeyenlere nazik bir hatırlatma yapın"],[10,"LCV'yi kapatın, kesin sayıyı salona bildirin"],[1,"Konum ve saat için kısa bir hatırlatma mesajı atın"]],
+  "diger": [[35,"Davetli listesini netleştirin"],[28,"Davetiyeyi hazırlayıp gönderin"],[10,"Yanıt vermeyenlere nazik bir hatırlatma yapın"],[5,"Katılımı kesinleştirin, sayıyı mekâna bildirin"],[1,"Konum ve saat için kısa bir hatırlatma mesajı atın"]] };
+const TARIH_RE = /^\d{4}-\d{2}-\d{2}$/, SAAT_RE = /^\d{2}:\d{2}$/;
+function varsayilanTarih(){ const d = new Date(Date.now() + 180 * 864e5); return d.toISOString().slice(0, 10); }
+let S = Object.assign({ tur: "Düğün", gelin: "", damat: "", tarih: varsayilanTarih(), saat: "19:00" }, oku("lavie_gerisayim", {}));
+{ const q = new URLSearchParams(location.search);
+  if (TURLER[q.get("tur")]) S.tur = q.get("tur");
+  ["gelin","damat"].forEach(k => { if (q.has(k)) S[k] = q.get(k).slice(0, 30); });
+  if (TARIH_RE.test(q.get("tarih") || "")) S.tarih = q.get("tarih");
+  if (SAAT_RE.test(q.get("saat") || "")) S.saat = q.get("saat"); }
+["gelin","damat","tarih","saat"].forEach(k => $(k).value = S[k] || "");
+// Girilen saat Türkiye saati (UTC+3) kabul edilir
+function hedef(){
+  if (!TARIH_RE.test(S.tarih)) return null;
+  const [y, a, g] = S.tarih.split("-").map(Number), [sa, dk] = (SAAT_RE.test(S.saat) ? S.saat : "00:00").split(":").map(Number);
+  const t = Date.UTC(y, a - 1, g, sa - 3, dk);
+  return isNaN(t) ? null : t;
+}
+function tarihYazi(){ const [y, a, g] = S.tarih.split("-").map(Number), d = new Date(Date.UTC(y, a - 1, g)); return `${g} ${AY[a - 1]} ${y} ${GUN[d.getUTCDay()]}`; }
+function ciftAd(){ const g = S.gelin.trim(), d = S.damat.trim(); return g && d ? `${g} & ${d}` : (g || d); }
+function iyelik(ad){
+  const k = ad.toLocaleLowerCase("tr"), u = k.match(/[aeıioöuü]/g);
+  if (!u) return ad + "'in";
+  const e = { a:"ın", ı:"ın", e:"in", i:"in", o:"un", u:"un", ö:"ün", ü:"ün" }[u[u.length - 1]];
+  return ad + "'" + (/[aeıioöuü]$/.test(k) ? "n" : "") + e;
+}
+function paylasLink(){
+  const p = new URLSearchParams({ tarih: S.tarih, saat: S.saat, tur: S.tur });
+  if (S.gelin.trim()) p.set("gelin", S.gelin.trim());
+  if (S.damat.trim()) p.set("damat", S.damat.trim());
+  return location.origin + location.pathname + "?" + p.toString();
+}
+function kalanGun(){ const h = hedef(); return h === null ? null : Math.floor((h - Date.now()) / 864e5); }
+function waMetin(){
+  const g = S.gelin.trim(), d = S.damat.trim(), n = kalanGun();
+  const ne = g && d ? `${g} ile ${iyelik(d)} ${TURLER[S.tur]}` : (g || d) ? `${iyelik(g || d)} ${TURLER[S.tur]}` : "Büyük güne";
+  const kalan = n === null ? "" : n > 1 ? `${n} gün kaldı!` : n === 1 ? "yarın!" : n === 0 ? "bugün!" : "";
+  return `${ne.charAt(0).toLocaleUpperCase("tr") + ne.slice(1)} ${kalan} Geri sayımı buradan izleyebilirsiniz: ${paylasLink()}`.replace(/\s+/g, " ");
+}
+const iki = n => String(n).padStart(2, "0");
+function sayacCiz(){
+  const h = hedef();
+  if (h === null) { $("sayac").innerHTML = ""; $("baslik").textContent = "Bir tarih seçin"; $("altYazi").textContent = ""; return; }
+  let fark = h - Date.now();
+  const ad = ciftAd();
+  $("baslik").innerHTML = ad ? `<b>${esc(ad)}</b> · ${esc(S.tur)}` : `<b>${esc(S.tur)}</b> gününe`;
+  $("altYazi").textContent = tarihYazi() + ", saat " + (SAAT_RE.test(S.saat) ? S.saat : "00:00");
+  if (fark <= 0) {
+    const gecen = Math.floor(-fark / 864e5);
+    $("sayac").innerHTML = `<div class="tam"><b>${gecen < 1 ? "Bugün büyük gün!" : gecen + " gün önce"}</b><span>${gecen < 1 ? "Mutluluklar dileriz" : "Bu tarih geçti; yeni bir tarih seçebilirsiniz"}</span></div>`;
+    return;
+  }
+  const g = Math.floor(fark / 864e5); fark -= g * 864e5;
+  const s = Math.floor(fark / 36e5); fark -= s * 36e5;
+  const d = Math.floor(fark / 6e4), sn = Math.floor((fark - d * 6e4) / 1000);
+  $("sayac").innerHTML = [[g, "gün"], [iki(s), "saat"], [iki(d), "dakika"], [iki(sn), "saniye"]].map(([v, t]) => `<div><b>${v}</b><span>${t}</span></div>`).join("");
+}
+function adimCiz(){
+  const h = hedef();
+  if (h === null) { $("adimlar").innerHTML = `<div class="bos">Hazırlık takvimi için tarih seçin.</div>`; return; }
+  const [y, a, g] = S.tarih.split("-").map(Number), bugun = new Date(); bugun.setHours(0, 0, 0, 0);
+  const L = ADIMLAR[S.tur === "Düğün" ? "Düğün" : "diger"];
+  $("adimlar").innerHTML = L.map(([gun, is]) => {
+    const d = new Date(y, a - 1, g - gun), fark = Math.round((d - bugun) / 864e5);
+    const etiket = fark < 0 ? "Tarihi geçti" : fark === 0 ? "Bugün" : fark + " gün sonra";
+    return `<div class="satir adim${fark < 0 ? " gecti" : ""}"><div><b>${esc(is)}</b><small>${gun === 1 ? "1 gün önce" : gun % 7 === 0 ? gun / 7 + " hafta önce" : gun + " gün önce"} · ${d.getDate()} ${AY[d.getMonth()]}${d.getFullYear() !== bugun.getFullYear() ? " " + d.getFullYear() : ""} ${GUN[d.getDay()]}</small></div><span class="rozet-k">${etiket}</span><span></span></div>`;
+  }).join("");
+}
+function ics(){
+  const h = hedef(); if (h === null) return;
+  const f = t => new Date(t).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const ad = ciftAd(), baslik = (ad ? ad + " - " : "") + S.tur;
+  const kac = s => s.replace(/[\;,]/g, m => "\\" + m);
+  const metin = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//LaVie Davetiye//Geri Sayim//TR","CALSCALE:GREGORIAN","BEGIN:VEVENT",
+    "UID:" + h + "-" + Math.random().toString(36).slice(2) + "@laviedavetiye", "DTSTAMP:" + f(Date.now()), "DTSTART:" + f(h), "DTEND:" + f(h + 4 * 36e5),
+    "SUMMARY:" + kac(baslik), "DESCRIPTION:" + kac("Geri sayım: " + paylasLink()), "END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const url = URL.createObjectURL(new Blob([metin], { type: "text/calendar;charset=utf-8" }));
+  const a = document.createElement("a"); a.href = url; a.download = (S.tur === "Düğün" ? "dugun" : "davet") + "-" + S.tarih + ".ics";
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+async function kopyala(metin, b, eski){
+  try { await navigator.clipboard.writeText(metin); b.textContent = "Kopyalandı"; }
+  catch { const t = document.createElement("textarea"); t.value = metin; document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand("copy"); } catch {} t.remove(); b.textContent = ok ? "Kopyalandı" : "Kopyalanamadı"; }
+  setTimeout(() => b.textContent = eski, 1600);
+}
+function seg(el, ogeler, secili, fn){ el.innerHTML = ogeler.map(([k,v]) => `<button type="button" data-k="${k}" aria-pressed="${k===secili}">${v}</button>`).join(""); el.querySelectorAll("button").forEach(b => b.onclick = () => fn(b.dataset.k)); }
+function ciz(){
+  yaz("lavie_gerisayim", S);
+  seg($("turSec"), Object.keys(TURLER).map(k => [k, k]), S.tur, k => { S.tur = k; ciz(); });
+  sayacCiz(); adimCiz();
+  $("wa").href = "https://wa.me/?text=" + encodeURIComponent(waMetin());
+  const p = new URLSearchParams({ tur: S.tur });
+  if (S.gelin.trim()) p.set("gelin", S.gelin.trim());
+  if (S.damat.trim()) p.set("damat", S.damat.trim());
+  $("ctaLink").href = "/?" + p.toString() + "#olustur";
+}
+["gelin","damat","tarih","saat"].forEach(k => $(k).addEventListener("input", () => { S[k] = $(k).value; ciz(); }));
+$("kopyala").onclick = () => kopyala(paylasLink(), $("kopyala"), "Linki kopyala");
+$("ics").onclick = ics;
+ciz();
+setInterval(sayacCiz, 1000);
+"""
+
 ARACLAR = [
  dict(slug="davetli-listesi", ad="Davetli listesi", title="Ücretsiz Düğün Davetli Listesi Hazırlama Aracı (Excel'e Aktar) | LaVie",
       desc="Düğün, nişan ve kına davetli listenizi ücretsiz hazırlayın: gelin ve damat tarafı, gruplar, kişi sayısı, toplamlar ve Excel'e aktarma. Üyelik gerekmez.",
@@ -632,6 +797,10 @@ ARACLAR = [
       desc="Ücretsiz düğün hashtag oluşturucu: gelin ve damat adlarını yazın, düğün, nişan, kına ve söz için size özel Instagram etiketi önerileri alın. Türkçe karakter dönüşümü, tek dokunuşla kopyala.",
       h1=("Düğün hashtag", "oluşturucu"), giris="Gelin ve damadın adını yazın; düğün, nişan, kına ya da söz için size özel hashtag önerileri anında hazırlansın. Türkçe karakterleri doğru dönüştürür, beğendiğinizi tek dokunuşla kopyalarsınız.",
       govde=HS_GOVDE, js=HS_JS, sss=HS_SSS),
+ dict(slug="dugun-geri-sayim", ad="Düğün geri sayım", title="Düğün Geri Sayım: Düğününüze Kaç Gün Kaldı? Paylaşılabilir Sayaç | LaVie",
+      desc="Ücretsiz düğün geri sayım sayacı: tarih ve saati seçin, düğününüze kaç gün kaldığını canlı görün. WhatsApp'ta paylaşılabilir link, takvime ekleme ve hazırlık takvimi.",
+      h1=("Düğün", "geri sayım"), giris="Düğün, nişan, kına ya da söz tarihinizi ve saatini seçin; kaç gün, saat ve dakika kaldığını canlı görün. Geri sayım linkinizi WhatsApp'ta paylaşın, düğünü takviminize ekleyin.",
+      govde=GS_GOVDE, js=GS_JS, sss=GS_SSS),
 ]
 
 def araclar_ana():
@@ -640,11 +809,11 @@ def araclar_ana():
     return f"""<!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ücretsiz Düğün Araçları: Davetli Listesi, Bütçe Hesaplama | LaVie</title>
-<meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, 2027 düğün takvimi. Üyelik gerekmez.">
+<meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, düğün geri sayım, 2027 düğün takvimi. Üyelik gerekmez.">
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">
 <meta property="og:type" content="website"><meta property="og:title" content="Ücretsiz düğün araçları · LaVie"><meta property="og:url" content="{url}"><meta property="og:image" content="{og_gorsel('araclar')}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
-{hub_ld("araclar", "Ücretsiz düğün araçları", "Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, 2027 düğün takvimi.", [(a["slug"], a["ad"]) for a in ARACLAR])}
+{hub_ld("araclar", "Ücretsiz düğün araçları", "Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, düğün geri sayım, 2027 düğün takvimi.", [(a["slug"], a["ad"]) for a in ARACLAR])}
 <style>{CSS}{YENI_CSS}</style></head><body>
 <a class="ust-serit" href="https://instagram.com/la.viecreative" target="_blank" rel="noopener"><div class="in">{IG}<span>Instagram'da biz: <b>@la.viecreative</b></span></div></a>
 <header class="nav"><div class="in"><a href="/" aria-label="LaVie Davetiye ana sayfa"><img src="/logo.svg" alt="La Vie Creative Studio" width="630" height="165"></a><a class="btn pri" href="/#olustur">Davetiyemi oluştur</a></div></header>

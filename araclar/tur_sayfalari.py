@@ -178,14 +178,14 @@ footer{background:var(--deep);color:var(--deep-mut);padding-block:40px 110px;fon
 
 # "Yeni eklenenler" bölümü (/rehber ve /araclar en üstünde). İlk sıradaki sezona uygun içeriktir.
 YENILER = [
+ dict(slug="dugun-geri-sayim", ad="Düğün geri sayım", tip="Araç", tarih="17 Ekim 2026",
+      ozet="Düğününüze kaç gün kaldığını canlı görün; paylaşılabilir link, takvime ekleme ve hazırlık takvimi."),
  dict(slug="2027-dugun-takvimi", ad="2027 düğün takvimi", tip="Araç", tarih="13 Ekim 2026", sezon="Sezonun içeriği",
       ozet="Gelecek yılın düğün tarihini seçme zamanı: bayramlar, Ramazan, iki bayram arası ve uzun hafta sonları tek takvimde."),
  dict(slug="dijital-davetiye-nasil-yapilir", ad="Dijital davetiye nasıl yapılır?", tip="Rehber", tarih="16 Ekim 2026",
       ozet="Hazırlamanız gereken bilgilerden paylaşıma ve katılım takibine kadar adım adım dijital davetiye."),
  dict(slug="dugun-hashtag-olusturucu", ad="Düğün hashtag oluşturucu", tip="Araç", tarih="15 Ekim 2026",
       ozet="Gelin ve damadın adından düğün, nişan, kına ve söz için Instagram etiketi önerileri."),
- dict(slug="soz-davetiyesi-sozleri", ad="Söz davetiyesi sözleri", tip="Rehber", tarih="14 Ekim 2026",
-      ozet="Kısa, geleneksel, romantik ve aile ağzından 27 söz davetiyesi sözü."),
 ]
 YENI_CSS = """
 .yeni{margin-top:26px}.yeni h2{font-size:1.5rem;margin:0 0 4px}

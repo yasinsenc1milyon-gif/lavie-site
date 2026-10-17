@@ -137,6 +137,16 @@ footer{background:var(--deep);color:var(--deep-mut);padding-block:40px 110px;fon
 .etiket-d{display:flex;gap:6px;flex-wrap:wrap}
 .etiket-d button,.etiket-d a{font:inherit;font-size:.8rem;font-weight:500;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 13px;cursor:pointer;text-decoration:none;line-height:1.2}
 .etiket-d a:hover,.etiket-d button:hover{border-color:var(--accent)}
+.sayac-kutu{margin-top:18px;background:var(--soft);border:1px solid #dcd0e2;border-radius:18px;padding:18px 14px;text-align:center}
+.sayac-baslik{margin:0;font-size:1.05rem}.sayac-baslik b{font-family:var(--display);font-weight:400;font-size:1.5rem;overflow-wrap:anywhere}
+.sayac-alt{margin:10px 0 0;color:var(--muted);font-size:.9rem}
+.ozet.sayac{margin-top:12px}.ozet.sayac div{background:#fff;text-align:center;padding:14px 6px}
+.ozet.sayac b{font-size:clamp(1.9rem,8vw,2.8rem)}
+.ozet.sayac .tam{grid-column:1/-1}.ozet.sayac .tam b{font-size:1.8rem;margin-bottom:6px}
+@media(max-width:560px){.ozet.sayac{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.ozet.sayac div{padding:12px 2px}}
+.satir.adim{grid-template-columns:1fr auto}.satir.adim span:empty{display:none}
+.rozet-k{font-size:.76rem;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.satir.gecti b,.satir.gecti small{color:#a39ca5}.satir.gecti b{text-decoration:line-through}
 </style>
 </head>
 <body>
@@ -173,7 +183,7 @@ footer{background:var(--deep);color:var(--deep-mut);padding-block:40px 110px;fon
 <h2>Sıkça sorulanlar</h2>
 <div class="sss"><details><summary>Davetiye sözü oluşturucu nasıl çalışır?</summary><p>Davet türünü ve istediğiniz tarzı seçip isimleri yazdığınızda, araç hazır söz kalıplarını sizin bilgilerinizle birleştirerek öneriler sunar. &#x27;Yeni öneriler&#x27; ile farklı seçenekleri görebilir, beğendiğinizi kopyalayabilirsiniz.</p></details><details><summary>Önerilen sözleri değiştirebilir miyim?</summary><p>Elbette. Sözü kopyalayıp dilediğiniz gibi düzenleyebilir ya da &#x27;Bu sözle davetiye oluştur&#x27; ile doğrudan davetiye oluşturucuya aktarıp orada değiştirebilirsiniz.</p></details><details><summary>Ücretli mi?</summary><p>Hayır, araç tamamen ücretsizdir ve üyelik gerektirmez.</p></details></div></section>
 <h2 style="font-size:1.5rem;margin-top:48px">Diğer ücretsiz araçlar</h2>
-<div class="diger"><a href="/davetli-listesi">Davetli listesi</a><a href="/dugun-butcesi-hesaplama">Düğün bütçesi hesaplama</a><a href="/2027-dugun-takvimi">2027 düğün takvimi</a><a href="/dugun-hashtag-olusturucu">Düğün hashtag oluşturucu</a><a href="/rehber">Davetiye rehberi</a></div>
+<div class="diger"><a href="/davetli-listesi">Davetli listesi</a><a href="/dugun-butcesi-hesaplama">Düğün bütçesi hesaplama</a><a href="/2027-dugun-takvimi">2027 düğün takvimi</a><a href="/dugun-hashtag-olusturucu">Düğün hashtag oluşturucu</a><a href="/dugun-geri-sayim">Düğün geri sayım</a><a href="/rehber">Davetiye rehberi</a></div>
 </main>
 <footer><div class="in"><a href="/" aria-label="LaVie Davetiye"><img src="/logo-acik.svg" alt="La Vie Creative Studio" width="630" height="165"></a><span>© <span id="yil">2026</span> LaVie Davetiye · <a href="https://instagram.com/la.viecreative" target="_blank" rel="noopener">@la.viecreative</a></span></div></footer>
 <a class="destek" id="destek" target="_blank" rel="noopener" aria-label="WhatsApp destek hattı"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 000-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 001.8-1.3 2.3 2.3 0 00.2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg></a>
