@@ -23,6 +23,7 @@ SAYFALAR = [
              ("lcv-nedir","LCV nedir?","Davetiyedeki LCV ifadesinin anlamı ve katılım yanıtlarını toplamanın kolay yolu."),
              ("davetli-listesi","Davetli listesi aracı","Misafirlerinizi gruplara ayırın, kişi sayısını hesaplayın, listeyi Excel'e aktarın."),
              ("dugun-butcesi-hesaplama","Düğün bütçesi hesaplama","Salon, yemek, kıyafet ve diğer kalemleri tek ekranda planlayın."),
+             ("dijital-davetiye-fiyatlari","Dijital davetiye fiyatları","Dijital davetiyenin fiyatını neyin belirlediği, görsel davetiye ile davetiye sitesi farkı ve gizli maliyetler."),
              ("2027-dugun-takvimi","2027 düğün takvimi","Bayramlar, Ramazan ve uzun hafta sonlarıyla düğün tarihi seçerken nelere dikkat etmeli."),
              ("dugun-hashtag-olusturucu","Düğün hashtag oluşturucu","Misafirlerinizin fotoğraf paylaşırken kullanacağı size özel Instagram etiketi."),
              ("dugun-geri-sayim","Düğün geri sayım","Düğününüze kaç gün kaldığını canlı görün, paylaşılabilir geri sayım linkinizi oluşturun.")],
@@ -210,12 +211,12 @@ footer{background:var(--deep);color:var(--deep-mut);padding-block:40px 110px;fon
 YENILER = [
  dict(slug="2027-dugun-takvimi", ad="2027 düğün takvimi", tip="Araç", tarih="13 Ekim 2026", sezon="Sezonun içeriği",
       ozet="Gelecek yılın düğün tarihini seçme zamanı: bayramlar, Ramazan, iki bayram arası ve uzun hafta sonları tek takvimde."),
+ dict(slug="dijital-davetiye-fiyatlari", ad="Dijital davetiye fiyatları", tip="Rehber", tarih="18 Ekim 2026",
+      ozet="Dijital davetiyenin fiyatını neler belirler: görsel davetiye ile davetiye sitesi farkı, tek seferlik ödeme ve gizli maliyetler."),
  dict(slug="dugun-geri-sayim", ad="Düğün geri sayım", tip="Araç", tarih="17 Ekim 2026",
       ozet="Düğününüze kaç gün kaldığını canlı görün; paylaşılabilir link, takvime ekleme ve hazırlık takvimi."),
  dict(slug="dijital-davetiye-nasil-yapilir", ad="Dijital davetiye nasıl yapılır?", tip="Rehber", tarih="16 Ekim 2026",
       ozet="Hazırlamanız gereken bilgilerden paylaşıma ve katılım takibine kadar adım adım dijital davetiye."),
- dict(slug="dugun-hashtag-olusturucu", ad="Düğün hashtag oluşturucu", tip="Araç", tarih="15 Ekim 2026",
-      ozet="Gelin ve damadın adından düğün, nişan, kına ve söz için Instagram etiketi önerileri."),
 ]
 YENI_CSS = """
 .yeni{margin-top:26px}.yeni h2{font-size:1.5rem;margin:0 0 4px}

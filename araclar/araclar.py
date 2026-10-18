@@ -271,7 +271,7 @@ BT_GOVDE = """
 <li><b>Davetli sayısı bütçenin anahtarıdır.</b> Salon ve yemek kişi başı fiyatlandığı için her ek 10 kişi toplamı belirgin şekilde artırır.</li>
 <li><b>Yedek ayırın.</b> Son dakika harcamaları için bütçenin bir kısmını "Diğer" kalemine bırakmak sürprizleri önler.</li>
 <li><b>Teklifleri girdikçe güncelleyin.</b> Bu araç tahmin değil, plan aracıdır; gerçek teklifler geldikçe rakamları değiştirin.</li>
-<li><b>Sabit maliyetli seçenekleri değerlendirin.</b> Davetiye gibi kalemlerde kişi sayısından bağımsız çözümler, kalabalık düğünlerde ciddi fark yaratır.</li>
+<li><b>Sabit maliyetli seçenekleri değerlendirin.</b> Davetiye gibi kalemlerde kişi sayısından bağımsız çözümler, kalabalık düğünlerde ciddi fark yaratır. Davetiye fiyatını nelerin belirlediğini <a href="/dijital-davetiye-fiyatlari">dijital davetiye fiyatları</a> rehberinde anlattık.</li>
 </ol>
 <h2>Sıkça sorulanlar</h2>
 """ + sss_html(BT_SSS) + "</section>"
