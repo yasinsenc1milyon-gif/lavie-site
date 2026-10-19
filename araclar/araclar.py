@@ -185,7 +185,7 @@ DL_GOVDE = """
 <li><b>Tarafları ayrı yazın.</b> Gelin ve damat tarafının sayılarını görmek, ailelerle konuşurken işinizi kolaylaştırır.</li>
 <li><b>Kişi sayısını hane hane girin.</b> "Kaya ailesi, 4 kişi" gibi kayıtlar hem davetiye adedini hem masa düzenini netleştirir.</li>
 <li><b>Gruplar masa planının temelidir.</b> Aile, arkadaş, iş gibi gruplar sonradan masaları yerleştirirken size zaman kazandırır.</li>
-<li><b>Telefonları baştan toplayın.</b> Dijital davetiyeyi WhatsApp'tan göndereceğiniz için numaraları listeye eklemek son haftayı rahatlatır.</li>
+<li><b>Telefonları baştan toplayın.</b> Dijital davetiyeyi WhatsApp'tan göndereceğiniz için numaraları listeye eklemek son haftayı rahatlatır. Kime nasıl bir mesaj yazacağınızı <a href="/whatsapp-davetiye-gonderme">WhatsApp'tan davetiye gönderme</a> rehberinde örneklerle anlattık.</li>
 </ol>
 <h2>Sıkça sorulanlar</h2>
 """ + sss_html(DL_SSS) + "</section>"
