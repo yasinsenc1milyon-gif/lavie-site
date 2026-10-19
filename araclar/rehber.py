@@ -9,10 +9,13 @@ TARIH = "2026-10-12"
 # Her yazı: bölümler (başlık, paragraflar, örnek sözler, madde listesi)
 YAZILAR = [
  dict(slug="dugun-davetiyesi-sozleri", kisa="Düğün davetiyesi sözleri", tur="Düğün",
-  title="Düğün Davetiyesi Sözleri: 40 Kısa, Anlamlı ve Modern Örnek | LaVie",
-  desc="En güzel düğün davetiyesi sözleri: kısa, klasik, modern, aile ağzından ve esprili 40 örnek. Kopyalayıp davetiyenize ekleyin, dijital davetiyenizde kullanın.",
+  title="Düğün Davetiyesi Sözleri: 48 Kısa, Anlamlı ve Dualı Örnek | LaVie",
+  desc="48 düğün davetiyesi sözü: kısa, klasik, dualı, modern, aile ağzından ve esprili örnekler. Tek tıkla kopyalayın, dijital düğün davetiyenize ekleyin.",
+  guncel=("2026-10-19", "19 Ekim 2026"),
+  cta=("Seçtiğiniz sözle düğün davetiyenizi hazırlayın", "Sözü kopyalayın, LaVie'de “Davet notu” alanına yapıştırın; zarfı açılan, müzikli, konumlu ve katılım formlu dijital düğün davetiyenizde anında görün. 500 TL, tek seferlik."),
+  ilgili=[("davetiye-sozu-olusturucu","Davetiye sözü oluşturucu"),("davetli-listesi","Davetli listesi aracı"),("dugun-geri-sayim","Düğün geri sayım")],
   h1=("Düğün Davetiyesi", "Sözleri"),
-  giris="Davetiyedeki birkaç cümle, misafirinizin düğününüzle ilgili ilk izlenimidir. Aşağıda farklı tarzlarda 40 düğün davetiyesi sözü bulacaksınız. Beğendiğinizi kopyalayabilir, isimleri ve ayrıntıları kendinize göre değiştirebilirsiniz.",
+  giris="Davetiyedeki birkaç cümle, misafirinizin düğününüzle ilgili ilk izlenimidir. Aşağıda farklı tarzlarda 48 düğün davetiyesi sözü bulacaksınız. Beğendiğinizi kopyalayabilir, isimleri ve ayrıntıları kendinize göre değiştirebilirsiniz.",
   bolumler=[
    ("Kısa düğün davetiyesi sözleri", ["Davetiyeniz sade bir tasarıma sahipse ya da tek satırlık bir cümle istiyorsanız kısa sözler en iyi seçimdir."],
     ["Bir ömür boyu sürecek mutluluğumuza sizi de bekliyoruz.",
@@ -32,6 +35,15 @@ YAZILAR = [
      "Mutluluğumuzu paylaşmak üzere düğün törenimize sizleri de davet etmekten onur duyarız.",
      "Allah'ın izni ve ailelerimizin rızasıyla evleniyoruz. Bu mutlu günümüzde sizleri de aramızda görmek isteriz.",
      "Bir yastıkta kocamaya niyet ettiğimiz bu günde dualarınızı bekliyoruz."], None),
+   ("Dualı ve manevi düğün davetiyesi sözleri", ["Dini nikâh, mevlit ya da dua ile başlayan bir düğün planlıyorsanız davetiyede de bu manevi havayı yansıtan sözler tercih edebilirsiniz."],
+    ["Rabbimin takdiri ve ailelerimizin duasıyla kurduğumuz yuvanın ilk gününde sizleri de aramızda görmek isteriz.",
+     "Hayırlı bir yuva kurmak niyetiyle çıktığımız bu yolda dualarınızla yanımızda olmanızı rica ederiz.",
+     "Allah'ın izniyle birleşen hayatlarımızın ilk adımında sizleri de sevincimize ortak etmek isteriz.",
+     "Sevgi ve merhamet üzerine kurmaya niyet ettiğimiz yuvamız için dualarınızı ve varlığınızı bekliyoruz.",
+     "Nikâhımızın hayırlara vesile olması dileğiyle, bu mübarek günümüzde sizleri de aramızda görmekten onur duyarız.",
+     "Bir ömür boyu birbirimize yoldaş olmaya niyet ettik. Bu güzel niyetimize âmin demeniz için sizleri de bekliyoruz.",
+     "Rabbim yuvamızı huzurla doldursun diye dua ederken bu dualara sizin de katılmanızı isteriz.",
+     "Hayırlı bir başlangıç için dualarınızı esirgemeyin; düğün merasimimize teşriflerinizi bekleriz."], None),
    ("Modern ve romantik düğün davetiyesi sözleri", ["Daha kişisel ve duygusal bir dil, özellikle genç çiftlerin davetiyelerinde çok sevilir."],
     ["İki ayrı hikâye bu akşam tek bir masalda buluşuyor. Masalımızın ilk sayfasında sizi de görmek istiyoruz.",
      "Birlikte gülmeye, birlikte yaşlanmaya karar verdik. Bu kararı sizinle kutlamak istiyoruz.",
@@ -66,7 +78,10 @@ YAZILAR = [
   ],
   sss=[("Düğün davetiyesine en çok hangi söz yazılır?", "En çok tercih edilenler 'Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız' gibi sade ve sıcak cümlelerdir. Aile büyüklerine de hitap ettiği için geniş davetli listelerinde güvenli bir seçimdir."),
        ("Davetiye sözü ne kadar uzun olmalı?", "Bir ya da iki cümle yeterlidir. Asıl bilgiler (tarih, saat, mekân) ayrıca yer aldığı için davet sözünün kısa ve akılda kalıcı olması daha etkilidir."),
-       ("Dijital davetiyede de bu sözleri kullanabilir miyim?", "Evet. LaVie'de sözü 'Davet notu' alanına yapıştırmanız yeterli; yazdığınız anda telefondaki önizlemede görünür ve sonradan panelinizden değiştirebilirsiniz.")]),
+       ("Dijital davetiyede de bu sözleri kullanabilir miyim?", "Evet. LaVie'de sözü 'Davet notu' alanına yapıştırmanız yeterli; yazdığınız anda telefondaki önizlemede görünür ve sonradan panelinizden değiştirebilirsiniz."),
+       ("Davetiyede gelinin adı mı damadın adı mı önce yazılır?", "Kesin bir kural yoktur. Yaygın kullanımda gelinin adı önce yazılır; aile adları kullanılıyorsa kız ve erkek tarafı aynı düzende sıralanır. Önemli olan iki ailenin de bu sıralamayı benimsemesidir; dijital davetiyede isimlerin sırasını dilediğiniz zaman değiştirebilirsiniz."),
+       ("Düğüne çocuk getirilmemesi davetiyede kibarca nasıl belirtilir?", "Doğrudan yasak dili yerine nazik bir not tercih edin: 'Çocuklarımıza iyi uykular dileriz' ya da 'Bu gece yalnızca yetişkin misafirlerimizi ağırlayacağız' gibi. Notu davet sözünün altına ayrı bir satır olarak eklemek, sözün sıcaklığını bozmadan mesajı iletir."),
+       ("Davet sözüne kendi hikâyemizi yazabilir miyiz?", "Elbette. Tanışma yılınız, ilk buluştuğunuz şehir ya da ortak bir esprinizle başlayan bir cümle davetiyeyi kişisel kılar. İsterseniz ücretsiz davetiye sözü oluşturucuyla isimlerinize özel taslaklar üretip üzerinde değişiklik yapabilirsiniz.")]),
 
  dict(slug="kina-davetiyesi-sozleri", kisa="Kına davetiyesi sözleri", tur="Kına",
   title="Kına Davetiyesi Sözleri: 23 Duygusal, Kısa ve Eğlenceli Örnek | LaVie",
@@ -382,7 +397,7 @@ def yazi(y):
     turq = y["tur"]
     olustur = f"/?tur={turq}#olustur"
     tur_sayfa = next((s for s in SAYFALAR if s["tur"] == turq), SAYFALAR[0])
-    art = {"@context":"https://schema.org","@type":"Article","headline":y["title"].split(" | ")[0],"description":y["desc"],"datePublished":TARIH,"dateModified":TARIH,
+    art = {"@context":"https://schema.org","@type":"Article","headline":y["title"].split(" | ")[0],"description":y["desc"],"datePublished":TARIH,"dateModified":y.get("guncel",(TARIH,))[0],
            "author":{"@type":"Organization","name":"LaVie Davetiye","url":U+"/"},"publisher":{"@type":"Organization","name":"LaVie Davetiye","logo":{"@type":"ImageObject","url":U+"/logo.svg"}},
            "mainEntityOfPage":url,"image":og_gorsel(y["slug"]),"inLanguage":"tr-TR"}
     bc = {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana sayfa","item":U+"/"},{"@type":"ListItem","position":2,"name":"Rehber","item":U+"/rehber"},{"@type":"ListItem","position":3,"name":y["kisa"],"item":url}]}
@@ -394,7 +409,9 @@ def yazi(y):
         govde += f'<h2 id="b{i}">{e(baslik)}</h2>' + "".join(f"<p>{e(p)}</p>" for p in paragraflar)
         if ornekler: govde += '<div class="metinler">' + "".join(f'<div class="metin"><p>“{e(m)}”</p><button type="button" data-m="{e(m)}">Kopyala</button></div>' for m in ornekler) + "</div>"
         if liste: govde += '<ul class="liste">' + "".join(f"<li>{e(x)}</li>" for x in liste) + "</ul>"
-        if i == 1: govde += f'<div class="cta-kutu"><b>Bu sözü davetiyenizde görün</b><p>Zarfı açılan, müzikli ve katılım formlu dijital {e(turq.lower())} davetiyenizi oluşturun; yazdığınız söz anında önizlemede belirir. 500 TL, tek seferlik.</p><a class="btn pri" href="{olustur}">Davetiyemi oluştur</a></div>'
+        if i == 1:
+            cb, cp = y.get("cta") or ("Bu sözü davetiyenizde görün", f"Zarfı açılan, müzikli ve katılım formlu dijital {turq.lower()} davetiyenizi oluşturun; yazdığınız söz anında önizlemede belirir. 500 TL, tek seferlik.")
+            govde += f'<div class="cta-kutu"><b>{e(cb)}</b><p>{e(cp)}</p><a class="btn pri" href="{olustur}">Davetiyemi oluştur</a></div>'
     sss = "".join(f"<details><summary>{e(q)}</summary><p>{e(a)}</p></details>" for q,a in y["sss"])
     diger = "".join(f'<a href="/{x["slug"]}">{e(x["kisa"])}</a>' for x in YAZILAR if x is not y)
     ilgili = ""
@@ -425,7 +442,7 @@ def yazi(y):
 <div class="yol"><a href="/">Ana sayfa</a> › <a href="/rehber">Rehber</a> › {e(y['kisa'])}</div>
 <div class="eyebrow" style="margin-top:26px">LaVie Rehber</div>
 <h1>{e(ilk)} <em>{e(son)}</em></h1>
-<p class="meta">Güncelleme: 12 Ekim 2026 · LaVie Davetiye</p>
+<p class="meta">Güncelleme: {y.get("guncel",(TARIH,"12 Ekim 2026"))[1]} · LaVie Davetiye</p>
 <p class="lead" style="font-size:1.1rem">{e(y['giris'])}</p>
 <nav class="icindekiler" aria-label="İçindekiler"><b>İçindekiler</b><ol>{ic}</ol></nav>
 {govde}
