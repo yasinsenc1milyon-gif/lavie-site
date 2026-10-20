@@ -212,12 +212,12 @@ footer{background:var(--deep);color:var(--deep-mut);padding-block:40px 110px;fon
 YENILER = [
  dict(slug="2027-dugun-takvimi", ad="2027 düğün takvimi", tip="Araç", tarih="13 Ekim 2026", sezon="Sezonun içeriği",
       ozet="Gelecek yılın düğün tarihini seçme zamanı: bayramlar, Ramazan, iki bayram arası ve uzun hafta sonları tek takvimde."),
+ dict(slug="tarihi-kaydet-mesaji", ad="Tarihi kaydedin mesajı", tip="Araç", tarih="20 Ekim 2026",
+      ozet="Save the date: isim, tarih ve şehirle WhatsApp'a hazır samimi, resmî ve eğlenceli 'tarihi kaydedin' mesajları."),
  dict(slug="whatsapp-davetiye-gonderme", ad="WhatsApp'tan davetiye gönderme", tip="Rehber", tarih="19 Ekim 2026",
       ozet="Kime nasıl yazmalı: aile büyükleri, arkadaşlar ve iş arkadaşları için örnek davet ve hatırlatma mesajları."),
  dict(slug="dijital-davetiye-fiyatlari", ad="Dijital davetiye fiyatları", tip="Rehber", tarih="18 Ekim 2026",
       ozet="Dijital davetiyenin fiyatını neler belirler: görsel davetiye ile davetiye sitesi farkı, tek seferlik ödeme ve gizli maliyetler."),
- dict(slug="dugun-geri-sayim", ad="Düğün geri sayım", tip="Araç", tarih="17 Ekim 2026",
-      ozet="Düğününüze kaç gün kaldığını canlı görün; paylaşılabilir link, takvime ekleme ve hazırlık takvimi."),
 ]
 YENI_CSS = """
 .yeni{margin-top:26px}.yeni h2{font-size:1.5rem;margin:0 0 4px}

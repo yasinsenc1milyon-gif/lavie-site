@@ -88,6 +88,10 @@ ARAC_CSS = """
 .satir.adim{grid-template-columns:1fr auto}.satir.adim span:empty{display:none}
 .rozet-k{font-size:.76rem;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap}
 .satir.gecti b,.satir.gecti small{color:#a39ca5}.satir.gecti b{text-decoration:line-through}
+.mesajlar{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:18px}
+.mesaj{display:grid;gap:8px;align-content:start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
+.mesaj small{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:500}
+.mesaj p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.95rem;line-height:1.55}
 """
 
 def kabuk(slug, title, desc, h1, giris, govde, script, ld_ekstra=(), cta_tur="Düğün"):
@@ -776,6 +780,134 @@ ciz();
 setInterval(sayacCiz, 1000);
 """
 
+# ---------------- Tarihi kaydet (save the date) mesajı ----------------
+TM_SSS = [("Tarihi kaydedin (save the date) mesajı nedir?", "Düğün, nişan ya da kına tarihiniz belli olduğunda, asıl davetiyeden önce yakınlarınıza gönderdiğiniz kısa bir ön haberdir. Amaç, misafirlerin o günü şimdiden ayırmasını sağlamaktır; saat, program ve katılım bilgisi daha sonra davetiyeyle gelir."),
+          ("Tarihi kaydedin mesajı ne zaman gönderilir?", "Düğün için genellikle 3-6 ay önce gönderilir. Şehir dışından ya da yurt dışından gelecek misafirleriniz varsa, yolculuk ve izin planı yapabilmeleri için daha erken haber vermek iyi olur. Asıl davetiye ise çoğunlukla düğünden 4-6 hafta önce gönderilir."),
+          ("Bu mesaj davetiyenin yerine geçer mi?", "Hayır. Tarihi kaydedin mesajı yalnızca bir ön haberdir. Saat, mekân, program ve katılım (LCV) bilgisi için daha sonra asıl davetiyeyi göndermeniz gerekir. Mesajlarda bu yüzden davetiyenin ayrıca geleceği belirtilir."),
+          ("Herkese tarihi kaydedin mesajı göndermeli miyim?", "Yalnızca davet edeceğinizden emin olduğunuz kişilere gönderin. Bu mesajı alan herkes davetiyeyi de bekler; liste kesinleşmeden geniş bir gruba göndermek sonradan zor durumda kalmanıza yol açabilir."),
+          ("Mesajı WhatsApp'ta nasıl gönderirim?", "Beğendiğiniz mesajın altındaki 'WhatsApp'ta gönder' düğmesine dokunun; WhatsApp mesaj hazır şekilde açılır, kişiyi ya da grubu seçip gönderirsiniz. Çok kişiye tek tek göndermek için WhatsApp'taki yayın listesi özelliğini kullanabilirsiniz; yayın listesi mesajları yalnızca numaranızı rehberine kaydetmiş kişilere ulaşır."),
+          ("Girdiğim bilgiler kaydediliyor mu?", "Hayır, araç tamamen tarayıcınızda çalışır; isimler, tarih ve şehir bize gönderilmez. Son girdiğiniz bilgiler yalnızca bu cihazda hatırlanır.")]
+TM_GOVDE = """
+<div class="arac">
+  <div class="izgara">
+    <div class="alan"><span>Davet türü</span><div class="seg" id="turSec"></div></div>
+    <div class="iki">
+      <label class="alan"><span>Gelin</span><input id="gelin" placeholder="Elif" maxlength="30" autocomplete="off"></label>
+      <label class="alan"><span>Damat</span><input id="damat" placeholder="Burak" maxlength="30" autocomplete="off"></label>
+    </div>
+    <div class="iki">
+      <label class="alan"><span>Tarih</span><input id="tarih" type="date"></label>
+      <label class="alan"><span>Saat</span><input id="saat" type="time" aria-label="Saat (isteğe bağlı)"></label>
+    </div>
+    <div class="iki">
+      <label class="alan"><span>Şehir</span><input id="sehir" placeholder="İstanbul" maxlength="30" autocomplete="off"></label>
+      <label class="alan"><span>Mekân</span><input id="mekan" placeholder="İsteğe bağlı" maxlength="60" autocomplete="off"></label>
+    </div>
+    <div class="alan"><span>Geri sayım linki</span><div class="seg" id="linkSec"></div></div>
+  </div>
+  <div class="mesajlar" id="mesajlar" aria-live="polite"></div>
+  <p class="not">Saat ve mekân boş bırakılabilir; çoğu çift bu ayrıntıları asıl davetiyede paylaşır. Mesajları göndermeden önce dilediğiniz gibi düzenleyebilirsiniz.</p>
+</div>
+<div class="cta-kutu"><b>Sırada davetiye var</b><p>Tarihi duyurduktan sonra asıl davetiyeyi gönderme zamanı gelir. Dijital davetiyenizde misafirleriniz zarfı açar, programı, konumu ve canlı geri sayımı görür, katılımını tek dokunuşla bildirir. İsimleriniz hazır olarak aktarılır.</p><a class="btn pri" id="ctaLink" href="/?tur=Düğün#olustur">Bu bilgilerle davetiye oluştur</a></div>
+<section class="makale">
+<h2>Tarihi kaydedin mesajı nasıl hazırlanır?</h2>
+<ol>
+<li><b>Önce tarihi kesinleştirin.</b> Salon ya da mekân onaylanmadan tarih duyurmayın; sonradan değişiklik herkesin planını bozar. Tarih seçerken <a href="/2027-dugun-takvimi">2027 düğün takvimi</a> aracımız bayram ve tatilleri gösterir.</li>
+<li><b>Kısa tutun.</b> İsimler, tarih ve şehir yeterlidir. Ayrıntılar davetiyede gelecek.</li>
+<li><b>Davetiyenin geleceğini belirtin.</b> Böylece misafirler saat ve adres için ayrıca soru sormaz.</li>
+<li><b>Hitabı kişiye göre seçin.</b> Aile büyüklerine daha saygılı, arkadaşlara daha samimi bir dil kullanın.</li>
+<li><b>Listeyi önceden belirleyin.</b> Mesajı alan herkes davetiyeyi de bekleyecektir; <a href="/davetli-listesi">davetli listesi</a> aracımızla listenizi hazırlayabilirsiniz.</li>
+</ol>
+<p>Asıl davetiyeyi ne zaman göndereceğinizi <a href="/davetiye-ne-zaman-gonderilir">davetiye ne zaman gönderilir</a> rehberimizde, kime nasıl yazacağınızı <a href="/whatsapp-davetiye-gonderme">WhatsApp'tan davetiye gönderme</a> yazımızda bulabilirsiniz. Mesajınıza eklemek için <a href="/dugun-geri-sayim">düğün geri sayım</a> ve <a href="/dugun-hashtag-olusturucu">düğün hashtag oluşturucu</a> araçlarımızı da kullanabilirsiniz.</p>
+<h2>Sıkça sorulanlar</h2>
+""" + sss_html(TM_SSS) + "</section>"
+TM_JS = r"""
+const TURLER = {
+  "Düğün": { haber: "Evleniyoruz!", biz: "düğünümüz", bizE: "düğünümüze", onlar: "düğünü", ad: "düğün" },
+  "Nişan": { haber: "Nişanlanıyoruz!", biz: "nişanımız", bizE: "nişanımıza", onlar: "nişanı", ad: "nişan" },
+  "Kına": { haber: "Kına gecemizin tarihi belli oldu!", biz: "kına gecemiz", bizE: "kına gecemize", onlar: "kına gecesi", ad: "kına gecesi" },
+  "Söz": { haber: "Söz törenimizin tarihi belli oldu!", biz: "söz törenimiz", bizE: "söz törenimize", onlar: "söz töreni", ad: "söz töreni" } };
+const AY = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const GUN = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+const TARIH_RE = /^\d{4}-\d{2}-\d{2}$/, SAAT_RE = /^\d{2}:\d{2}$/;
+function varsayilanTarih(){ const d = new Date(Date.now() + 180 * 864e5); d.setDate(d.getDate() + (6 - d.getDay() + 7) % 7); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+let S = Object.assign({ tur: "Düğün", gelin: "", damat: "", tarih: varsayilanTarih(), saat: "", sehir: "", mekan: "", link: "yok" }, oku("lavie_tarihikaydet", {}));
+{ const q = new URLSearchParams(location.search);
+  if (TURLER[q.get("tur")]) S.tur = q.get("tur");
+  ["gelin","damat","sehir"].forEach(k => { if (q.has(k)) S[k] = q.get(k).slice(0, 30); });
+  if (TARIH_RE.test(q.get("tarih") || "")) S.tarih = q.get("tarih"); }
+["gelin","damat","tarih","saat","sehir","mekan"].forEach(k => $(k).value = S[k] || "");
+const buyuk = s => s ? s.charAt(0).toLocaleUpperCase("tr") + s.slice(1) : s;
+// Türkçe ekler: Elif'in / Burak'ın, İstanbul'da / Sivas'ta, İzmir'e / Ankara'ya
+function sonUnlu(ad){ const u = ad.toLocaleLowerCase("tr").match(/[aeıioöuü]/g); return u ? u[u.length - 1] : "e"; }
+function iyelik(ad){
+  const k = ad.toLocaleLowerCase("tr"), e = { a:"ın", ı:"ın", e:"in", i:"in", o:"un", u:"un", ö:"ün", ü:"ün" }[sonUnlu(ad)];
+  return ad + "'" + (/[aeıioöuü]$/.test(k) ? "n" : "") + e;
+}
+const kalin = ad => "aıou".includes(sonUnlu(ad));
+const bulunma = ad => ad + "'" + (/[fstkçşhp]$/.test(ad.toLocaleLowerCase("tr")) ? "t" : "d") + (kalin(ad) ? "a" : "e");
+const yonelme = ad => ad + "'" + (/[aeıioöuü]$/.test(ad.toLocaleLowerCase("tr")) ? "y" : "") + (kalin(ad) ? "a" : "e");
+function tarihBilgi(){
+  if (!TARIH_RE.test(S.tarih)) return null;
+  const [y, a, g] = S.tarih.split("-").map(Number), d = new Date(Date.UTC(y, a - 1, g));
+  if (isNaN(d)) return null;
+  return { uzun: `${g} ${AY[a - 1]} ${y} ${GUN[d.getUTCDay()]}`, kisa: `${String(g).padStart(2, "0")}.${String(a).padStart(2, "0")}.${y}` };
+}
+function geriSayimLink(){
+  const p = new URLSearchParams({ tarih: S.tarih, tur: S.tur });
+  if (SAAT_RE.test(S.saat)) p.set("saat", S.saat);
+  if (S.gelin.trim()) p.set("gelin", S.gelin.trim());
+  if (S.damat.trim()) p.set("damat", S.damat.trim());
+  return location.origin + "/dugun-geri-sayim?" + p.toString();
+}
+function mesajlar(){
+  const g = S.gelin.trim() || "Elif", d = S.damat.trim() || "Burak", T = TURLER[S.tur], t = tarihBilgi();
+  if (!t) return [];
+  const sehir = S.sehir.trim(), mekan = S.mekan.trim(), saat = SAAT_RE.test(S.saat) ? S.saat.replace(":", ".") : "";
+  const cift = `${g} & ${d}`;
+  const tarihSatir = "🗓 " + t.uzun + (saat ? ", " + saat : "");
+  const yerSatir = mekan || sehir ? "📍 " + [mekan, sehir].filter(Boolean).join(", ") : "";
+  const sehirde = sehir ? " " + bulunma(sehir) : "";
+  const gunu = `${t.uzun} günü${sehirde}`;
+  const onlarin = S.tur === "Kına" ? `kızımız ${iyelik(g)} kına gecesi` : `çocuklarımız ${g} ile ${iyelik(d)} ${T.onlar}`;
+  const L = [
+    ["Samimi", `Tarihi şimdiden kaydedin! 💍\n\n${cift}\n${T.haber}\n\n${tarihSatir}${yerSatir ? "\n" + yerSatir : ""}\n\nDavetiyemiz yakında geliyor. O gün sizi de yanımızda görmek bizi çok mutlu eder.`],
+    ["Samimi", `Merhaba! Güzel bir haberimiz var: ${T.biz} ${gunu} olacak. 🤍\n\nDavetiyeyi daha sonra göndereceğiz ama bu tarihi şimdiden takviminize not etmenizi çok isteriz.\n\nSevgiyle, ${cift}`],
+    ["Resmî", `Değerli dostlarımız,\n\n${buyuk(T.biz)} ${gunu} gerçekleşecektir. Bu mutlu günümüzde sizleri de aramızda görmekten onur duyarız. Davetiyemiz ayrıca gönderilecektir; şimdiden tarihi ajandanıza not etmenizi rica ederiz.\n\n${cift}`],
+    ["Aile büyüklerine", `Sevgili büyüklerimiz,\n\n${buyuk(T.biz)} için tarih belli oldu: ${gunu}. Sizin duanız ve varlığınız bizim için çok kıymetli; o gün aramızda olmanızı çok isteriz. Davetiyemizi ayrıca ileteceğiz.\n\nEllerinizden öperiz.\n${cift}`],
+    ["Aile adına", `Kıymetli dostlarımız,\n\n${buyuk(onlarin)} ${gunu} yapılacaktır. Bu mutlu günümüzde sizleri de aramızda görmekten mutluluk duyarız. Davetiye ayrıca gönderilecektir; şimdiden tarihi ayırmanızı rica ederiz.\n\nSevgi ve saygılarımızla`],
+    ["İş arkadaşlarına", `Merhaba, ${T.biz} ${gunu} olacak. Davetiye kısa süre içinde gelecek; uygunsanız tarihi şimdiden ayırmanızı rica ederiz.\n\nSevgiler, ${cift}`],
+    ["Kısa", `Tarihi kaydedin: ${cift} ${T.ad} · ${t.kisa}${sehir ? " · " + sehir : ""} 💍 Davetiye yakında!`],
+    ["Kısa", `${t.kisa} tarihini boş bırakın! ${T.haber} 🤍 ${cift}`],
+    ["Eğlenceli", `Bu bir tatbikat değildir! 🎉 ${T.haber}\n\n${t.uzun} için ajandanızı şimdiden boşaltın${sehir ? ", yolunuz " + yonelme(sehir) + " düşüyor" : ""}. Davetiye yakında yola çıkıyor, siz de dans ayakkabılarınızı hazırlayın! 💃🕺\n\n${cift}`],
+    ["Eğlenceli", `Takvimler hazır mı? 📅 ${t.uzun} günü ${T.biz} var ve siz olmadan olmaz! Ayrıntılar davetiyede, tarih şimdiden sizin. 💌\n\n${cift}`]
+  ];
+  const ek = S.link === "var" ? "\n\nGeri sayım: " + geriSayimLink() : "";
+  return L.map(([etk, m]) => [etk, m + ek]);
+}
+function seg(el, ogeler, secili, fn){ el.innerHTML = ogeler.map(([k,v]) => `<button type="button" data-k="${k}" aria-pressed="${k===secili}">${v}</button>`).join(""); el.querySelectorAll("button").forEach(b => b.onclick = () => fn(b.dataset.k)); }
+async function kopyala(metin, b, eski){
+  try { await navigator.clipboard.writeText(metin); b.textContent = "Kopyalandı"; }
+  catch { const t = document.createElement("textarea"); t.value = metin; document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand("copy"); } catch {} t.remove(); b.textContent = ok ? "Kopyalandı" : "Kopyalanamadı"; }
+  setTimeout(() => b.textContent = eski, 1600);
+}
+function ciz(){
+  yaz("lavie_tarihikaydet", S);
+  seg($("turSec"), Object.keys(TURLER).map(k => [k, k]), S.tur, k => { S.tur = k; ciz(); });
+  seg($("linkSec"), [["yok","Ekleme"],["var","Mesaja ekle"]], S.link, k => { S.link = k; ciz(); });
+  const L = mesajlar();
+  $("mesajlar").innerHTML = L.length ? L.map(([etk, m], i) => `<div class="mesaj"><small>${esc(etk)}</small><p>${esc(m)}</p><div class="etiket-d"><button type="button" data-i="${i}">Kopyala</button><a href="https://wa.me/?text=${encodeURIComponent(m)}" target="_blank" rel="noopener">WhatsApp'ta gönder</a></div></div>`).join("")
+    : `<div class="bos" style="border:1px solid var(--line);border-radius:14px">Mesajların hazırlanması için bir tarih seçin.</div>`;
+  $("mesajlar").querySelectorAll("button[data-i]").forEach(b => b.onclick = () => kopyala(L[+b.dataset.i][1], b, "Kopyala"));
+  const p = new URLSearchParams({ tur: S.tur });
+  if (S.gelin.trim()) p.set("gelin", S.gelin.trim());
+  if (S.damat.trim()) p.set("damat", S.damat.trim());
+  $("ctaLink").href = "/?" + p.toString() + "#olustur";
+}
+["gelin","damat","tarih","saat","sehir","mekan"].forEach(k => $(k).addEventListener("input", () => { S[k] = $(k).value; ciz(); }));
+ciz();
+"""
+
 ARACLAR = [
  dict(slug="davetli-listesi", ad="Davetli listesi", title="Ücretsiz Düğün Davetli Listesi Hazırlama Aracı (Excel'e Aktar) | LaVie",
       desc="Düğün, nişan ve kına davetli listenizi ücretsiz hazırlayın: gelin ve damat tarafı, gruplar, kişi sayısı, toplamlar ve Excel'e aktarma. Üyelik gerekmez.",
@@ -801,6 +933,10 @@ ARACLAR = [
       desc="Ücretsiz düğün geri sayım sayacı: tarih ve saati seçin, düğününüze kaç gün kaldığını canlı görün. WhatsApp'ta paylaşılabilir link, takvime ekleme ve hazırlık takvimi.",
       h1=("Düğün", "geri sayım"), giris="Düğün, nişan, kına ya da söz tarihinizi ve saatini seçin; kaç gün, saat ve dakika kaldığını canlı görün. Geri sayım linkinizi WhatsApp'ta paylaşın, düğünü takviminize ekleyin.",
       govde=GS_GOVDE, js=GS_JS, sss=GS_SSS),
+ dict(slug="tarihi-kaydet-mesaji", ad="Tarihi kaydedin mesajı", title="Tarihi Kaydedin (Save the Date) Mesajı: WhatsApp İçin Hazır Metinler | LaVie",
+      desc="Ücretsiz save the date mesajı oluşturucu: isim, tarih ve şehri yazın; düğün, nişan, kına ve söz için WhatsApp'a hazır 'tarihi kaydedin' mesajları alın.",
+      h1=("Tarihi kaydedin", "mesajı"), giris="İsimleri, tarihi ve şehri yazın; samimi, resmî, kısa ve eğlenceli 'tarihi kaydedin' mesajlarınız anında hazırlansın. Beğendiğinizi kopyalayın ya da tek dokunuşla WhatsApp'ta gönderin.",
+      govde=TM_GOVDE, js=TM_JS, sss=TM_SSS),
 ]
 
 def araclar_ana():
@@ -809,11 +945,11 @@ def araclar_ana():
     return f"""<!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ücretsiz Düğün Araçları: Davetli Listesi, Bütçe Hesaplama | LaVie</title>
-<meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, düğün geri sayım, 2027 düğün takvimi. Üyelik gerekmez.">
+<meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, tarihi kaydedin mesajı, düğün geri sayım, 2027 düğün takvimi. Üyelik gerekmez.">
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">
 <meta property="og:type" content="website"><meta property="og:title" content="Ücretsiz düğün araçları · LaVie"><meta property="og:url" content="{url}"><meta property="og:image" content="{og_gorsel('araclar')}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
-{hub_ld("araclar", "Ücretsiz düğün araçları", "Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, düğün geri sayım, 2027 düğün takvimi.", [(a["slug"], a["ad"]) for a in ARACLAR])}
+{hub_ld("araclar", "Ücretsiz düğün araçları", "Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, tarihi kaydedin mesajı, düğün geri sayım, 2027 düğün takvimi.", [(a["slug"], a["ad"]) for a in ARACLAR])}
 <style>{CSS}{YENI_CSS}</style></head><body>
 <a class="ust-serit" href="https://instagram.com/la.viecreative" target="_blank" rel="noopener"><div class="in">{IG}<span>Instagram'da biz: <b>@la.viecreative</b></span></div></a>
 <header class="nav"><div class="in"><a href="/" aria-label="LaVie Davetiye ana sayfa"><img src="/logo.svg" alt="La Vie Creative Studio" width="630" height="165"></a><a class="btn pri" href="/#olustur">Davetiyemi oluştur</a></div></header>
