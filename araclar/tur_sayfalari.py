@@ -17,6 +17,7 @@ SAYFALAR = [
   cta_dugme="Düğün davetiyemi oluştur",
   rehber_baslik="Düğün hazırlığınız için ücretsiz rehber ve araçlar",
   rehberler=[("dugun-davetiyesi-sozleri","Düğün davetiyesi sözleri","Resmi, samimi, kısa ve dini örneklerle kopyalayıp kullanabileceğiniz davet metinleri."),
+             ("nikah-davetiyesi-sozleri","Nikah davetiyesi sözleri","Yalnızca nikah, nikah + kokteyl ya da nikah + yemek için klasik, modern ve romantik davet metinleri."),
              ("davetiye-sozu-olusturucu","Davetiye sözü oluşturucu","İsimlerinizi ve tarihinizi yazın, size özel düğün davetiyesi sözü hazırlansın."),
              ("dijital-davetiye-nasil-yapilir","Dijital davetiye nasıl yapılır?","Bilgileri hazırlamaktan WhatsApp'ta paylaşıma ve LCV takibine kadar adım adım anlatım."),
              ("davetiye-ne-zaman-gonderilir","Davetiye ne zaman gönderilir?","Düğün davetiyesini kaç hafta önce göndermeniz gerektiğini ve hatırlatma zamanlamasını öğrenin."),
@@ -213,12 +214,12 @@ footer{background:var(--deep);color:var(--deep-mut);padding-block:40px 110px;fon
 YENILER = [
  dict(slug="2027-dugun-takvimi", ad="2027 düğün takvimi", tip="Araç", tarih="13 Ekim 2026", sezon="Sezonun içeriği",
       ozet="Gelecek yılın düğün tarihini seçme zamanı: bayramlar, Ramazan, iki bayram arası ve uzun hafta sonları tek takvimde."),
+ dict(slug="nikah-davetiyesi-sozleri", ad="Nikah davetiyesi sözleri", tip="Rehber", tarih="21 Ekim 2026",
+      ozet="Klasik, modern, romantik ve aile ağzından nikah davet metinleri; nikah + kokteyl ve nikah + yemek için örnekler."),
  dict(slug="tarihi-kaydet-mesaji", ad="Tarihi kaydedin mesajı", tip="Araç", tarih="20 Ekim 2026",
       ozet="Save the date: isim, tarih ve şehirle WhatsApp'a hazır samimi, resmî ve eğlenceli 'tarihi kaydedin' mesajları."),
  dict(slug="whatsapp-davetiye-gonderme", ad="WhatsApp'tan davetiye gönderme", tip="Rehber", tarih="19 Ekim 2026",
       ozet="Kime nasıl yazmalı: aile büyükleri, arkadaşlar ve iş arkadaşları için örnek davet ve hatırlatma mesajları."),
- dict(slug="dijital-davetiye-fiyatlari", ad="Dijital davetiye fiyatları", tip="Rehber", tarih="18 Ekim 2026",
-      ozet="Dijital davetiyenin fiyatını neler belirler: görsel davetiye ile davetiye sitesi farkı, tek seferlik ödeme ve gizli maliyetler."),
 ]
 YENI_CSS = """
 .yeni{margin-top:26px}.yeni h2{font-size:1.5rem;margin:0 0 4px}

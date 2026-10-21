@@ -337,7 +337,7 @@ SZ_GOVDE = """
 <li><b>Misafirinize uygun olsun.</b> Aile büyüklerinin ağırlıkta olduğu davetlerde klasik, arkadaş ağırlıklı davetlerde daha samimi bir dil seçin.</li>
 <li><b>Size benzesin.</b> Önerileri başlangıç olarak kullanıp kendi hikâyenizden bir kelime eklemek sözü unutulmaz yapar.</li>
 </ol>
-<p>Daha fazla örnek için <a href="/dugun-davetiyesi-sozleri">düğün</a>, <a href="/kina-davetiyesi-sozleri">kına</a> ve <a href="/nisan-davetiyesi-sozleri">nişan</a> davetiyesi sözleri yazılarımıza göz atın.</p>
+<p>Daha fazla örnek için <a href="/dugun-davetiyesi-sozleri">düğün</a>, <a href="/nikah-davetiyesi-sozleri">nikah</a>, <a href="/kina-davetiyesi-sozleri">kına</a> ve <a href="/nisan-davetiyesi-sozleri">nişan</a> davetiyesi sözleri yazılarımıza göz atın.</p>
 <h2>Sıkça sorulanlar</h2>
 """ + sss_html(SZ_SSS) + "</section>"
 SZ_JS = r"""
