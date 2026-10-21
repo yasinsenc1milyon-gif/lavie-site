@@ -127,6 +127,15 @@ footer.site .logo.img img{height:56px}
 .dene-s input:focus{outline:none;border-color:var(--accent);background:#fff}
 .dene-s .btn{padding:10px 16px}
 @media (max-width:420px){.dene-s{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}.dene-s .btn{grid-column:1/-1}}
+.ust-dene{margin:26px 0 0;max-width:520px}
+.hizli{margin:-4px 0 14px;font-size:.92rem;color:var(--muted);line-height:1.5}
+.detay{margin-top:18px;border:1px dashed var(--line);border-radius:14px;background:var(--paper)}
+.detay summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;font-weight:500;color:var(--accent)}
+.detay summary::-webkit-details-marker{display:none}
+.detay summary small{font-weight:400;font-size:.78rem;color:var(--muted);letter-spacing:.06em}
+.detay .kapa,.detay[open] .ac{display:none}
+.detay[open] .kapa{display:inline;color:var(--ink)}
+.detay-ic{padding:4px 16px 16px;display:grid;gap:14px}
 .dene-son{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px}
 .dene-son .btn{flex:1 1 160px;justify-content:center}
 .device{position:relative;width:100%;aspect-ratio:9/18.5;max-height:650px;border-radius:44px;border:10px solid #18161c;background:#18161c;overflow:hidden;box-shadow:0 40px 80px -36px rgba(33,31,39,.7),0 0 0 1px rgba(0,0,0,.05)}
@@ -447,6 +456,15 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
       <div class="eyebrow">Düğün · Nişan · Kına · Söz</div>
       <h1>Davetiyeniz, sevdiklerinizin <em>cebinde</em></h1>
       <p class="lead">Zarfı açılan, müzikli ve geri sayımlı şık bir davetiye sitesi. Misafirleriniz katılımını tek dokunuşla bildirir; siz de herkesi size özel panelinizden takip edersiniz.</p>
+      <form class="dene ust-dene" id="deneForm" autocomplete="off">
+        <div class="dene-b">Kendi isimlerinizle deneyin</div>
+        <div class="dene-s">
+          <input id="deneGelin" maxlength="20" placeholder="Gelin" aria-label="Gelinin adı" enterkeyhint="next">
+          <span aria-hidden="true">&amp;</span>
+          <input id="deneDamat" maxlength="20" placeholder="Damat" aria-label="Damadın adı" enterkeyhint="go">
+          <button class="btn pri" type="submit">Göster</button>
+        </div>
+      </form>
       <div class="cta">
         <a class="btn pri" href="#olustur">Davetiyemi oluştur</a>
         <a class="btn sec" href="/d?c=ornek" target="_blank" rel="noopener">Canlı örneği aç
@@ -460,15 +478,6 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
       </ul>
     </div>
     <figure class="showcase">
-      <form class="dene" id="deneForm" autocomplete="off">
-        <div class="dene-b">Kendi isimlerinizle deneyin</div>
-        <div class="dene-s">
-          <input id="deneGelin" maxlength="20" placeholder="Gelin" aria-label="Gelinin adı" enterkeyhint="next">
-          <span aria-hidden="true">&amp;</span>
-          <input id="deneDamat" maxlength="20" placeholder="Damat" aria-label="Damadın adı" enterkeyhint="go">
-          <button class="btn pri" type="submit">Göster</button>
-        </div>
-      </form>
       <div class="device"><iframe id="demoIframe" src="/d?c=ornek" title="Örnek davetiye" loading="lazy"></iframe></div>
       <div class="dene-son" id="deneSon" hidden>
         <a class="btn pri" id="deneOlustur" href="#olustur">Bu isimlerle oluştur</a>
@@ -600,40 +609,47 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
       </div>
       <div class="formcard">
         <form id="f" autocomplete="off">
-          <h3 class="fsec">Davet</h3>
+          <h3 class="fsec">Hızlı sipariş</h3>
+          <p class="hizli">Sadece 4 bilgi yeter. Mekân, program ve diğer ayrıntıları isterseniz şimdi, isterseniz sipariş sonrası size özel panelinizden eklersiniz.</p>
           <div class="f"><span class="label">Davet türü</span><div class="seg" id="types"></div></div>
-          <div class="f"><span class="label">İsimlerin yazı stili</span><div class="seg yazi-seg" id="yaziSec"></div></div>
           <div class="row">
-            <div class="f"><label class="label" for="gelin">Gelin</label><input id="gelin" value="Elif"></div>
-            <div class="f"><label class="label" for="damat">Damat</label><input id="damat" value="Burak"></div>
+            <div class="f"><label class="label" for="gelin">Gelin</label><input id="gelin" placeholder="Örn. Elif" data-ornek="Elif" autocomplete="off"></div>
+            <div class="f"><label class="label" for="damat">Damat</label><input id="damat" placeholder="Örn. Burak" data-ornek="Burak" autocomplete="off"></div>
           </div>
           <div class="row">
-            <div class="f"><label class="label" for="tarih">Tarih</label><input id="tarih" type="date" value="2027-06-12"></div>
-            <div class="f"><label class="label" for="saat">Saat</label><input id="saat" type="time" value="19:30"></div>
+            <div class="f"><label class="label" for="tarih">Tarih</label><input id="tarih" type="date" data-ornek="2027-06-12"></div>
+            <div class="f"><label class="label" for="telefon">Telefonunuz</label><input id="telefon" type="tel" inputmode="tel" placeholder="05XX XXX XX XX" autocomplete="tel"></div>
           </div>
-          <div class="f"><label class="label" for="aile">Aile isimleri (isteğe bağlı)</label><input id="aile" value="Yılmaz ve Demir aileleri"></div>
-          <div class="f"><label class="label" for="not">Davet notu</label><textarea id="not">Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız.</textarea></div>
+          <span class="hint">Ödemenizi bu numarayla eşleştiririz; gerekirse WhatsApp'tan size ulaşırız.</span>
 
-          <h3 class="fsec">Mekân ve program</h3>
-          <div class="f"><label class="label" for="mekan">Mekân</label><input id="mekan" value="Dragos Kır Bahçesi"></div>
-          <div class="f"><label class="label" for="adres">Adres</label><input id="adres" value="Orhantepe Mah., Kartal / İstanbul"></div>
-          <div class="f"><label class="label" for="konum">Konum linki (Google Maps, isteğe bağlı)</label><input id="konum" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/...">
-            <span class="hint">Google Maps'te mekânı açın → Paylaş → Bağlantıyı kopyala.</span></div>
-          <div class="f"><label class="label" for="program">Program (her satıra bir tane)</label><textarea id="program" rows="4">19:30 Karşılama
-20:00 Nikâh töreni
-20:30 Akşam yemeği
-22:00 Eğlence</textarea></div>
+          <details class="detay" id="detay">
+            <summary><span class="ac">+ Ayrıntıları şimdi ekleyin</span><span class="kapa">− Ayrıntıları gizle</span><small>İsteğe bağlı</small></summary>
+            <div class="detay-ic">
+              <div class="f"><span class="label">İsimlerin yazı stili</span><div class="seg yazi-seg" id="yaziSec"></div></div>
+              <div class="row">
+                <div class="f"><label class="label" for="saat">Saat</label><input id="saat" type="time" data-ornek="19:30"></div>
+                <div class="f"><label class="label" for="aile">Aile isimleri</label><input id="aile" placeholder="Örn. Yılmaz ve Demir aileleri" data-ornek="Yılmaz ve Demir aileleri"></div>
+              </div>
+              <div class="f"><label class="label" for="not">Davet notu</label><textarea id="not" placeholder="Örn. Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız." data-ornek="Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız."></textarea></div>
 
-          <div class="f"><label class="label" for="katilimNotu">Katılım notu (isteğe bağlı)</label><input id="katilimNotu" maxlength="240" placeholder="Örn. Çocuklarımıza iyi uykular dileriz.">
-            <div class="seg hazir" id="knHazir"></div><span class="hint">Katılım formunun üstünde görünür. Hazır cümlelerden birine dokunabilir ya da kendiniz yazabilirsiniz.</span></div>
+              <h3 class="fsec">Mekân ve program</h3>
+              <div class="f"><label class="label" for="mekan">Mekân</label><input id="mekan" placeholder="Örn. Dragos Kır Bahçesi" data-ornek="Dragos Kır Bahçesi"></div>
+              <div class="f"><label class="label" for="adres">Adres</label><input id="adres" placeholder="Örn. Orhantepe Mah., Kartal / İstanbul" data-ornek="Orhantepe Mah., Kartal / İstanbul"></div>
+              <div class="f"><label class="label" for="konum">Konum linki (Google Maps)</label><input id="konum" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/...">
+                <span class="hint">Google Maps'te mekânı açın → Paylaş → Bağlantıyı kopyala.</span></div>
+              <div class="f"><label class="label" for="program">Program (her satıra bir tane)</label><textarea id="program" rows="4" placeholder="19:30 Karşılama&#10;20:00 Nikâh töreni&#10;20:30 Akşam yemeği&#10;22:00 Eğlence" data-ornek="19:30 Karşılama&#10;20:00 Nikâh töreni&#10;20:30 Akşam yemeği&#10;22:00 Eğlence"></textarea></div>
 
-          <h3 class="fsec">Müzik</h3>
-          <div class="f"><div class="seg" id="muzikSec"></div><span class="hint">Davetiye zarfı açılınca çalar. Dinlemek için parçaya dokunun.</span></div>
+              <div class="f"><label class="label" for="katilimNotu">Katılım notu</label><input id="katilimNotu" maxlength="240" placeholder="Örn. Çocuklarımıza iyi uykular dileriz.">
+                <div class="seg hazir" id="knHazir"></div><span class="hint">Katılım formunun üstünde görünür. Hazır cümlelerden birine dokunabilir ya da kendiniz yazabilirsiniz.</span></div>
 
-          <h3 class="fsec">Paket ve iletişim</h3>
-          <div class="f"><div class="pk" id="pk"></div></div>
-          <div class="f"><label class="label" for="telefon">Telefonunuz</label><input id="telefon" type="tel" inputmode="tel" placeholder="05XX XXX XX XX" autocomplete="tel">
-            <span class="hint">Sipariş ve ödeme bilgisi için WhatsApp'tan size ulaşırız.</span></div>
+              <h3 class="fsec">Müzik</h3>
+              <div class="f"><div class="seg" id="muzikSec"></div><span class="hint">Davetiye zarfı açılınca çalar. Dinlemek için parçaya dokunun.</span></div>
+
+              <h3 class="fsec">Paket</h3>
+              <div class="f"><div class="pk" id="pk"></div></div>
+            </div>
+          </details>
+          <p class="hint" style="margin-top:4px">Boş bıraktığınız alanlar önizlemede örnek olarak görünür; davetiyenize eklenmez.</p>
         </form>
       </div>
     </div>
@@ -766,11 +782,11 @@ function galeriCiz(){
   $("galeri").querySelectorAll("[data-sec]").forEach(b => b.onclick = () => { S.tasarim = b.dataset.sec; ciz(true); $("olustur").scrollIntoView(); });
 }
 
-function veri(){ const d = { tasarim:S.tasarim, tur:S.tur, muzik:S.muzik, yazi:S.yazi }; ALANLAR.forEach(k => d[k] = $(k).value.trim()); return d; }
+function veri(onizleme){ const d = { tasarim:S.tasarim, tur:S.tur, muzik:S.muzik, yazi:S.yazi }; ALANLAR.forEach(k => { const v = $(k).value.trim(); d[k] = v || (onizleme ? ($(k).dataset.ornek || "") : ""); }); return d; }
 
 function seritCiz(){
   const st = $("strip"); st.innerHTML = "";
-  const d = veri();
+  const d = veri(true);
   L.TASARIMLAR.forEach(t => {
     const [bg, fg, font] = t.mini;
     const b = document.createElement("button"); b.className = "tpl"; b.type = "button";
@@ -786,7 +802,7 @@ function seg(el, ogeler, anahtar){
     b.setAttribute("aria-pressed", String(S[anahtar] === deger)); b.onclick = () => { S[anahtar] = deger; ciz(); }; el.appendChild(b); });
 }
 function yaziCiz(){
-  const el = $("yaziSec"), d = veri(), varsayilan = L.TASARIMLAR.find(t => t.id === S.tasarim).mini[2];
+  const el = $("yaziSec"), d = veri(true), varsayilan = L.TASARIMLAR.find(t => t.id === S.tasarim).mini[2];
   const ad = `${(d.gelin||"E")[0]} & ${(d.damat||"B")[0]}`;
   el.innerHTML = L.YAZILAR.map(([k, yazi, font]) => `<button type="button" data-y="${k}" aria-pressed="${S.yazi===k}" style="font-family:'${font||varsayilan}',serif${k==="bodoni"?";font-style:italic":""}">${L.esc(ad)}<small>${yazi}</small></button>`).join("");
   el.querySelectorAll("[data-y]").forEach(b => b.onclick = () => { S.yazi = b.dataset.y; ciz(); });
@@ -821,7 +837,7 @@ function mesaj(kod){
   return ["Merhaba LaVie, sipariş vermek istiyorum.","",
     kod?`Sipariş kodu: ${kod}`:null,
     `Tasarım: ${t.ad}`,`Tür: ${d.tur}`,`Gelin: ${d.gelin}`,`Damat: ${d.damat}`,
-    `Tarih: ${L.uzunTarih(d)} ${d.saat}`,`Mekân: ${d.mekan}`,`Adres: ${d.adres}`,
+    `Tarih: ${L.uzunTarih(d)}${d.saat ? " " + d.saat : ""}`, d.mekan?`Mekân: ${d.mekan}`:null, d.adres?`Adres: ${d.adres}`:null,
     d.konum?`Konum: ${d.konum}`:null, d.aile?`Aile: ${d.aile}`:null, d.not?`Not: ${d.not}`:null,
     d.program?`Program:\n${d.program}`:null, d.katilimNotu?`Katılım notu: ${d.katilimNotu}`:null, `Yazı stili: ${(L.YAZILAR.find(y => y[0] === d.yazi) || L.YAZILAR[0])[1]}`, `Müzik: ${(window.LavieMuzik.bul(d.muzik)||{ad:"Yok"}).ad}`,
     d.telefon?`Telefon: ${d.telefon}`:null, `Paket: ${p.ad} (${p.fiyat} TL)`, window.LAVIE_REF?`Referans: ${window.LAVIE_REF}`:null].filter(x => x !== null).join("\n");
@@ -829,7 +845,7 @@ function mesaj(kod){
 function ciz(basa){
   seritCiz(); seg($("types"), L.TURLER.map(t => [t, t]), "tur"); yaziCiz(); muzikCiz(); paketCiz();
   const sc = $("screen"), y = sc.scrollTop;
-  L.ciz(sc, veri(), async () => { await new Promise(r => setTimeout(r, 500)); }, {
+  L.ciz(sc, veri(true), async () => { await new Promise(r => setTimeout(r, 500)); }, {
     mesajlar: [{ isim: "Örnek misafir", mesaj: "Mutluluğunuz daim olsun, bir ömür boyu el ele!", zaman: new Date().toISOString() }]
   });
   sc.scrollTop = basa ? 0 : y;
@@ -844,7 +860,7 @@ function siparisSifirla(){
 $("order").addEventListener("click", async () => {
   const d = veri();
   if (!d.gelin || !d.damat || !d.tarih || d.telefon.replace(/\D/g,"").length < 10) {
-    $("note").textContent = "Lütfen gelin, damat, tarih ve telefon bilgilerini doldurun."; $("note").hidden = false;
+    $("note").textContent = "Lütfen gelin, damat, tarih ve telefon bilgilerini doldurun."; $("note").hidden = false; document.getElementById("f").scrollIntoView({block:"start",behavior:"smooth"});
     $(!d.gelin ? "gelin" : !d.damat ? "damat" : !d.tarih ? "tarih" : "telefon").focus(); return;
   }
   $("order").disabled = true; $("order").textContent = "Hazırlanıyor...";
