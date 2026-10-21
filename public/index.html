@@ -433,6 +433,12 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 /* Kaydırınca beliren bölümler */
 @media (prefers-reduced-motion:no-preference){.bel{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}.bel.gor{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.obar,.destek{transition:none}}
+
+/* iPhone: tarih/saat kutuları taşmasın (ızgara hücresi küçülebilsin) */
+.row>*,.f{min-width:0}
+/*, boşken ipucu görünsün */
+input.bos[type=date]::before,input.bos[type=time]::before{content:attr(placeholder);color:var(--muted)}
+input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;min-height:46px;text-align:left}input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value{text-align:left;margin:0}
 </style>
 </head>
 <body>
@@ -617,7 +623,7 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
             <div class="f"><label class="label" for="damat">Damat</label><input id="damat" placeholder="Örn. Burak" data-ornek="Burak" autocomplete="off"></div>
           </div>
           <div class="row">
-            <div class="f"><label class="label" for="tarih">Tarih</label><input id="tarih" type="date" data-ornek="2027-06-12"></div>
+            <div class="f"><label class="label" for="tarih">Tarih</label><input id="tarih" type="date" data-ornek="2027-06-12" placeholder="Tarih seçin"></div>
             <div class="f"><label class="label" for="telefon">Telefonunuz</label><input id="telefon" type="tel" inputmode="tel" placeholder="05XX XXX XX XX" autocomplete="tel"></div>
           </div>
           <span class="hint">Ödemenizi bu numarayla eşleştiririz; gerekirse WhatsApp'tan size ulaşırız.</span>
@@ -627,7 +633,7 @@ body.bar-acik .destek{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
             <div class="detay-ic">
               <div class="f"><span class="label">İsimlerin yazı stili</span><div class="seg yazi-seg" id="yaziSec"></div></div>
               <div class="row">
-                <div class="f"><label class="label" for="saat">Saat</label><input id="saat" type="time" data-ornek="19:30"></div>
+                <div class="f"><label class="label" for="saat">Saat</label><input id="saat" type="time" data-ornek="19:30" placeholder="Saat seçin"></div>
                 <div class="f"><label class="label" for="aile">Aile isimleri</label><input id="aile" placeholder="Örn. Yılmaz ve Demir aileleri" data-ornek="Yılmaz ve Demir aileleri"></div>
               </div>
               <div class="f"><label class="label" for="not">Davet notu</label><textarea id="not" placeholder="Örn. Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız." data-ornek="Hayatımızın en güzel gününde sizleri de aramızda görmekten mutluluk duyarız."></textarea></div>
@@ -957,6 +963,7 @@ try { const k = JSON.parse(localStorage.getItem("lavie_odeme") || "null");
   if (k && k.c && k.k && k.url && k.t && Date.now() - k.t < 2 * 3600e3) { O = { ...k, yontem: "kart" }; odemeBekle(); }
   else localStorage.removeItem("lavie_odeme"); } catch {}
 ALANLAR.forEach(k => $(k).addEventListener("input", () => ciz()));
+["tarih","saat"].forEach(k => { const e = $(k), f = () => e.classList.toggle("bos", !e.value); ["input","change","blur"].forEach(ev => e.addEventListener(ev, f)); f(); });
 $("f").addEventListener("submit", e => e.preventDefault());
 $("fullBtn").addEventListener("click", () => { const f = $("stage").classList.toggle("full"); $("fullBtn").textContent = f ? "Kapat" : "Tam ekran"; });
 

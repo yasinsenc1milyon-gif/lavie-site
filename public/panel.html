@@ -75,6 +75,11 @@ a{color:var(--accent)}
 @media (max-width:760px){.onizle-kap{position:static}}
 .onizle{width:100%;max-width:340px;height:min(600px,75vh);border-radius:28px;border:8px solid #1d1b22;background:#1d1b22;overflow:hidden}
 .onizle > div{height:100%;overflow-y:auto;border-radius:20px;container-type:inline-size}
+
+/* iPhone: tarih/saat kutuları taşmasın (ızgara hücresi küçülebilsin) */
+.row>*,.f{min-width:0}
+/* */
+input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;min-height:46px;text-align:left}input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value{text-align:left;margin:0}
 </style>
 </head>
 <body>

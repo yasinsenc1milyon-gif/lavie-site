@@ -79,6 +79,11 @@ textarea{min-height:70px;resize:vertical}
 .huni em{font-style:normal;height:14px;border-radius:4px;background:var(--accent);display:block;min-width:2px}
 .huni b{text-align:right;font-weight:500;font-variant-numeric:tabular-nums}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;font-size:.88rem;z-index:5}
+
+/* iPhone: tarih/saat kutuları taşmasın (ızgara hücresi küçülebilsin) */
+.row>*,.f{min-width:0}
+/* */
+input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;min-height:46px;text-align:left}input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value{text-align:left;margin:0}
 </style>
 </head>
 <body>

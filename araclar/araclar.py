@@ -7,6 +7,7 @@ from rehber import YAZILAR
 e = html.escape
 
 ARAC_CSS = """
+input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;min-height:46px;text-align:left}input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value{text-align:left;margin:0}
 .arac{background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px;margin-top:26px;box-shadow:0 24px 50px -36px rgba(33,31,39,.4)}
 @media(max-width:560px){.arac{padding:16px;border-radius:18px}}
 .alan{display:grid;gap:5px;min-width:0}
