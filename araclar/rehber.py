@@ -427,7 +427,7 @@ YAZILAR = [
        ("Davetiye mesajına ne yazılır?", "Kişinin adıyla başlayan bir hitap, davetin ne olduğu (düğün, nişan, kına), onu aranızda görmek istediğinizi anlatan bir cümle ve davetiye linki yeterlidir. Katılım bekliyorsanız yanıt vermesini rica eden kısa bir not ekleyin."),
        ("Davetiyeyi gönderdikten sonra bilgi değişirse herkese yeniden mesaj mı atmalıyım?", "Görsel bir davetiye gönderdiyseniz yeni görseli herkese yeniden göndermeniz gerekir. Davetiye sitesi kullanıyorsanız bilgiyi panelden güncellemeniz yeterlidir; link aynı kalır. Önemli bir değişiklikse misafirlere kısa bir bilgilendirme mesajı atmak yine de iyi olur.")]),
  dict(slug="nikah-davetiyesi-sozleri", kisa="Nikah davetiyesi sözleri", tur="Düğün",
-  ilgili=[("davetiye-sozu-olusturucu","Davetiye sözü oluşturucu"),("tarihi-kaydet-mesaji","Tarihi kaydedin mesajı")],
+  ilgili=[("davetiye-sozu-olusturucu","Davetiye sözü oluşturucu"),("tarihi-kaydet-mesaji","Tarihi kaydedin mesajı"),("nikah-sekeri-notu-olusturucu","Nikah şekeri notu oluşturucu")],
   cta=("Seçtiğiniz sözle nikah davetiyenizi hazırlayın", "Sözü kopyalayın, LaVie'de “Davet notu” alanına yapıştırın; nikah salonunun konumu, saat ve katılım formuyla birlikte zarfı açılan, müzikli dijital davetiyenizde anında görün. 500 TL, tek seferlik."),
   title="Nikah Davetiyesi Sözleri: Resmi, Modern ve Romantik 25 Örnek | LaVie",
   desc="Nikah davetiyesi sözleri: klasik, modern, romantik ve aile ağzından örnekler; nikah + kokteyl ve nikah + yemek metinleri, davetiyede olması gereken bilgiler ve sık yapılan hatalar.",
