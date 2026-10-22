@@ -152,6 +152,18 @@ input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;displa
 .mesaj{display:grid;gap:8px;align-content:start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
 .mesaj small{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:500}
 .mesaj p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.95rem;line-height:1.55}
+.arac textarea{font:inherit;font-size:16px;width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);resize:vertical}
+.arac textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+.notlar{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.mesaj.secili{border-color:var(--accent);background:var(--soft)}
+.onizleme{margin-top:16px;padding:22px 12px;border:1px dashed var(--line);border-radius:14px;background:var(--paper);display:grid;justify-items:center;gap:6px}
+.onizleme .not{margin:0;text-align:center}
+.etk{box-sizing:border-box;background:#fff;border:.3mm solid #cbbfd3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2.5mm 3mm;gap:.8mm;overflow:hidden;color:#2b2732}
+.etk.yuv{border-radius:50%;padding:4mm 5mm}
+.etk-m{margin:0;font-family:var(--serif);font-style:italic;font-size:calc(2.7mm * var(--o));line-height:1.2}
+.etk-c{font-family:var(--display);font-weight:400;font-size:calc(3.9mm * var(--o));line-height:1.1;color:var(--accent);overflow-wrap:anywhere}
+.etk-t{font-size:calc(2.1mm * var(--o));letter-spacing:.08em;color:#6a6570}
+#baski{display:none}
+@media print{@page{size:A4;margin:10mm}body.baski-var>:not(#baski){display:none!important}body.baski-var{background:#fff!important}body.baski-var #baski{display:flex!important;flex-wrap:wrap;gap:4mm;width:190mm}#baski .etk{break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
 <body>
@@ -199,7 +211,7 @@ input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;displa
 <h2>Sıkça sorulanlar</h2>
 <div class="sss"><details><summary>Davetli listesi nasıl hazırlanır?</summary><p>Önce iki tarafın aile, akraba, arkadaş ve iş çevrelerini ayrı ayrı yazın. Her kayda kaç kişi geleceğini (eşler, çocuklar) ekleyin. Toplam sayıyı salon kapasitenizle karşılaştırın, gerekirse grupları daraltın. Son hâlini Excel&#x27;e aktarıp aileyle paylaşın.</p></details><details><summary>Listem nereye kaydediliyor?</summary><p>Listeniz yalnızca kendi telefonunuzda ya da bilgisayarınızda, bu tarayıcıda saklanır. Bize hiçbir bilgi gönderilmez. Başka bir cihazda kullanmak için listeyi Excel&#x27;e aktarabilirsiniz.</p></details><details><summary>Listeyi Excel&#x27;de nasıl açarım?</summary><p>&#x27;Excel&#x27;e aktar&#x27; düğmesine basınca bir CSV dosyası iner. Excel, Numbers ya da Google E-Tablolar bu dosyayı doğrudan açar; Türkçe karakterler korunur.</p></details><details><summary>Kaç kişilik davetiye basmalıyım?</summary><p>Kâğıt davetiye kişi başı değil hane başı gönderilir; genellikle davetli sayısının yarısı ile üçte biri arası adet yeterlidir. Dijital davetiyede adet sınırı yoktur, tek link herkese gönderilir.</p></details></div></section>
 <h2 style="font-size:1.5rem;margin-top:48px">Diğer ücretsiz araçlar</h2>
-<div class="diger"><a href="/dugun-butcesi-hesaplama">Düğün bütçesi hesaplama</a><a href="/davetiye-sozu-olusturucu">Davetiye sözü oluşturucu</a><a href="/2027-dugun-takvimi">2027 düğün takvimi</a><a href="/dugun-hashtag-olusturucu">Düğün hashtag oluşturucu</a><a href="/dugun-geri-sayim">Düğün geri sayım</a><a href="/tarihi-kaydet-mesaji">Tarihi kaydedin mesajı</a><a href="/rehber">Davetiye rehberi</a></div>
+<div class="diger"><a href="/dugun-butcesi-hesaplama">Düğün bütçesi hesaplama</a><a href="/davetiye-sozu-olusturucu">Davetiye sözü oluşturucu</a><a href="/2027-dugun-takvimi">2027 düğün takvimi</a><a href="/dugun-hashtag-olusturucu">Düğün hashtag oluşturucu</a><a href="/dugun-geri-sayim">Düğün geri sayım</a><a href="/tarihi-kaydet-mesaji">Tarihi kaydedin mesajı</a><a href="/nikah-sekeri-notu-olusturucu">Nikah şekeri notu oluşturucu</a><a href="/rehber">Davetiye rehberi</a></div>
 </main>
 <footer><div class="in"><a href="/" aria-label="LaVie Davetiye"><img src="/logo-acik.svg" alt="La Vie Creative Studio" width="630" height="165"></a><span>© <span id="yil">2026</span> LaVie Davetiye · <a href="https://instagram.com/la.viecreative" target="_blank" rel="noopener">@la.viecreative</a></span></div></footer>
 <a class="destek" id="destek" target="_blank" rel="noopener" aria-label="WhatsApp destek hattı"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 000-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 001.8-1.3 2.3 2.3 0 00.2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg></a>

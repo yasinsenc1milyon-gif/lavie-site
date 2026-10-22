@@ -93,6 +93,18 @@ input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;displa
 .mesaj{display:grid;gap:8px;align-content:start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
 .mesaj small{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:500}
 .mesaj p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.95rem;line-height:1.55}
+.arac textarea{font:inherit;font-size:16px;width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);resize:vertical}
+.arac textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+.notlar{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.mesaj.secili{border-color:var(--accent);background:var(--soft)}
+.onizleme{margin-top:16px;padding:22px 12px;border:1px dashed var(--line);border-radius:14px;background:var(--paper);display:grid;justify-items:center;gap:6px}
+.onizleme .not{margin:0;text-align:center}
+.etk{box-sizing:border-box;background:#fff;border:.3mm solid #cbbfd3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2.5mm 3mm;gap:.8mm;overflow:hidden;color:#2b2732}
+.etk.yuv{border-radius:50%;padding:4mm 5mm}
+.etk-m{margin:0;font-family:var(--serif);font-style:italic;font-size:calc(2.7mm * var(--o));line-height:1.2}
+.etk-c{font-family:var(--display);font-weight:400;font-size:calc(3.9mm * var(--o));line-height:1.1;color:var(--accent);overflow-wrap:anywhere}
+.etk-t{font-size:calc(2.1mm * var(--o));letter-spacing:.08em;color:#6a6570}
+#baski{display:none}
+@media print{@page{size:A4;margin:10mm}body.baski-var>:not(#baski){display:none!important}body.baski-var{background:#fff!important}body.baski-var #baski{display:flex!important;flex-wrap:wrap;gap:4mm;width:190mm}#baski .etk{break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 """
 
 def kabuk(slug, title, desc, h1, giris, govde, script, ld_ekstra=(), cta_tur="Düğün"):
@@ -909,6 +921,137 @@ function ciz(){
 ciz();
 """
 
+# ---------------- Nikah şekeri notu ----------------
+NS_SSS = [("Nikah şekeri notuna ne yazılır?", "Genellikle kısa bir teşekkür ya da güzel bir dilek, çiftin isimleri ve düğün tarihi yazılır. Etiket küçük olduğu için tek cümle yeterlidir: örneğin 'Mutluluğumuzu paylaştığınız için teşekkür ederiz' ve altında 'Elif & Burak · 12.06.2027'."),
+          ("Nikah şekeri etiketi hangi boyutta olmalı?", "En çok kullanılanlar 4 ya da 5 cm çaplı yuvarlak etiketler ile 5×3 cm dikdörtgen kartlardır. Tül kese ve küçük kutular için 4 cm yuvarlak, kurdeleyle bağlanan kartlar ya da kavanozlar için 5×3 cm dikdörtgen uygundur. Araçtaki önizleme etiketleri gerçek boyutuna yakın gösterir."),
+          ("Etiketleri evde nasıl basarım?", "Notu seçip etiket şeklini belirledikten sonra 'A4 sayfayı yazdır' düğmesine dokunun. Sayfa, seçtiğiniz boyutta etiketlerle dolu olarak yazdırılır. Yazıcı ayarlarında ölçeği %100 (gerçek boyut) seçin. Yapışkanlı A4 etiket kâğıdına basarsanız kesip doğrudan yapıştırabilir, kalın kâğıda basarsanız makas ya da daire zımbasıyla kesebilirsiniz."),
+          ("Nişan ya da kına şekeri için de kullanabilir miyim?", "Evet. Davet türünden Nişan, Kına, Söz ya da Nikah seçtiğinizde notlar o güne göre değişir. Örneğin kına için 'Kına gecemizin tatlı hatırası' gibi öneriler gelir."),
+          ("Notu kendim değiştirebilir miyim?", "Evet. Bir öneriye dokunduğunuzda metin 'Etiket metni' kutusuna gelir; orada dilediğiniz gibi düzenleyebilir ya da tamamen kendi cümlenizi yazabilirsiniz. Önizleme ve baskı sizin yazdığınız metni kullanır."),
+          ("Girdiğim bilgiler bir yere gönderiliyor mu?", "Hayır, araç tamamen tarayıcınızda çalışır; isimler ve tarih bize gönderilmez. Son girdiğiniz bilgiler yalnızca bu cihazda hatırlanır.")]
+NS_GOVDE = """
+<div class="arac">
+  <div class="izgara">
+    <div class="alan"><span>Davet türü</span><div class="seg" id="turSec"></div></div>
+    <div class="iki">
+      <label class="alan"><span>Gelin</span><input id="gelin" placeholder="Elif" maxlength="24" autocomplete="off"></label>
+      <label class="alan"><span>Damat</span><input id="damat" placeholder="Burak" maxlength="24" autocomplete="off"></label>
+    </div>
+    <div class="iki">
+      <label class="alan"><span>Tarih</span><input id="tarih" type="date"></label>
+      <label class="alan"><span>Tarih biçimi</span><select id="bicim"><option value="kisa">12.06.2027</option><option value="uzun">12 Haziran 2027</option><option value="yok">Tarih yazma</option></select></label>
+    </div>
+  </div>
+  <div class="izgara" style="margin-top:18px">
+    <label class="alan"><span>Etiket metni</span><textarea id="metin" rows="2" maxlength="90"></textarea></label>
+    <div class="alan"><span>Etiket şekli</span><div class="seg" id="sekilSec"></div></div>
+  </div>
+  <div class="onizleme"><div id="onizleme"></div><p class="not" id="sigar"></p></div>
+  <div class="dugmeler"><button type="button" class="btn pri" id="yazdir">A4 sayfayı yazdır</button><button type="button" class="btn" id="kopyalaB">Metni kopyala</button></div>
+  <p class="not">Önizleme etiketi gerçek boyutuna yakın gösterir. Yazdırırken ölçeği %100 (gerçek boyut) seçin; yapışkanlı A4 etiket kâğıdı ya da kalın kâğıt kullanabilirsiniz.</p>
+  <div class="alan" style="margin-top:20px"><span>Not önerileri: birini etikete koyun</span></div>
+  <div class="mesajlar notlar" id="notlar" style="margin-top:8px"></div>
+</div>
+<div id="baski" aria-hidden="true"></div>
+<div class="cta-kutu"><b>Şekerler hazır, sıra davetiyede</b><p>Nikah şekerinizdeki isimler ve tarihle dijital davetiyenizi de hazırlayın. Misafirleriniz zarfı açar, programı, konumu ve geri sayımı görür, katılımını tek dokunuşla bildirir. İsimleriniz hazır olarak aktarılır.</p><a class="btn pri" id="ctaLink" href="/?tur=Düğün#olustur">Bu bilgilerle davetiye oluştur</a></div>
+<section class="makale">
+<h2>Nikah şekeri notu nasıl hazırlanır?</h2>
+<ol>
+<li><b>Tek cümle yeter.</b> Etiket küçüktür; kısa bir teşekkür ya da dilek, uzun bir paragraftan daha şık durur.</li>
+<li><b>İsimleri ve tarihi ekleyin.</b> Şeker yıllarca saklanmasa da etiket çoğu zaman saklanır; tarih o günün hatırası olur.</li>
+<li><b>Şekli ambalaja göre seçin.</b> Tül kese ve küçük kutulara yuvarlak etiket, kurdeleyle bağlanan şekerlere dikdörtgen kart daha uygundur.</li>
+<li><b>Önce bir deneme basın.</b> Tek sayfa basıp kesin ve ambalajın üzerinde deneyin; sonra kalanını çoğaltın.</li>
+<li><b>Davetiyeyle uyumlu olsun.</b> Etiketteki isim yazımı ve tarih davetiyenizdekiyle aynı olmalı.</li>
+</ol>
+<p>Kaç adet şeker hazırlayacağınızı <a href="/davetli-listesi">davetli listesi</a> aracımızla, harcamalarınızı <a href="/dugun-butcesi-hesaplama">düğün bütçesi hesaplama</a> aracımızla planlayabilirsiniz. Davetiyeniz için hazır metinler <a href="/davetiye-sozu-olusturucu">davetiye sözü oluşturucu</a> ve <a href="/nikah-davetiyesi-sozleri">nikah davetiyesi sözleri</a> sayfalarında; etikete eklemek isterseniz <a href="/dugun-hashtag-olusturucu">düğün hashtag oluşturucu</a> da işinize yarar.</p>
+<h2>Sıkça sorulanlar</h2>
+""" + sss_html(NS_SSS) + "</section>"
+NS_JS = r"""
+const TURLER = {
+  "Düğün": { un: "Düğünümüzün", de: "düğünümüzde", ad: "düğün" },
+  "Nikah": { un: "Nikahımızın", de: "nikahımızda", ad: "nikah" },
+  "Nişan": { un: "Nişanımızın", de: "nişanımızda", ad: "nişan" },
+  "Kına": { un: "Kına gecemizin", de: "kına gecemizde", ad: "kına" },
+  "Söz": { un: "Söz törenimizin", de: "söz törenimizde", ad: "söz" } };
+const SEKILLER = { y40: { ad: "Yuvarlak 4 cm", w: 40, h: 40, r: 1 }, y50: { ad: "Yuvarlak 5 cm", w: 50, h: 50, r: 1 }, d53: { ad: "Dikdörtgen 5×3 cm", w: 50, h: 30, r: 0 }, k44: { ad: "Kare 4×4 cm", w: 40, h: 40, r: 0 } };
+const AY = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const TARIH_RE = /^\d{4}-\d{2}-\d{2}$/;
+let S = Object.assign({ tur: "Düğün", gelin: "", damat: "", tarih: "", bicim: "kisa", sekil: "y40", metin: "" }, oku("lavie_nikahsekeri", {}));
+if (!SEKILLER[S.sekil]) S.sekil = "y40";
+{ const q = new URLSearchParams(location.search);
+  if (TURLER[q.get("tur")]) S.tur = q.get("tur");
+  ["gelin","damat"].forEach(k => { if (q.has(k)) S[k] = q.get(k).slice(0, 24); });
+  if (TARIH_RE.test(q.get("tarih") || "")) S.tarih = q.get("tarih"); }
+["gelin","damat","tarih","bicim","metin"].forEach(k => $(k).value = S[k] || "");
+if (!$("bicim").value) $("bicim").value = S.bicim = "kisa";
+function notlar(){
+  const T = TURLER[S.tur], dugun = S.tur === "Düğün" || S.tur === "Nikah";
+  const L = [
+    ["Klasik", "Mutluluğumuzu paylaştığınız için teşekkür ederiz."],
+    ["Klasik", "Bu güzel günde yanımızda olduğunuz için teşekkürler."],
+    ["Hatıra", T.un + " tatlı hatırası."],
+    ["Hatıra", "Bugünün tatlı bir anı olarak kalması dileğiyle."],
+    ["Geleneksel", "Tatlı yiyelim, tatlı konuşalım."],
+    ["Geleneksel", "Duanız ve sevginiz hep bizimle olsun."],
+    ["Romantik", dugun ? "Bir ömür sürecek hikâyemizin ilk günü." : "Bir ömür sürecek hikâyemizin ilk adımı."],
+    ["Romantik", "Aşkımız kadar tatlı olsun."],
+    ["Kısa", "İyi ki geldiniz."],
+    ["Kısa", "Sevgiyle teşekkürler."],
+    ["Eğlenceli", dugun ? "Biz evet dedik, siz de bu tatlıya hayır demeyin!" : "Biz söz verdik, siz de bu tatlıya hayır demeyin!"],
+    ["Eğlenceli", "Hayatımız tatlandı, sizinki de tatlansın!"],
+    ["Teşekkür", T.de.charAt(0).toLocaleUpperCase("tr") + T.de.slice(1) + " bizi yalnız bırakmadığınız için teşekkür ederiz."],
+    ["İngilizce", "Thank you for sharing our special day."],
+    ["İngilizce", "Love is sweet."]
+  ];
+  return L;
+}
+function cift(){ const g = S.gelin.trim(), d = S.damat.trim(); return g && d ? g + " & " + d : (g || d || "Elif & Burak"); }
+function tarihYazi(){
+  if (S.bicim === "yok" || !TARIH_RE.test(S.tarih)) return "";
+  const [y, a, g] = S.tarih.split("-").map(Number);
+  if (!y || !a || !g || a > 12) return "";
+  return S.bicim === "uzun" ? `${g} ${AY[a - 1]} ${y}` : `${String(g).padStart(2, "0")}.${String(a).padStart(2, "0")}.${y}`;
+}
+function etiketHTML(){
+  const sk = SEKILLER[S.sekil], t = tarihYazi(), m = (S.metin.trim() || notlar()[0][1]);
+  const olcek = sk.w >= 50 && sk.h >= 50 ? 1.2 : 1;
+  return `<div class="etk${sk.r ? " yuv" : ""}" style="width:${sk.w}mm;height:${sk.h}mm;--o:${olcek}"><p class="etk-m">${esc(m)}</p><b class="etk-c">${esc(cift())}</b>${t ? `<small class="etk-t">${esc(t)}</small>` : ""}</div>`;
+}
+function sigan(){ const sk = SEKILLER[S.sekil], ara = 4; return Math.floor((190 + ara) / (sk.w + ara)) * Math.floor((277 + ara) / (sk.h + ara)); }
+function seg(el, ogeler, secili, fn){ el.innerHTML = ogeler.map(([k,v]) => `<button type="button" data-k="${k}" aria-pressed="${k===secili}">${v}</button>`).join(""); el.querySelectorAll("button").forEach(b => b.onclick = () => fn(b.dataset.k)); }
+async function kopyala(metin, b, eski){
+  try { await navigator.clipboard.writeText(metin); b.textContent = "Kopyalandı"; }
+  catch { const t = document.createElement("textarea"); t.value = metin; document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand("copy"); } catch {} t.remove(); b.textContent = ok ? "Kopyalandı" : "Kopyalanamadı"; }
+  setTimeout(() => b.textContent = eski, 1600);
+}
+function tamMetin(m){ const t = tarihYazi(); return m + "\n" + cift() + (t ? " · " + t : ""); }
+function ciz(){
+  yaz("lavie_nikahsekeri", S);
+  seg($("turSec"), Object.keys(TURLER).map(k => [k, k]), S.tur, k => { const eski = notlar().map(x => x[1]); S.tur = k; if (eski.includes(S.metin.trim())) { const i = eski.indexOf(S.metin.trim()); S.metin = notlar()[i][1]; $("metin").value = S.metin; } ciz(); });
+  seg($("sekilSec"), Object.entries(SEKILLER).map(([k, v]) => [k, v.ad]), S.sekil, k => { S.sekil = k; ciz(); });
+  const L = notlar(), secili = S.metin.trim() || L[0][1];
+  $("notlar").innerHTML = L.map(([etk, m], i) => `<div class="mesaj${m === secili ? " secili" : ""}"><small>${esc(etk)}</small><p>${esc(m)}</p><div class="etiket-d"><button type="button" data-s="${i}">${m === secili ? "Seçildi" : "Etikete koy"}</button><button type="button" data-k="${i}">Kopyala</button></div></div>`).join("");
+  $("notlar").querySelectorAll("button[data-s]").forEach(b => b.onclick = () => { S.metin = L[+b.dataset.s][1]; $("metin").value = S.metin; ciz(); $("onizleme").scrollIntoView({ behavior: "smooth", block: "center" }); });
+  $("notlar").querySelectorAll("button[data-k]").forEach(b => b.onclick = () => kopyala(tamMetin(L[+b.dataset.k][1]), b, "Kopyala"));
+  if (!S.metin.trim()) $("metin").placeholder = L[0][1];
+  const h = etiketHTML();
+  $("onizleme").innerHTML = h;
+  const n = sigan();
+  $("sigar").textContent = `${SEKILLER[S.sekil].ad}: bir A4 sayfaya ${n} etiket sığar.`;
+  $("baski").innerHTML = h.repeat(n);
+  const p = new URLSearchParams({ tur: TURLER[S.tur] && (S.tur === "Nikah" ? "Düğün" : S.tur) });
+  if (S.gelin.trim()) p.set("gelin", S.gelin.trim());
+  if (S.damat.trim()) p.set("damat", S.damat.trim());
+  $("ctaLink").href = "/?" + p.toString() + "#olustur";
+}
+document.body.appendChild($("baski"));
+document.body.classList.add("baski-var");
+["gelin","damat","tarih","bicim","metin"].forEach(k => $(k).addEventListener("input", () => { S[k] = $(k).value; ciz(); }));
+$("bicim").addEventListener("change", () => { S.bicim = $("bicim").value; ciz(); });
+$("yazdir").onclick = () => window.print();
+$("kopyalaB").onclick = () => kopyala(tamMetin(S.metin.trim() || notlar()[0][1]), $("kopyalaB"), "Metni kopyala");
+ciz();
+"""
+
 ARACLAR = [
  dict(slug="davetli-listesi", ad="Davetli listesi", title="Ücretsiz Düğün Davetli Listesi Hazırlama Aracı (Excel'e Aktar) | LaVie",
       desc="Düğün, nişan ve kına davetli listenizi ücretsiz hazırlayın: gelin ve damat tarafı, gruplar, kişi sayısı, toplamlar ve Excel'e aktarma. Üyelik gerekmez.",
@@ -938,6 +1081,10 @@ ARACLAR = [
       desc="Ücretsiz save the date mesajı oluşturucu: isim, tarih ve şehri yazın; düğün, nişan, kına ve söz için WhatsApp'a hazır 'tarihi kaydedin' mesajları alın.",
       h1=("Tarihi kaydedin", "mesajı"), giris="İsimleri, tarihi ve şehri yazın; samimi, resmî, kısa ve eğlenceli 'tarihi kaydedin' mesajlarınız anında hazırlansın. Beğendiğinizi kopyalayın ya da tek dokunuşla WhatsApp'ta gönderin.",
       govde=TM_GOVDE, js=TM_JS, sss=TM_SSS),
+ dict(slug="nikah-sekeri-notu-olusturucu", ad="Nikah şekeri notu oluşturucu", title="Nikah Şekeri Notu Oluşturucu: İsim ve Tarihli Etiket, A4 Yazdır | LaVie",
+      desc="Ücretsiz nikah şekeri notu oluşturucu: isim ve tarihi yazın, düğün, nişan, kına ve söz şekeri için kısa notlar seçin; yuvarlak ya da dikdörtgen etiketleri A4'e yazdırın.",
+      h1=("Nikah şekeri notu", "oluşturucu"), giris="İsimleri ve tarihi yazın; nikah şekeri, nişan ya da kına hediyeliği için kısa notlardan birini seçin ya da kendiniz yazın. Etiketi gerçek boyutunda görün, A4 sayfaya dizip evde yazdırın.",
+      govde=NS_GOVDE, js=NS_JS, sss=NS_SSS),
 ]
 
 def araclar_ana():
@@ -946,11 +1093,11 @@ def araclar_ana():
     return f"""<!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="/favicon-180.png"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ücretsiz Düğün Araçları: Davetli Listesi, Bütçe Hesaplama | LaVie</title>
-<meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, tarihi kaydedin mesajı, düğün geri sayım, 2027 düğün takvimi. Üyelik gerekmez.">
+<meta name="description" content="Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, tarihi kaydedin mesajı, nikah şekeri notu, düğün geri sayım, 2027 düğün takvimi. Üyelik gerekmez.">
 <link rel="canonical" href="{url}"><meta name="theme-color" content="#f6f3f1">
 <meta property="og:type" content="website"><meta property="og:title" content="Ücretsiz düğün araçları · LaVie"><meta property="og:url" content="{url}"><meta property="og:image" content="{og_gorsel('araclar')}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500&display=swap">
-{hub_ld("araclar", "Ücretsiz düğün araçları", "Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, tarihi kaydedin mesajı, düğün geri sayım, 2027 düğün takvimi.", [(a["slug"], a["ad"]) for a in ARACLAR])}
+{hub_ld("araclar", "Ücretsiz düğün araçları", "Düğün hazırlığı için ücretsiz araçlar: davetli listesi, düğün bütçesi hesaplama, davetiye sözü ve düğün hashtag oluşturucu, tarihi kaydedin mesajı, nikah şekeri notu, düğün geri sayım, 2027 düğün takvimi.", [(a["slug"], a["ad"]) for a in ARACLAR])}
 <style>{CSS}{YENI_CSS}</style></head><body>
 <a class="ust-serit" href="https://instagram.com/la.viecreative" target="_blank" rel="noopener"><div class="in">{IG}<span>Instagram'da biz: <b>@la.viecreative</b></span></div></a>
 <header class="nav"><div class="in"><a href="/" aria-label="LaVie Davetiye ana sayfa"><img src="/logo.svg" alt="La Vie Creative Studio" width="630" height="165"></a><a class="btn pri" href="/#olustur">Davetiyemi oluştur</a></div></header>
